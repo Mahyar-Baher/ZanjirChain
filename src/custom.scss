@@ -1,0 +1,41 @@
+@use "sass:math";
+$primary: #7878FF;
+@import 'bootstrap/scss/bootstrap';
+@keyframes btn-purple {
+  @for $i from 0 through 100 {
+    #{$i}% {
+      $gradient-percent: 7%;
+      
+      @if $i <= 50 {
+        $gradient-percent: 20% + (93% * math.div($i, 50));
+      } @else {
+        $gradient-percent: 100% - (93% * math.div(($i - 50), 50));
+      }
+      
+      background: linear-gradient(
+        90deg,
+        #9500EB #{$gradient-percent},
+        white 100%
+      );
+    }
+  }
+}
+@keyframes btn-sky {
+  @for $i from 0 through 100 {
+    #{$i}% {
+      $gradient-percent: 7%;
+      
+      @if $i <= 50 {
+        $gradient-percent: 20% + (93% * math.div($i, 50));
+      } @else {
+        $gradient-percent: 100% - (93% * math.div(($i - 50), 50));
+      }
+      
+      background: linear-gradient(
+        90deg,
+        #7878FF #{$gradient-percent},
+        white 100%
+      );
+    }
+  }
+}

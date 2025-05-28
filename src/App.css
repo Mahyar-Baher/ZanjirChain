@@ -1,38 +1,130 @@
-.App {
-  text-align: center;
+.bg-purple{
+    background: #9500EB;
+background: linear-gradient(80deg, rgba(149, 0, 235, 0.9) 0%, rgba(149, 0, 235, 0.9) 21%, rgba(0, 0, 255, 0.9) 100%);
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.ic {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  transition: all 0.3s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.ic-attention {
+  background-image: url('../public/media/images/attention_icon.gif');
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.ic-wallet {
+  background-image: url('./media/images/icons/2169864.png');
+}
+.ic-wallet-night {
+  background-image: url('./media/images/icons/21698641.png');
+}
+.ic-dashboard{
+    background-image: url('./media/images/icons/10994716.png');
+}
+.ic-wallet{
+    background-image: url('./media/images/icons/2169864.png');
+}
+.ic-trade{
+    background-image: url('./media/images/icons/transfer.png');
+}
+.ic-history{
+    background-image: url('./media/images/icons/history.png');
+}
+.ic-user{
+    background-image: url('./media/images/icons/avatar.png');
+}
+.ic-logout{
+    background-image: url('./media/images/icons/power-off.png');
+}
+.placeholder-opacity-10::placeholder {
+  color: #a200ff85 !important;
+}
+.btn-nav-bo:hover{
+    background-color: #9500EB !important;
+}
+.custom-nav-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 1;
+  border-radius: 100px 0 0 100px;
+  padding: 14px 24px;
+  font-size: 1.1rem;
   color: white;
+  background-color: transparent;
 }
 
-.App-link {
-  color: #61dafb;
+.custom-nav-button.active {
+  background-color: white;
+  color: black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.custom-nav-button.active i {
+  color: black;
+  font-size: 1.6rem;
+}
+
+.custom-nav-button i {
+  font-size: 1.4rem;
+  margin-left: 12px;
+  transition: font-size 0.3s, color 0.3s;
+}
+.custom-nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%) scale(0);
+  width: 300px;
+  height: 100%;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 25%;
+  z-index: -1;
+  transition: transform 0.3s ease-in-out;
+  transform-origin: left;
+}
+
+.custom-nav-button:hover::before {
+  transform: translateX(-50%) scaleX(1.4) scaleY(1.5);
+}
+
+.custom-nav-button:hover {
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: black;
+}
+.bg-img-hexed{
+    background-image: url('./media/images/icons/pngwing.com-7.png');
+    background-position: top right;
+    background-size: 120px;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(100px);
+}
+.bg-img-hexed-d{
+    background-image: url('./media/images/icons/pngwing.com-6.png');
+    background-position: bottom left;
+    background-size: 120px;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(100px);
+}
+.bg-btn-purple{
+  background: #9500EB;
+  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(255, 255, 255, 1) 100%);
+  transition: all 3s ease-in-out;
+}
+.bg-btn-purple:hover{
+  animation: btn-purple infinite 3s ease-in-out;
+}
+.bg-btn-sky{
+  background: #7878FF;
+  background: linear-gradient(90deg, rgba(120, 120, 255, 1) 20%, rgba(255, 255, 255, 1) 100%);
+  transition: all 3s ease-in-out;
+}
+.bg-btn-sky:hover{
+  animation: btn-sky infinite 3s ease-in-out;
 }
