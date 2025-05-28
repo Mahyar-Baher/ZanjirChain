@@ -5,6 +5,7 @@ import {
   Button,
   Paper,
   CssBaseline,
+  Stack,
   IconButton,
   useMediaQuery,
 } from '@mui/material';
@@ -12,16 +13,24 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { lightTheme, darkTheme } from '../theme';
 import React, { useState, useMemo, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const navItems = [
   { label: 'پیشخوان', icon: 'ic-dashboard', path: null },
-  { label: 'کیف پول', icon: 'ic-wallet', path: '/wallet' },
+  { label: 'کیف پول', icon: 'ic-wallet', path: '/wallet', children: [{label: 'دارایی کل', icon: 'fa fa-mony', path: '/wallet'},{label: 'واریز وجه', icon: 'fa fa-download', path: '/income'},{label: 'برداشت وجه', icon: 'fa fa-aploud', path: '/outcome'}] },
   { label: 'معامله آسان تتر', icon: 'ic-trade', path: null },
   { label: 'تاریخچه', icon: 'ic-history', path: null },
   { label: 'مدیریت حساب کاربری', icon: 'ic-user', path: null },
   { label: 'خروج از حساب', icon: 'ic-logout', path: null },
 ];
-
 const Navbarbox = () => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(null);
@@ -128,6 +137,17 @@ const Navbarbox = () => {
           </Box>
         </Paper>
       </Box>
+      <Grid item size={{ xs: 12, md: 2 }}>
+        <Item className="p-0 mt-2">
+          <Box className="p-0">
+            <Stack direction="column" className='pt-4 mt-4'  spacing={0}>
+            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>دارایی کل</Button>
+            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>واریز</Button>
+            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>تاریخچه</Button>
+          </Stack>
+          </Box>
+        </Item>
+      </Grid>
     </ThemeProvider>
   );
 };

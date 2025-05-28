@@ -98,33 +98,71 @@ background: linear-gradient(80deg, rgba(149, 0, 235, 0.9) 0%, rgba(149, 0, 235, 
   font-size: 1.4rem;
   color: black;
 }
-.bg-img-hexed{
-    background-image: url('./media/images/icons/pngwing.com-7.png');
-    background-position: top right;
-    background-size: 120px;
-    background-repeat: no-repeat;
-    backdrop-filter: blur(100px);
+.bg-img-hexed {
+  position: relative;
+  z-index: 1;
 }
-.bg-img-hexed-d{
-    background-image: url('./media/images/icons/pngwing.com-6.png');
-    background-position: bottom left;
-    background-size: 120px;
-    background-repeat: no-repeat;
-    backdrop-filter: blur(100px);
+.bg-img-hexed-d {
+  position: relative;
+  z-index: 1;
+}
+.bg-img-hexed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('./media/images/icons/pngwing.com-7.png');
+  background-position: top right;
+  background-size: 120px;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
+}
+.bg-img-hexed-d::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('./media/images/icons/pngwing.com-6.png');
+  background-position: bottom left;
+  background-size: 120px;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: -1;
 }
 .bg-btn-purple{
   background: #9500EB;
-  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(255, 255, 255, 1) 100%);
-  transition: all 3s ease-in-out;
+  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(255, 255, 255, 0.4) 100%);
+  transition: all 4s ease-in-out;
+}
+.bg-btn-purple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(255, 255, 255, 0.4) 100%);
+  opacity: 0.6;
+  z-index: -1;
 }
 .bg-btn-purple:hover{
-  animation: btn-purple infinite 3s ease-in-out;
+  animation: btn-purple infinite 4s ease-in-out;
 }
 .bg-btn-sky{
   background: #7878FF;
-  background: linear-gradient(90deg, rgba(120, 120, 255, 1) 20%, rgba(255, 255, 255, 1) 100%);
-  transition: all 3s ease-in-out;
+  background: linear-gradient(90deg, #7878FF 20%, rgba(255, 255, 255, 0.4) 100%);
+  transition: all 4s ease-in-out;
+}
+.bg-btn-sky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #7878FF 80%, rgba(255, 255, 255, 0.4) 100%);
+  opacity: 0.6;
+  z-index: -1;
 }
 .bg-btn-sky:hover{
-  animation: btn-sky infinite 3s ease-in-out;
+  animation: btn-sky infinite 4s ease-in-out;
 }

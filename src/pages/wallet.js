@@ -31,29 +31,18 @@ const Wallet = () => {
         </Grid>
 
         <Grid container spacing={2} sx={{pt: 5, pl: 1}} item size={{ xs: 10, md: 10 }}>
-          <Grid item size={{ xs: 12, md: 2 }}>
-            <Item className="p-0 mt-2">
-              <Box className="p-0">
-                <Stack direction="column" className='pt-4 mt-4'  spacing={0}>
-                <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>دارایی کل</Button>
-                <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>واریز</Button>
-                <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>تاریخچه</Button>
-              </Stack>
-              </Box>
-            </Item>
-          </Grid>
-          <Grid item size={{ xs: 12, md: 4 }} sx={{borderRadius: 2,overflow: 'hidden' }}>
+          <Grid item size={{ xs: 12, md: 4 }} sx={{borderRadius: 2,overflow: 'hidden', justifyItems: 'left' }}>
             <Item sx={{p:0}} className='shadow'>
-              <Box className="bg-img-hexed bg-opacity-10">
-                <Box className="bg-img-hexed-d bg-opacity-10">
-                  <Box className="bg-secondary bg-opacity-50 p-3 pe-5">
-                    <Typography  variant="h4" className='fw-semibold text-end text-black'>
+              <Box className="bg-img-hexed">
+                <Box className="bg-img-hexed-d">
+                  <Box className="bg-secondary bg-opacity-10 p-3 pe-5">
+                    <Typography  variant="h4" className='fw-semibold text-end'>
                       تومان
                     </Typography>
-                    <Typography className='fw-semibold text-start mt-2 text-black'>
+                    <Typography className='fw-semibold text-start mt-2'>
                       تومان 0.00
                     </Typography>
-                    <Typography className='fw-semibold text-start mt-2 text-black'>
+                    <Typography className='fw-semibold text-start mt-2'>
                       موجودی در دسترس 0
                     </Typography>
                   </Box>
@@ -61,26 +50,26 @@ const Wallet = () => {
               </Box>
               <Box>
               <Stack direction="row" className='rounded-bottom-2 overflow-hodden' spacing={0}>
-                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px',borderRadius: '0px 0px 5px 0px !important'}} fullWidth color="secondary">برداشت</Button>
-                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px'}} fullWidth color="secondary">واریز</Button>
-                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px'}} fullWidth color="secondary">تاریخچه</Button>
-                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px',borderRadius: '0px 0px 0px 5px !important'}} fullWidth color="secondary">تبدیل به تتر</Button>
+                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px',borderRadius: '0px 0px 5px 0px !important'}} fullWidth>برداشت</Button>
+                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px'}} fullWidth>واریز</Button>
+                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px'}} fullWidth>تاریخچه</Button>
+                <Button variant="contained" className="rounded-0 fw-bold bg-btn-sky" sx={{py:4, fontSize: '13px',borderRadius: '0px 0px 0px 5px !important'}} fullWidth>تبدیل به تتر</Button>
               </Stack>
               </Box>
             </Item>
           </Grid>
           <Grid item size={{ xs: 12, md: 4 }} sx={{borderRadius: 2,overflow: 'hidden' }}>
             <Item sx={{p:0}} className='shadow'>
-              <Box className="bg-img-hexed bg-opacity-10">
-                <Box className="bg-img-hexed-d bg-opacity-10">
-                  <Box className="bg-secondary bg-opacity-50 p-3 pe-5">
-                    <Typography  variant="h4" className='fw-semibold text-end text-black'>
+              <Box className="bg-img-hexed">
+                <Box className="bg-img-hexed-d">
+                  <Box className="bg-secondary bg-opacity-10 p-3 pe-5">
+                    <Typography  variant="h4" className='fw-semibold text-end'>
                       تتر
                     </Typography>
-                    <Typography className='fw-semibold text-start mt-2 text-black'>
+                    <Typography className='fw-semibold text-start mt-2'>
                       تتر 0.00
                     </Typography>
-                    <Typography className='fw-semibold text-start mt-2 text-black'>
+                    <Typography className='fw-semibold text-start mt-2'>
                       موجودی در دسترس 0
                     </Typography>
                   </Box>
