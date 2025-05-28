@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/tether_mo/static/css/main.e6a3e42e.css",
+    "main.js": "/tether_mo/static/js/main.2446803a.js",
+    "static/media/pngwing.com-7.png": "/tether_mo/static/media/pngwing.com-7.dedb6f437073cd248e14.png",
+    "static/media/pngwing.com-6.png": "/tether_mo/static/media/pngwing.com-6.41ce4537c8bb73ac3e1b.png",
+    "static/media/attention_icon.gif": "/tether_mo/static/media/attention_icon.dec7e28451aec69b5cd4.gif",
+    "index.html": "/tether_mo/index.html",
+    "main.e6a3e42e.css.map": "/tether_mo/static/css/main.e6a3e42e.css.map",
+    "main.2446803a.js.map": "/tether_mo/static/js/main.2446803a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6a3e42e.css",
+    "static/js/main.2446803a.js"
+  ]
+}
