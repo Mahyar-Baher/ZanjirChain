@@ -1,13 +1,13 @@
-  import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Grid,
   Button,
   Paper,
   CssBaseline,
-  Stack,
   IconButton,
   useMediaQuery,
+  Collapse,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,24 +15,43 @@ import { lightTheme, darkTheme } from '../theme';
 import React, { useState, useMemo, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
 const navItems = [
-  { label: 'پیشخوان', icon: 'ic-dashboard', path: null },
-  { label: 'کیف پول', icon: 'ic-wallet', path: '/wallet', children: [{label: 'دارایی کل', icon: 'fa fa-mony', path: '/wallet'},{label: 'واریز وجه', icon: 'fa fa-download', path: '/income'},{label: 'برداشت وجه', icon: 'fa fa-aploud', path: '/outcome'}] },
-  { label: 'معامله آسان تتر', icon: 'ic-trade', path: null },
-  { label: 'تاریخچه', icon: 'ic-history', path: null },
-  { label: 'مدیریت حساب کاربری', icon: 'ic-user', path: null },
-  { label: 'خروج از حساب', icon: 'ic-logout', path: null },
+  { label: 'پیشخوان', icon: 'ic-dashboard', path: '/' },
+  {
+    label: 'کیف پول', icon: 'ic-wallet', path: '/wallet',
+    children: [
+      { label: 'دارایی کل', icon: 'fas fa-money', path: '/wallet' },
+      { label: 'واریز وجه', icon: 'fa fa-download', path: '/income' },
+      { label: 'برداشت وجه', icon: 'fa fa-upload', path: '/outcome' },
+    ]
+  },
+  { label: 'معامله آسان تتر', icon: 'ic-trade', path: '/trade' },
+  {
+    label: 'تاریخچه', icon: 'ic-history', path: '/history',
+    children: [
+      { label: 'تاریخچه واریز و برداشت', icon: 'fa fa-history', path: '/history' },
+      { label: 'تاریخچه معاملات تتر', icon: 'fa fa-history', path: '/history_tether' },
+      { label: 'تاریخچه معاملات تومان', icon: 'fa fa-history', path: '/history_toman' }
+    ]
+  },
+  {
+    label: 'مدیریت حساب کاربری', icon: 'ic-user', path: '/user',
+    children: [
+      { label: 'مشخصات کاربری', icon: 'fa fa-user', path: '/user_information' },
+      { label: 'حساب های بانکی', icon: 'fa fa-cards', path: '/credits' },
+      { label: 'هشدار قیمت', icon: 'fa fa-alert', path: '/alert_price' },
+      { label: 'مدیریت پیام ها', icon: 'fa fa-mail', path: '/manage_message' },
+      { label: 'مدیریت آدرس ها', icon: 'fa fa-file-pen', path: '/manage_addresses' },
+      { label: 'تنظیمات', icon: 'fa fa-setting', path: '/settings' },
+      { label: 'امنیت', icon: 'fa fa-shild', path: '/security' }
+    ]
+  },
+  { label: 'خروج از حساب', icon: 'ic-logout', path: '/logout' },
 ];
+
 const Navbarbox = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [hovered, setHovered] = useState(null);
   const isMobile = useMediaQuery('(max-width:900px)');
   const [collapsed, setCollapsed] = useState(isMobile);
@@ -44,16 +63,14 @@ const Navbarbox = () => {
 
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
 
+  const isActive = (path) => location.pathname === path;
+  const isChildVisible = (item) =>
+    item.children && item.children.some((child) => location.pathname === child.path);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        component="nav"
-        sx={{
-          flexShrink: 0,
-          width: collapsed ? 72 : { xs: 72, sm: 250 },
-        }}
-      >
+      <Box component="nav" sx={{ flexShrink: 0, width: collapsed ? 72 : { xs: 72, sm: 250 } }}>
         <Paper
           elevation={3}
           sx={{
@@ -66,7 +83,6 @@ const Navbarbox = () => {
             color: '#fff',
             position: 'fixed',
             transition: 'width 0.3s ease',
-            overflowX: 'hidden',
             zIndex: 1200,
           }}
         >
@@ -78,7 +94,7 @@ const Navbarbox = () => {
               display: 'flex',
               flexDirection: 'column',
               py: 2,
-              px: 1,
+              ps: 1,
             }}
           >
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-start' }}>
@@ -92,62 +108,73 @@ const Navbarbox = () => {
             </Box>
 
             <Grid container direction="column" spacing={1} sx={{ flexGrow: 1 }}>
-              {navItems.map(({ label, icon, path }, index) => (
-                <Grid item key={label}>
+              {navItems.map((item, index) => (
+                <Grid item key={item.label}>
                   <Button
                     fullWidth
-                    onClick={() => path && navigate(path)}
+                    onClick={() => item.path && navigate(item.path)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
                     variant="text"
-                    color="inherit"
+                    className={`custom-nav-button rounded-start-0 rounded-end-pill mt-2 ${isActive(item.path) || isChildVisible(item) ? 'active' : ''}`}
                     sx={{
-                      p: 2,
                       justifyContent: 'flex-start',
                       textTransform: 'none',
                       fontSize: '1rem',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      transition: 'all 0.3s ease',
-                      color: '#fff',
+                      color: isActive(item.path) || isChildVisible(item) ? '#fff' : '#fff',
                       '& i': {
-                        transition: 'all 0.3s ease',
                         marginLeft: '12px',
                         fontSize: '18px',
                       },
-                      '&:hover': {
-                        backgroundColor: 'rgba(255,255,255,0.1)',
-                      },
                     }}
-                    startIcon={
-                      <i
-                        className={`ic ${
-                          hovered === index ? `${icon}-night` : icon
-                        } ms-3`}
-                        aria-hidden="true"
-                      ></i>
-                    }
-                  >
-                    {!collapsed && label}
+                    startIcon={<i className={`ic ${ isActive(item.path) || hovered === index ? `${item.icon}-night` : item.icon } ms-3`} aria-hidden="true"></i>}>
+                    {!collapsed && item.label}
                   </Button>
+                  {item.children && (
+                    <Collapse in={isChildVisible(item)} sx={{position: 'relative'}}>
+                      <Box
+                        sx={{
+                          ml: 2,
+                          background: 'linear-gradient(180deg, #9A5BFF, #5040B2)',
+                          borderRadius: '30px 30px 30px 30px',
+                          overflow: 'hidden',
+                          mt: 0,
+                          minWidth: '200px !important',
+                          position: 'absolute',
+                          zIndex: '3',
+                          top: '-90px',
+                          right: '16vw'
+                        }}
+                      >
+                        {!collapsed &&item.children.map((child) => (
+                          <Button
+                            key={child.label}
+                            fullWidth
+                            onClick={() => navigate(child.path)}
+                            sx={{
+                              justifyContent: 'space-between',
+                              color: location.pathname === child.path ? '#fff' : '#fff',
+                              backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
+                              px: 2,
+                              py: 1.2,
+                              borderBottom: '1px dashed rgba(255,255,255,0.3)',
+                              '& i': { marginLeft: '8px' },
+                              textAlign: 'right'
+                            }}
+                            startIcon={<i className={`${child.icon}`} />}
+                          >
+                            {child.label}
+                          </Button>
+                        ))}
+                      </Box>
+                    </Collapse>
+                  )}
                 </Grid>
               ))}
             </Grid>
           </Box>
         </Paper>
       </Box>
-      <Grid item size={{ xs: 12, md: 2 }}>
-        <Item className="p-0 mt-2">
-          <Box className="p-0">
-            <Stack direction="column" className='pt-4 mt-4'  spacing={0}>
-            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>دارایی کل</Button>
-            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>واریز</Button>
-            <Button variant="contained" className="rounded-0 fw-bold" sx={{py: 2, fontSize: '13px'}} fullWidth color="secondary" startIcon={<i className="ms-3 fa fa-coins"></i>}>تاریخچه</Button>
-          </Stack>
-          </Box>
-        </Item>
-      </Grid>
     </ThemeProvider>
   );
 };
