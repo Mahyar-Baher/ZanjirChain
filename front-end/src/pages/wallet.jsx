@@ -33,14 +33,6 @@ const Wallet = () => {
         <Navbarbox />
         <Grid item size="grow" sx={{ p: 4 }}>
           <Grid container spacing={2} sx={{ height:{xs:'fit-content', md:'fit-content'} }}>
-            <Grid item size={{xs: 12, md:12 ,lg:2}} sx={{ height:'100%'}}>
-              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems:'center',p:1}}>
-                <Typography fontWeight={600} textAlign="center" mb={2}>
-                  ارزش دارایی‌های شما
-                </Typography>
-                <DualProgress tether={tether} toman={toman} rate={rate} />
-              </Item>
-            </Grid>
             <Grid item size={{xs: 12,md: 6, lg:5}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'} }}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' , p:0}}>
                 <Box sx={{p:2, pb:0}}>
@@ -97,6 +89,14 @@ const Wallet = () => {
                     تبدیل به تومان
                   </Button>
                 </Stack>
+              </Item>
+            </Grid>
+            <Grid item size={{xs: 12, md:12 ,lg:2}} sx={{ height:'100%'}}>
+              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems:'center',p:1}}>
+                <Typography fontWeight={600} textAlign="center" mb={2}>
+                  ارزش دارایی‌های شما
+                </Typography>
+                <DualProgress tether={tether} toman={toman} rate={rate} />
               </Item>
             </Grid>
           </Grid>
