@@ -4,37 +4,37 @@ services:
       context: ./back-end
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8000:8000"   # پورت php-fpm (بعداً با لاراول سرو کنید)
     volumes:
       - ./back-end:/var/www/html
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_DATABASE=tetherland
+      - DB_DATABASE=laravel_db
       - DB_USERNAME=root
       - DB_PASSWORD=secret
     depends_on:
       - mysql
 
-  frontend:
-    build:
-      context: ./tether_mo
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./tether_mo:/app
-    command: npm run dev
-
   mysql:
     image: mysql:8.0
     ports:
-      - "3306:3306"
+      - "3307:3307"
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: tetherland
+      MYSQL_DATABASE: laravel_db
     volumes:
       - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: secret
+    depends_on:
+      - mysql
 
 volumes:
   mysql-data:
