@@ -23,14 +23,15 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Wallet = () => {
   const { darkMode } = useOutletContext();
-  const toman = 23223330;
-  const tether = 131;
+  const toman = 0;
+  const tether = 100;
   const rate = 85000;
 
   return (
     <Paper sx={{ minHeight: '100vh', bgcolor: darkMode ? '#121212' : '#f5f5f5' }}>
       <Grid container sx={{ height: {xs:'fit-content', md:'fit-content'} }}>
         <Navbarbox />
+
         <Grid item size="grow" sx={{ p: 4 }}>
           <Grid container spacing={2} sx={{ height:{xs:'fit-content', md:'fit-content'} }}>
             <Grid item size={{xs: 12,md: 6, lg:5}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'} }}>

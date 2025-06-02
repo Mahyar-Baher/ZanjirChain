@@ -7,13 +7,11 @@ import {
   CssBaseline,
   IconButton,
   useMediaQuery,
-  Collapse,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { lightTheme, darkTheme } from '../theme';
 import React, { useState, useMemo, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
 
 const navItems = [
   { label: 'پیشخوان', icon: 'ic-dashboard', path: '/' },
@@ -52,7 +50,7 @@ const navItems = [
 const Navbarbox = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [hovered, setHovered] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const isMobile = useMediaQuery('(max-width:900px)');
   const [collapsed, setCollapsed] = useState(isMobile);
   const [darkMode, setDarkMode] = useState(false);
@@ -70,18 +68,16 @@ const Navbarbox = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box component="nav" sx={{ flexShrink: 0, width: collapsed ? 72 : { xs: 72, sm: 250 } }}>
+      <Box component="nav" sx={{ display: 'flex', position: 'relative' }}>
         <Paper
           elevation={3}
           sx={{
-            p: 0,
             height: '100vh',
             width: collapsed ? 72 : 250,
             borderRadius: '90px 0 0 90px',
             background:
               'linear-gradient(80deg, rgba(149,0,235,0.9) 0%, rgba(149,0,235,0.9) 21%, rgba(0,0,255,0.9) 100%)',
             color: '#fff',
-            position: 'fixed',
             transition: 'width 0.3s ease',
             zIndex: 1200,
           }}
@@ -95,6 +91,7 @@ const Navbarbox = () => {
               flexDirection: 'column',
               py: 2,
               ps: 1,
+              position: 'relative',
             }}
           >
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-start' }}>
@@ -107,67 +104,71 @@ const Navbarbox = () => {
               </IconButton>
             </Box>
 
-            <Grid container direction="column" spacing={1} sx={{ flexGrow: 1 }}>
+            <Grid container direction="column" spacing={1}>
               {navItems.map((item, index) => (
-                <Grid item key={item.label}>
+                <Grid item key={item.label} sx={{ position: 'relative' }}>
                   <Button
                     fullWidth
                     onClick={() => item.path && navigate(item.path)}
-                    onMouseEnter={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(null)}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                     variant="text"
-                    className={`custom-nav-button rounded-start-0 rounded-end-pill mt-2 ${isActive(item.path) || isChildVisible(item) ? 'active' : ''}`}
                     sx={{
                       justifyContent: 'flex-start',
                       textTransform: 'none',
                       fontSize: '1rem',
-                      color: isActive(item.path) || isChildVisible(item) ? '#fff' : '#fff',
+                      color: '#fff',
                       '& i': {
                         marginLeft: '12px',
                         fontSize: '18px',
                       },
                     }}
-                    startIcon={<i className={`ic ${ isActive(item.path) || hovered === index ? `${item.icon}-night` : item.icon } ms-3`} aria-hidden="true"></i>}>
+                    startIcon={
+                      <i
+                        className={`ic ${isActive(item.path) || isChildVisible(item) ? `${item.icon}-night` : item.icon} ms-3`}
+                      ></i>
+                    }
+                  >
                     {!collapsed && item.label}
                   </Button>
-                  {item.children && (
-                    <Collapse in={isChildVisible(item)} sx={{position: 'relative'}}>
-                      <Box
-                        sx={{
-                          ml: 2,
-                          background: 'linear-gradient(180deg, #9A5BFF, #5040B2)',
-                          borderRadius: '30px 30px 30px 30px',
-                          overflow: 'hidden',
-                          mt: 0,
-                          minWidth: '200px !important',
-                          position: 'absolute',
-                          zIndex: '3',
-                          top: '-90px',
-                          right: '16vw'
-                        }}
-                      >
-                        {/* {!collapsed &&item.children.map((child) => (
-                          <Button
-                            key={child.label}
-                            fullWidth
-                            onClick={() => navigate(child.path)}
-                            sx={{
-                              justifyContent: 'space-between',
-                              color: location.pathname === child.path ? '#fff' : '#fff',
-                              backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
-                              px: 2,
-                              py: 1.2,
-                              borderBottom: '1px dashed rgba(255,255,255,0.3)',
-                              '& i': { marginLeft: '8px' },
-                              textAlign: 'right'
-                            }}
-                            startIcon={<i className={`${child.icon}`} />}
-                          >
-                            {child.label}
-                          </Button>
-                        ))} */}
-                      </Box>
-                    </Collapse>
+
+                  {/* Floating child menu */}
+                  {item.children && hoveredIndex === index && !collapsed && (
+                    <Paper
+                      elevation={4}
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                      sx={{
+                        position: 'absolute',
+                        top: 0,
+                        right: collapsed ? 72 : 250,
+                        minWidth: 200,
+                        background: 'linear-gradient(180deg, #9A5BFF, #5040B2)',
+                        borderRadius: '20px',
+                        zIndex: 1300,
+                        py: 1,
+                      }}
+                    >
+                      {item.children.map((child) => (
+                        <Button
+                          key={child.label}
+                          fullWidth
+                          onClick={() => navigate(child.path)}
+                          sx={{
+                            justifyContent: 'flex-start',
+                            color: '#fff',
+                            backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
+                            px: 2,
+                            py: 1,
+                            borderBottom: '1px dashed rgba(255,255,255,0.3)',
+                            '& i': { ml: 1 },
+                          }}
+                          startIcon={<i className={child.icon}></i>}
+                        >
+                          {child.label}
+                        </Button>
+                      ))}
+                    </Paper>
                   )}
                 </Grid>
               ))}
