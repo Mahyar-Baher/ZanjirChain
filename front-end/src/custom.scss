@@ -1,0 +1,61 @@
+@use "sass:math";
+$primary: #7878FF;
+@function gradient-percent($i) {
+  $min: 20%;
+  $max: 80%;
+  $range: $max - $min;
+
+  @if $i <= 50 {
+    @return $min + ($range * math.div($i, 50));
+  } @else {
+    @return $max - ($range * math.div(($i - 50), 50));
+  }
+}
+
+@keyframes btn-purple {
+  @for $i from 0 through 100 {
+    #{$i}% {
+      $percent: gradient-percent($i);
+      background: linear-gradient(
+        90deg,
+        #9500EB #{$percent},
+        rgba(149, 0, 235, 0.6) 100%
+      );
+    }
+  }
+}
+
+@keyframes btn-sky {
+  @for $i from 0 through 100 {
+    #{$i}% {
+      $percent: gradient-percent($i);
+      background: linear-gradient(
+        90deg,
+        #7878FF #{$percent},
+        rgba(120, 120, 255, 0.6) 100%
+      );
+    }
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.rounded-animate {
+  animation-name: pulse;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  transform-origin: 50% 50%;
+  display: inline-block;
+}
