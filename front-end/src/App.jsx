@@ -22,9 +22,9 @@ function App() {
         <Routes>
           <Route element={<MainLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}>
             <Route path="/" element={<Home />} />
-            <Route path="/wallet" element={<Wallet />} />
           </Route>
           <Route element={<EmptyLayout darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />}>
+            <Route path="/wallet" element={<Wallet />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/sms_verification" element={<Sms_verification />} />

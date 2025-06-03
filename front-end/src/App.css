@@ -18,28 +18,28 @@ background: linear-gradient(80deg, rgba(149, 0, 235, 0.9) 0%, rgba(149, 0, 235, 
   background-image: url('../public/media/images/attention_icon.gif');
 }
 .ic-wallet {
-  background-image: url('./assets/images/icons/2169864.png');
+  background-image: url('./assets/icons/2169864.png');
 }
 .ic-wallet-night {
-  background-image: url('./assets/images/icons/21698641.png');
+  background-image: url('./assets/icons/21698641.png');
 }
 .ic-dashboard{
-    background-image: url('./assets/images/icons/10994716.png');
+    background-image: url('./assets/icons/10994716.png');
 }
 .ic-wallet{
-    background-image: url('./assets/images/icons/2169864.png');
+    background-image: url('./assets/icons/2169864.png');
 }
 .ic-trade{
-    background-image: url('./assets/images/icons/transfer.png');
+    background-image: url('./assets/icons/transfer.png');
 }
 .ic-history{
-    background-image: url('./assets/images/icons/history.png');
+    background-image: url('./assets/icons/history.png');
 }
 .ic-user{
-    background-image: url('./assets/images/icons/avatar.png');
+    background-image: url('./assets/icons/avatar.png');
 }
 .ic-logout{
-    background-image: url('./assets/images/icons/power-off.png');
+    background-image: url('./assets/icons/power-off.png');
 }
 .placeholder-opacity-10::placeholder {
   color: #a200ff85 !important;

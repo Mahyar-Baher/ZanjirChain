@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-const DualProgress = ({ tether, toman, rate = 83000, size = 100, stroke = 6 }) => {
+const DualProgress = ({ tether, toman, rate = 83000, size = 100, stroke = 12 }) => {
     let tetherValue = tether;
     let tomanInTether = toman / rate;
     const bothZero = tether === 0 && toman === 0;

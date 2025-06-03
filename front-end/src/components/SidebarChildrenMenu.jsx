@@ -1,0 +1,45 @@
+
+import React from 'react';
+import { Box, Button } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const SidebarChildrenMenu = ({ childrenItems = [] }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  return (
+    <Box
+      sx={{
+        background: 'linear-gradient(180deg, #9A5BFF, #5040B2)',
+        borderRadius: '30px',
+        overflow: 'hidden',
+        height: 'fit-content',
+        p: 0,
+        mt: 6,
+      }}
+    >
+      {childrenItems.map((child) => (
+        <Button
+          key={child.label}
+          fullWidth
+          onClick={() => navigate(child.path)}
+          sx={{
+            justifyContent: 'center',
+            color: location.pathname === child.path ? '#fff' : '#fff',
+            backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
+            px: 0,
+            py: 1.2,
+            borderBottom: '1px dashed rgba(255,255,255,0.3)',
+            '& i': { marginLeft: '0px' },
+            textAlign: 'center'
+          }}
+          startIcon={<iconify-icon icon={child.icon} style={{ fontSize: '20px', marginLeft: 12 }}></iconify-icon>}
+        >
+          {child.label}
+        </Button>
+      ))}
+    </Box>
+  );
+};
+
+export default SidebarChildrenMenu;
