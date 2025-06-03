@@ -115,25 +115,25 @@ background: linear-gradient(80deg, rgba(149, 0, 235, 0.9) 0%, rgba(149, 0, 235, 
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('./media/images/icons/pngwing.com-7.png');
+  background-image: url('./assets/icons/pngwing.com-7.png');
   background-position: top right;
   background-size: 120px;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  opacity: 0.2;
   z-index: -1;
 }
-.bg-img-hexed-d::before {
+.bg-img-hexed::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('./media/images/icons/pngwing.com-6.png');
-  background-position: bottom left;
+  background-image: url('./assets/icons/pngwing.com-6.png');
+  background-position: center left;
   background-size: 120px;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  opacity: 0.2;
   z-index: -1;
 }
 .bg-btn-purple{

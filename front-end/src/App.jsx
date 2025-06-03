@@ -5,6 +5,7 @@ import EmptyLayout from './components/EmptyLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Income from './pages/Income';
 import Sms_verification from './pages/sms_verification';
 import Wallet from './pages/wallet';
 import { useState, useMemo } from 'react';
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route element={<EmptyLayout darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />}>
             <Route path="/wallet" element={<Wallet />} />
+            <Route path="/Income" element={<Income />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/sms_verification" element={<Sms_verification />} />

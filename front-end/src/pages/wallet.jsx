@@ -39,11 +39,11 @@ const Wallet = () => {
         </Grid>
         <Grid item size="grow" sx={{ p: 2, pt:4}}>
           <Grid container spacing={{ xs: 1, md: 1 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >
-            <Grid item size={{xs: 10,sm: 4, md: 2, lg:2}} sx={{pr:2}}>
+            <Grid item size={{xs: 12,sm: 12, md: 3, lg:2}} sx={{pr:{lg:2}}}>
               <SidebarChildrenMenu childrenItems={walletMenu?.children || []} />
             </Grid>
-            <Grid item size={{xs:10,sm: 12,md: 12, lg:4}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
-              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' , p:0}}>
+            <Grid item size={{xs:12,sm: 6,md: 9, lg:4}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
+              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' , p:0}} className='bg-img-hexed'>
                 <Box sx={{p:2, pb:0}}>
                   <Typography variant="h6" fontWeight={600} textAlign="right">
                     تومان
@@ -71,9 +71,9 @@ const Wallet = () => {
                 </Stack>
               </Item>
             </Grid>
-            <Grid item size={{xs: 10,sm:12,md:12 ,lg:4}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
-              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' ,p:0}}>
-                <Box sx={{p:2, pb:0}}>
+            <Grid item size={{xs: 12,sm:6,md:12 ,lg:4}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
+              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' ,p:0}} className='bg-img-hexed'>
+                <Box sx={{p:2, pb:0}} >
                   <Typography variant="h6" fontWeight={600} textAlign="right">
                     تتر
                   </Typography>
@@ -100,7 +100,7 @@ const Wallet = () => {
                 </Stack>
               </Item>
             </Grid>
-            <Grid item size={{xs: 10,sm:12,md:12 ,lg:2}} sx={{ height:'100%',mt:{xl:5.1}, alignContent: 'end'}}>
+            <Grid item size={{xs: 12,sm:12,md:12 ,lg:2}} sx={{ height:'100%',mt:{xl:5.1}, alignContent: 'end'}}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems:'center',p:1}}>
                 <Typography fontWeight={600} fontSize={'12px'} textAlign="center" mb={1}>
                   ارزش دارایی‌های شما
@@ -108,7 +108,7 @@ const Wallet = () => {
                 <DualProgress tether={tether} toman={toman} rate={rate} />
               </Item>
             </Grid>
-            <Grid item size={{xs: 10,sm: 12, md: 12, lg:12}} sx={{pl:2, mt: 3}}>
+            <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pl:0, mt: 3}}>
               <Item sx={{ height: '100%',backgroundColor:'#e9e9e9', display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',p:1}}>
                   <Box sx={{display:'felx'}}>
                     <Typography fontWeight={600} textAlign="center" mb={1}>
@@ -123,7 +123,7 @@ const Wallet = () => {
                   </Box>
                 </Item>
             </Grid>
-            <Grid item size={{xs: 10,sm: 12, md: 12, lg:12}} sx={{pl:2, mt: 3}}>
+            <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pl:0, mt: 3}}>
               <Item sx={{ height: '100%',backgroundColor:'transparent', display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',p:1}}>
                   <CryptoTable/>
               </Item>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Table, TableBody, TableCell, TableContainer,
+  useMediaQuery, useTheme,Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Button, TextField,
   Typography, Box, Checkbox, FormControlLabel
 } from '@mui/material';
@@ -17,6 +17,9 @@ const CryptoTable = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hideEmptyBalances, setHideEmptyBalances] = useState(false);
 
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+
   const filteredData = cryptoData.filter((crypto) => {
     const matchesSearch =
       crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -29,20 +32,19 @@ const CryptoTable = () => {
 
   return (
     <Paper sx={{ p: 1, width: '100%', backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-        <Typography sx={{ fontWeight: "900", fontSize: '30px', ml: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: {xs: 'column', sm:'row'}, alignItems: 'center', justifyContent: {xs: 'center', sm:'space-between'}, mb: 2 }}>
+        <Typography sx={{ fontWeight: "900", fontSize: '30px', ml: 1 }}>
           لیست ارزها
         </Typography>
-
         <TextField
           label="جستجو: نام رمزارز موردنظر را وارد کنید"
           variant="standard"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ borderRadius: '24%', ml: 'auto' }}
+          sx={{ borderRadius: '24%', ml: 'auto', width: {xs:'100%',md: 'fit-content'}}}
         />
-
         <FormControlLabel
+          fullWidth
           control={
             <Checkbox
               checked={hideEmptyBalances}
@@ -79,9 +81,9 @@ const CryptoTable = () => {
                 <TableCell align="center">{crypto.change}</TableCell>
                 <TableCell align="center">{crypto.tetherPrice}</TableCell>
                 <TableCell align="center" sx={{ borderTopLeftRadius: '22px', borderBottomLeftRadius: '22px', borderBottom: 'none' }}>
-                  <Button variant="text" size="small" sx={{ mx: 0, p: 0 }}>برداشت</Button>
-                  <Button variant="text" size="small" sx={{ mx: 0, p: 0 }}>واریز</Button>
-                  <Button variant="text" color="primary" size="small" sx={{ mx: 0, p: 0 }}>
+                  <Button variant={isMdUp ? 'text' : 'contained'} size="small" sx={{ mx: 0, p: 0 }}>برداشت</Button>
+                  <Button variant={isMdUp ? 'text' : 'contained'} size="small" sx={{ mx: 0, p: 0, mt:{xs: 1,md:0} }}>واریز</Button>
+                  <Button variant={isMdUp ? 'text' : 'contained'} color="primary" size="small" sx={{ mx: 0, p: 0,  mt:{xs: 1,md: 0} }}>
                     خرید/فروش
                   </Button>
                 </TableCell>
