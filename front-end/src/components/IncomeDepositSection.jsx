@@ -22,16 +22,31 @@ const Item = styled(Box)(() => ({
 const tomanMethods = ['درگاه پرداخت', 'کارت به کارت', 'واریز شناسه‌دار', 'واریز آفلاین'];
 const cryptoMethods = ['انتقال داخلی', 'شبکه TRC20', 'شبکه BEP20', 'شبکه ERC20'];
 const bankList = ['درگاه پرداخت بانک ملت', 'درگاه پرداخت بانک ملی', 'درگاه پرداخت بانک صادرات'];
-
-const formWrapperStyle = {
-  minWidth: '580px',
-  maxWidth: '580px',
-  margin: '0 auto',
-};
-
+const recentPays=[
+  '10000'
+]
 const MethodContent = ({ activeMethod, isCrypto }) => {
   const tomanForms = [
-    <Box component="form" noValidate autoComplete="off" key="gateway" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="gateway">
+      <TextField fullWidth select label="درگاه مورد نظر رو انتخاب کنید" margin="normal">
+        {bankList.map((bank) => (
+          <MenuItem key={bank} value={bank}>
+            {bank}
+          </MenuItem>
+        ))}
+      </TextField>
+      <TextField fullWidth label="مبلغ (تومان)" margin="normal" />
+      <Typography>تراکنش های اخیر</Typography>
+        {recentPays.map((recentPay)=>(
+          <Typography>
+            {recentPay} تومان
+          </Typography>
+        ))},
+      <Button variant="contained" fullWidth sx={{ mt: 2 }}>
+        پرداخت
+      </Button>
+    </Box>,
+     <Box component="form" noValidate autoComplete="off" key="card">
       <TextField fullWidth select label="درگاه مورد نظر رو انتخاب کنید" margin="normal">
         {bankList.map((bank) => (
           <MenuItem key={bank} value={bank}>
@@ -44,35 +59,36 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
         پرداخت
       </Button>
     </Box>,
-
-    <Box component="form" noValidate autoComplete="off" key="card" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="id">
+      <TextField fullWidth select label="درگاه مورد نظر رو انتخاب کنید" margin="normal">
+        {bankList.map((bank) => (
+          <MenuItem key={bank} value={bank}>
+            {bank}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField fullWidth label="مبلغ (تومان)" margin="normal" />
-      <TextField fullWidth label="شماره کارت مبدا" margin="normal" />
-      <TextField fullWidth label="کد پیگیری" margin="normal" />
       <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-        ثبت واریز کارت به کارت
+        پرداخت
       </Button>
     </Box>,
-
-    <Box component="form" noValidate autoComplete="off" key="id" sx={formWrapperStyle}>
+     <Box component="form" noValidate autoComplete="off" key="offline">
+      <TextField fullWidth select label="درگاه مورد نظر رو انتخاب کنید" margin="normal">
+        {bankList.map((bank) => (
+          <MenuItem key={bank} value={bank}>
+            {bank}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField fullWidth label="مبلغ (تومان)" margin="normal" />
-      <TextField fullWidth label="شناسه پرداخت" margin="normal" />
       <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-        ارسال واریز شناسه‌دار
+        پرداخت
       </Button>
-    </Box>,
-
-    <Box component="form" noValidate autoComplete="off" key="offline" sx={formWrapperStyle}>
-      <TextField fullWidth label="مبلغ (تومان)" margin="normal" />
-      <TextField fullWidth label="توضیحات واریز آفلاین" multiline rows={3} margin="normal" />
-      <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-        ثبت درخواست بررسی
-      </Button>
-    </Box>,
+    </Box>, 
   ];
 
   const cryptoForms = [
-    <Box component="form" noValidate autoComplete="off" key="internal" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="internal">
       <Typography mb={2}>
         آدرس انتقال داخلی: <strong>user123wallet</strong>
       </Typography>
@@ -82,7 +98,7 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
       </Button>
     </Box>,
 
-    <Box component="form" noValidate autoComplete="off" key="trc20" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="trc20">
       <Typography mb={2}>
         آدرس TRC20: <strong>TYx4...abc</strong>
       </Typography>
@@ -93,7 +109,7 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
       </Button>
     </Box>,
 
-    <Box component="form" noValidate autoComplete="off" key="bep20" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="bep20">
       <Typography mb={2}>
         آدرس BEP20: <strong>0xAbc...789</strong>
       </Typography>
@@ -104,7 +120,7 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
       </Button>
     </Box>,
 
-    <Box component="form" noValidate autoComplete="off" key="erc20" sx={formWrapperStyle}>
+    <Box component="form" noValidate autoComplete="off" key="erc20">
       <Typography mb={2}>
         آدرس ERC20: <strong>0xDef...123</strong>
       </Typography>
@@ -125,7 +141,6 @@ const IncomeDepositSection = () => {
   const methods = activeTab === 'toman' ? tomanMethods : cryptoMethods;
 
   return (
-    <Grid item xs={12} sm={6} md={9} lg={4} sx={{ height: { xs: 'fit-content', lg: '100%' } }}>
       <Item
         sx={{
           height: '100%',
@@ -179,16 +194,20 @@ const IncomeDepositSection = () => {
               onChange={(e, newValue) => setActiveMethod(newValue)}
               variant="fullWidth"
               sx={{
-                mt: 4,
+                mt: 1,
                 borderTop: '1px solid #eee',
                 '& .MuiTabs-indicator': {
                   backgroundColor: '#7878FF',
+                  top: 0,
+                  bottom: 'unset',
                 },
                 '& .Mui-selected': {
                   color: '#7878FF !important',
+                  p:0,
                 },
                 '& .MuiTab-root': {
                   fontSize: '12px',
+                  p:0
                 },
               }}
             >
@@ -196,6 +215,7 @@ const IncomeDepositSection = () => {
                 <Tab key={idx} label={label} />
               ))}
             </Tabs>
+
           <Typography fontWeight="bold" mb={1}>
             {activeTab === 'toman' ? 'فرم واریز تومان' : 'فرم واریز رمز ارز'}
           </Typography>
@@ -219,7 +239,6 @@ const IncomeDepositSection = () => {
           </Box>
         </Box>
       </Item>
-    </Grid>
   );
 };
 

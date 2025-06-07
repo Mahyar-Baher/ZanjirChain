@@ -42,8 +42,10 @@ const Wallet = () => {
           <SidebarChildrenMenu childrenItems={walletMenu?.children || []} />
         </Grid>
         <Grid item size="grow" sx={{ p: 2, pt:4}}>
-          <Grid container spacing={{ xs: 1, md: 1 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >
-            <IncomeDepositSection/>
+          <Grid container spacing={{ xs: 1, md: 1 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >  
+            <Grid item size={{xs: 12,sm:12,md:12 ,lg:6}} sx={{ height:'100%',mt:{xl:5.1}, alignContent: 'end'}}>
+              <IncomeDepositSection/>
+            </Grid>
             <Grid item size={{xs: 12,sm:12,md:12 ,lg:2}} sx={{ height:'100%',mt:{xl:5.1}, alignContent: 'end'}}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',alignItems:'center',p:1}}>
                 <Typography fontWeight={600} fontSize={'12px'} textAlign="center" mb={1}>
