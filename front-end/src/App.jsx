@@ -6,7 +6,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Income from './pages/Income';
+import Outcome from './pages/Outcome';
 import Sms_verification from './pages/sms_verification';
+import Dashboard from './pages/Dashboard';
 import Wallet from './pages/wallet';
 import { useState, useMemo } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
@@ -27,6 +29,8 @@ function App() {
           <Route element={<EmptyLayout darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />}>
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/Income" element={<Income />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/outcome" element={<Outcome />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/sms_verification" element={<Sms_verification />} />

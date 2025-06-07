@@ -9,11 +9,11 @@ import {
   Divider
 } from '@mui/material';
 import SidebarChildrenMenu from '../components/SidebarChildrenMenu';
-import HistoryLastIncome from '../components/HistoryLastIncome';
+import HistoryLastOutcome from '../components/HistoryLastOutcome';
 import Navbarbox from '../components/navbarbox';
 import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
-import IncomeDepositSection from '../components/IncomeDepositSection';
+import OutcomeDepositSection from '../components/OutcomeDepositSection';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -24,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[2],
 }));
 
-const Income = () => {
+const Outcome = () => {
   const { darkMode } = useOutletContext();
   const walletMenu = navItems.find(item => item.label === 'کیف پول');
   return (
@@ -40,7 +40,7 @@ const Income = () => {
             </Grid>
             <Grid item size={{xs:12,sm: 12,md: 12, lg:5.7}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' , p:0}}>
-                <IncomeDepositSection/>
+                <OutcomeDepositSection/>
               </Item>
             </Grid>
             <Grid item size={{xs: 12,sm:6,md:12 ,lg:4.3}} sx={{ height:{xs:'100%', md:'100%',lg: '100%'}}}>
@@ -58,14 +58,10 @@ const Income = () => {
                   </Box>
                 </Box>
               </Item>
-              <Item sx={{height:'100%', mt:3,p:4}}>
+              <Item sx={{height:'100%', mt:3, p:4}}>
                <Box sx={{ mt: 2}}>
                   <Typography sx={{ textAlign: 'justify',lineHeight: 2 }}>
                     کاربر گرامی، امکان افزایش موجودی کیف‌پول تومانی از طریق حساب <strong>بلوبانک</strong> برای <strong>واریز شناسه‌دار</strong> وجود ندارد. لطفاً توجه داشته باشید که اگر هنگام انتقال وجه، شناسه واریز را <strong>وارد نکنید</strong> یا آن را <strong>اشتباه وارد کنید</strong>، مبلغ به حساب شما اضافه نخواهد شد و پیگیری آن نیز امکان‌پذیر نخواهد بود.
-                  </Typography>
-                  <Typography sx={{ mt: 1, textAlign: 'justify',lineHeight:2 }}>
-                    همچنین، هنگام پرداخت از طریق <strong>شعبه</strong> یا به‌صورت <strong>اینترنتی</strong>، لطفاً بخش توضیحات تراکنش را <strong>خالی</strong> بگذارید. در روزهای کاری، در صورتی که پس از <strong>۱۲ ساعت</strong> کیف‌پول شما شارژ نشد، با پشتیبانی تماس بگیرید.
-                    توجه داشته باشید در <strong>روزهای تعطیل رسمی</strong>، به دلیل نبود چرخه تسویه پایا، شارژ کیف‌پول در اولین روز کاری انجام می‌شود. در این صورت، پس از گذشت ۱۲ ساعت از اولین روز کاری، لطفاً با پشتیبانی در تماس باشید.
                   </Typography>
                 </Box>
               </Item>
@@ -75,7 +71,7 @@ const Income = () => {
             </Grid>
             <Grid item size={{xs: 12,sm: 12, md: 12, lg:10}} sx={{pl:0, mt: 3}}>
               <Item sx={{ height: '100%',backgroundColor:'transparent', display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',p:1}}>
-                <HistoryLastIncome/>
+                <HistoryLastOutcome/>
               </Item>
             </Grid>
           </Grid>
@@ -85,4 +81,4 @@ const Income = () => {
   );
 };
 
-export default Income;
+export default Outcome;

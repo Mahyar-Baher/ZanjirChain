@@ -14,6 +14,7 @@ const SidebarChildrenMenu = ({ childrenItems = [] }) => {
         borderRadius: '30px',
         overflow: 'hidden',
         height: 'fit-content',
+        position: 'sticky',
         p: 0,
         mt: 6,
       }}
