@@ -17,7 +17,7 @@ const DualProgress = ({ tether, toman, rate = 83000, size = 100, stroke = 12 }) 
 
     const tetherLength = (tetherValue / total) * circumference;
     const tomanLength = (tomanInTether / total) * circumference;
-
+//  ka te non no'ya
     return (
         <Box position="relative" width={size} height={size}>
             <Box className="rounded-animate" sx={{ p: 0, m: 0 }}>
