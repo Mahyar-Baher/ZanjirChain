@@ -11,6 +11,7 @@ import Sms_verification from './pages/sms_verification';
 import Dashboard from './pages/Dashboard';
 import Wallet from './pages/wallet';
 import Trade from './pages/Trade';
+import History from './pages/History';
 import { useState, useMemo } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
@@ -30,6 +31,7 @@ function App() {
           <Route element={<EmptyLayout darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />}>
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/Trade" element={<Trade />} />
+            <Route path="/History" element={<History />} />
             <Route path="/Income" element={<Income />} />
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/outcome" element={<Outcome />} />

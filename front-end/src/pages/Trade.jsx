@@ -8,13 +8,12 @@ import {
   Stack,
   Divider
 } from '@mui/material';
-import DualProgress from '../components/DualProgress';
 import Navbarbox from '../components/navbarbox';
 import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
 import EasyBuyAndSell from '../components/EasyBuyAndSell';
 import TetherChartDash from '../components/TetherChartDash';
-import AddsMaster from '../components/AddsMaster';
+import TableBuyAndSell from '../components/TableBuyAndSell';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -56,9 +55,7 @@ const Trade = () => {
                 <TetherChartDash hideLatestRate />
             </Grid>
             <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pl:0, mt: 3}}>
-              <Grid container spacing={2}>
-                <AddsMaster/>
-              </Grid>
+                <TableBuyAndSell/>
             </Grid>
           </Grid>
         </Grid>
