@@ -368,7 +368,7 @@ const IncomeDepositSection = () => {
           onChange={(_, newValue) => setActiveMethod(newValue)}
           variant="fullWidth"
           sx={{
-            direction: 'ltr',
+            direction: 'rtl',
             mt: 1,
             borderTop: '1px solid #eee',
             '& .MuiTabs-indicator': {

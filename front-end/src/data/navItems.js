@@ -8,6 +8,7 @@ const navItems = [
       { label: 'برداشت وجه', icon: 'fa6-solid:upload', path: '/outcome' },
     ]
   },
+  { label: 'معامله آسان تتر', icon: 'mdi:currency-usd', path: '/trade' },
   {
     label: 'تاریخچه', icon: 'mdi:history', path: '/history',
     children: [
@@ -17,7 +18,7 @@ const navItems = [
     ]
   },
   {
-    label: 'مدیریت حساب کاربری', icon: 'mdi:account', path: '/user',
+    label: 'مدیریت حساب', icon: 'mdi:account', path: '/user',
     children: [
       { label: 'مشخصات کاربری', icon: 'mdi:account-circle', path: '/user_information' },
       { label: 'حساب های بانکی', icon: 'mdi:credit-card', path: '/credits' },
@@ -28,7 +29,6 @@ const navItems = [
       { label: 'امنیت', icon: 'mdi:shield-outline', path: '/security' }
     ]
   },
-  { label: 'معامله آسان تتر', icon: 'mdi:currency-usd', path: '/trade' },
   { label: 'خروج از حساب', icon: 'token-branded:catgirl', path: '/logout' },
 ];
 

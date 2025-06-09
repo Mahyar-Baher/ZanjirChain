@@ -23,7 +23,7 @@ const Item = styled(Box)(() => ({
 }));
 // const tomanMethods   = ['کارت بانکی'];
 const cryptoMethods  = ['انتقال داخلی', 'شبکه TRC20', 'شبکه BEP20', 'شبکه ERC20'];
-const recentAmounts  = ['500,000', '1,000,000', '5,000,000', '10,000,000', '15,000,000', '20,000,000', '25,000,000'];
+const recentAmounts  = ['5,000,000', '10,000,000', '15,000,000', '20,000,000', '25,000,000'];
 const feePercent     = 1;
 const balances       = ['1,000,000'];
 const MethodContent = ({ activeMethod, isCrypto }) => {
