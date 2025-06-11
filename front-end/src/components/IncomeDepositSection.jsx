@@ -83,20 +83,7 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
           </Typography>
         ))}
       </Box>
-      <Box
-        sx={{
-          mt: 2,
-          p: 2,
-          border: '1px solid #ccc',
-          borderRadius: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 1,
-          color: '#fff',
-          backgroundColor: '#7878FF',
-          opacity: 0.85,
-        }}
-      >
+      <Box sx={{mt: 2,p: 2,border: '1px solid #ccc',borderRadius: 2,display: 'flex',flexDirection: 'column',gap: 1,color: '#fff',backgroundColor: '#7878FF',opacity: 0.85,}}>
         <Box sx={{display: 'grid',gridTemplateColumns: 'auto 1fr auto',alignItems: 'center',gap: 1,width: '100%',}}>
           <Typography noWrap>کارمزد درگاه پرداخت</Typography>
           <Divider  sx={{    borderStyle: 'dashed',   borderColor: 'rgba(255,255,255,0.5)',   height: 2 }}/>

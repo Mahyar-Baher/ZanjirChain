@@ -25,14 +25,14 @@ const SidebarChildrenMenu = ({ childrenItems = [] }) => {
           fullWidth
           onClick={() => navigate(child.path)}
           sx={{
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             color: location.pathname === child.path ? '#fff' : '#fff',
             backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
-            px: 0,
+            pr: 2,
             py: 1.2,
             borderBottom: '1px dashed rgba(255,255,255,0.3)',
             '& i': { marginLeft: '0px' },
-            textAlign: 'center'
+            textAlign: 'start'
           }}
           startIcon={<iconify-icon icon={child.icon} style={{ fontSize: '20px', marginLeft: 12 }}></iconify-icon>}
         >

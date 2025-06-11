@@ -20,7 +20,7 @@ const navItems = [
   {
     label: 'مدیریت حساب', icon: 'mdi:account', path: '/user',
     children: [
-      { label: 'مشخصات کاربری', icon: 'mdi:account-circle', path: '/user_information' },
+      { label: 'مشخصات کاربری', icon: 'mdi:account-circle', path: '/user' },
       { label: 'حساب های بانکی', icon: 'mdi:credit-card', path: '/credits' },
       { label: 'هشدار قیمت', icon: 'mdi:bell-alert-outline', path: '/alert_price' },
       { label: 'مدیریت پیام ها', icon: 'mdi:email-outline', path: '/manage_message' },

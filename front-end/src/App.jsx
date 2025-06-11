@@ -11,6 +11,8 @@ import Sms_verification from './pages/sms_verification';
 import Dashboard from './pages/Dashboard';
 import Wallet from './pages/wallet';
 import Trade from './pages/Trade';
+import Password from './pages/Password';
+import User from './pages/User';
 import History from './pages/History';
 import { useState, useMemo } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
@@ -34,9 +36,11 @@ function App() {
             <Route path="/History" element={<History />} />
             <Route path="/Income" element={<Income />} />
             <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/User" element={<User />} />
             <Route path="/outcome" element={<Outcome />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/Password" element={<Password />} />
             <Route path="/sms_verification" element={<Sms_verification />} />
           </Route>
         </Routes>

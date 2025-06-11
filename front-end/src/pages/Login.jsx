@@ -1,5 +1,6 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 import {
   Container,
   Grid,
@@ -21,16 +22,18 @@ function Login() {
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
 
   const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({
     open: false,
     message: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!/^09\d{9}$/.test(phone.trim())) {
+    const trimmedPhone = phone.trim();
+
+    if (!/^09\d{9}$/.test(trimmedPhone)) {
       setErrorModal({
         open: true,
         message: 'شماره موبایل نامعتبر است.'
@@ -38,16 +41,47 @@ function Login() {
       return;
     }
 
-    if (password.trim().length < 4) {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        'https://amirrezaei2002x.shop/laravel/api/check-phone',
+        { mobile_number: trimmedPhone },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('پاسخ سرور:', response.data);
+
+      if (response.data && typeof response.data.exists !== 'undefined') {
+        if (response.data.exists === false) {
+          navigate('/sms_verification', {
+            state: { phone: trimmedPhone, exists: response.data.exists },
+          });
+        } else {
+          navigate('/Password', {
+            state: { phone: trimmedPhone, exists: response.data.exists },
+          });
+        }
+      } else {
+        setErrorModal({
+          open: true,
+          message: 'پاسخ نامعتبر از سرور دریافت شد.'
+        });
+      }
+    } catch (error) {
+      console.error('خطا در ارسال درخواست:', error);
       setErrorModal({
         open: true,
-        message: 'رمز باید حداقل ۴ حرف باشد.'
+        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.'
       });
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    navigate('/sms_verification');
   };
+
   const closeErrorModal = () => {
     setErrorModal(prev => ({ ...prev, open: false }));
   };
@@ -85,6 +119,7 @@ function Login() {
           </Box>
         </Fade>
       </Modal>
+
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}
@@ -114,8 +149,8 @@ function Login() {
             <Typography sx={{ mt: 2, mb: 3 }}>
               {errorModal.message}
             </Typography>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               onClick={closeErrorModal}
               sx={{ width: '100%' }}
             >
@@ -135,20 +170,15 @@ function Login() {
           flexDirection: { xs: 'column-reverse', md: 'row' },
         }}
       >
-        <Grid item xs={12} md={6} sx={{ p: 0, m: 0 }}>
+        <Grid item size={{xs:12,md:6}}>
           <WarningsBox />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={6}
+        <Grid item size={{xs:12, md:6}}
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            p: 0,
-            m: 0,
-            ml: { xs: 0, md: 2, lg: 0 },
+            px: 2,
             mb: { xs: 2, md: 0 },
           }}
         >
@@ -159,7 +189,7 @@ function Login() {
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               ورود / ثبت‌نام
             </Typography>
-            <form component="form" onSubmit={handleSubmit} mt={3}>
+            <form onSubmit={handleSubmit}>
               <TextField
                 fullWidth
                 label="شماره موبایل"
@@ -171,36 +201,17 @@ function Login() {
                 margin="normal"
                 sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
               />
-              <TextField
-                fullWidth
-                label="رمز ورود"
-                name="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="مثال: 123456"
-                variant="outlined"
-                margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
-              />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 size="large"
+                disabled={loading}
                 sx={{ height: 60, borderRadius: 0, fontSize: '1.1rem', mt: 2 }}
               >
-                ورود / ثبت‌نام
+                {loading ? 'در حال بررسی...' : 'ورود / ثبت‌نام'}
               </Button>
             </form>
-            <Button
-              onClick={() => navigate('/ForgotPassword')}
-              variant="text"
-              fullWidth
-              sx={{ mt: 2, height: 60, fontSize: '0.95rem', borderRadius: 0 }}
-            >
-              رمز خود را فراموش کرده‌ام
-            </Button>
           </Box>
         </Grid>
       </Grid>
