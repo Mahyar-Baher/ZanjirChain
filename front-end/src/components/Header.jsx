@@ -172,7 +172,6 @@ function Header({ darkMode, toggleDarkMode }) {
               </MenuItem>
             ))}
             </Menu>
-            <ThemeToggleButton darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
           </Box>
         </Toolbar>
       </Container>

@@ -22,9 +22,9 @@ const navItems = [
     children: [
       { label: 'مشخصات کاربری', icon: 'mdi:account-circle', path: '/user' },
       { label: 'حساب های بانکی', icon: 'mdi:credit-card', path: '/credits' },
-      { label: 'هشدار قیمت', icon: 'mdi:bell-alert-outline', path: '/alert_price' },
-      { label: 'مدیریت پیام ها', icon: 'mdi:email-outline', path: '/manage_message' },
-      { label: 'مدیریت آدرس ها', icon: 'mdi:map-marker-outline', path: '/manage_addresses' },
+      { label: 'هشدار قیمت', icon: 'mdi:bell-alert-outline', path: '/alertPrice' },
+      { label: 'مدیریت پیام ها', icon: 'mdi:email-outline', path: '/manageMessage' },
+      { label: 'مدیریت آدرس ها', icon: 'mdi:map-marker-outline', path: '/manageAddresses' },
       { label: 'تنظیمات', icon: 'mdi:cog-outline', path: '/settings' },
       { label: 'امنیت', icon: 'mdi:shield-outline', path: '/security' }
     ]

@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/MainLayout';
 import EmptyLayout from './components/EmptyLayout';
@@ -11,29 +11,36 @@ import Sms_verification from './pages/sms_verification';
 import Dashboard from './pages/Dashboard';
 import Wallet from './pages/wallet';
 import Trade from './pages/Trade';
+import AlertPrice from './pages/alertPrice';
 import Password from './pages/Password';
+import ManageMessage from './pages/ManageMessage';
+import ManageAddresses from './pages/ManageAddresses';
+import Credits from './pages/Credits';
+import Settings from './pages/Settings';
 import User from './pages/User';
 import History from './pages/History';
-import { useState, useMemo } from 'react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { lightTheme, darkTheme } from './theme';
-import ThemeToggleButton from './theme/ThemeToggleButton';
+import Security from './pages/Security';
+
+import { CustomThemeProvider } from './theme/ThemeContext';
+
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
-  const toggleDarkMode = () => setDarkMode(prev => !prev);
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <CustomThemeProvider>
       <Router>
         <Routes>
-          <Route element={<MainLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}>
+          <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
           </Route>
-          <Route element={<EmptyLayout darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />}>
+          <Route element={<EmptyLayout />}>
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/Trade" element={<Trade />} />
             <Route path="/History" element={<History />} />
+            <Route path="/Security" element={<Security />} />
+            <Route path="/Settings" element={<Settings />} />
+            <Route path="/ManageAddresses" element={<ManageAddresses />} />
+            <Route path="/ManageMessage" element={<ManageMessage />} />
+            <Route path="/AlertPrice" element={<AlertPrice />} />
+            <Route path="/Credits" element={<Credits />} />
             <Route path="/Income" element={<Income />} />
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/User" element={<User />} />
@@ -45,7 +52,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </ThemeProvider>
+    </CustomThemeProvider>
   );
 }
 

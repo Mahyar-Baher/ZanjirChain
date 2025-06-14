@@ -29,6 +29,7 @@ const styleModal = {
   transform: 'translate(-50%, -50%)',
   width: 440,
   bgcolor: 'background.paper',
+  color: 'text.primary',
   boxShadow: 24,
   p: 3,
   borderRadius: 2,

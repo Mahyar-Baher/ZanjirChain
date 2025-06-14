@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import DualProgress from '../components/DualProgress';
 import Navbarbox from '../components/navbarbox';
-import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
 import CompleteIdenity from '../components/CompleteIdenity';
 import QuickBuyAndSell from '../components/QuickBuyAndSell';
@@ -27,14 +26,13 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-  const { darkMode } = useOutletContext();
   const toman = 2000000;
   const tether = 1000;
   const rate = 85000;
   const size = 140;
   const DashboardMenu = navItems.find(item => item.label === 'کیف پول');
   return (
-    <Paper sx={{ minHeight: '100vh', bgcolor: darkMode ? '#121212' : '#f5f5f5' }}>
+    <Paper sx={{ minHeight: '100vh',  bgcolor: (theme) => theme.palette.background.default }}>
       <Grid container spacing={0} sx={{ height: {xs:'fit-content', md:'fit-content'},justifyContent: { xs: 'flex-end', md: 'flex-end' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }}>
         <Grid item size="auto">
           <Navbarbox />

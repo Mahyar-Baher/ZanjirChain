@@ -149,7 +149,7 @@ const WithdrawalSection = () => {
   const methodsArr = cryptoMethods;
 
   return (
-    <Item sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Stack direction="row" spacing={0} sx={{ border: '1px solid #7878FF', borderRadius: 1,p: 0.4  }}>
         {[
           { key: 'toman', label: 'برداشت تومان' },
@@ -210,7 +210,7 @@ const WithdrawalSection = () => {
       <Box sx={{ border: '0px solid #ccc', borderRadius: 2, p: 2, minHeight: 300 }}>
         <MethodContent activeMethod={method} isCrypto={tab === 'crypto'} />
       </Box>
-    </Item>
+    </Box>
   );
 };
 

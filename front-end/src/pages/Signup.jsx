@@ -1,4 +1,4 @@
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import {
   Container,
@@ -13,11 +13,9 @@ import {
   Fade,
 } from '@mui/material';
 import WarningsBox from '../components/warningbox';
-import ThemeToggleButton from '../theme/ThemeToggleButton';
 
 function Signup() {
   const navigate = useNavigate();
-  const { darkMode, toggleDarkMode } = useOutletContext();
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
   const [formData, setFormData] = useState({
     name: '',
@@ -70,7 +68,7 @@ function Signup() {
   };
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: '0 !important', m: '0 !important' }}>
+    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: '0 !important', m: '0 !important', bgcolor: (theme) => theme.palette.background.default }}>
       <Modal
         open={isVerySmallScreen}
         closeAfterTransition
@@ -170,9 +168,7 @@ function Signup() {
           }}
         >
           <Box width="100%" maxWidth={600}>
-            <Box my={1}>
-              <ThemeToggleButton darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            </Box>
+
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               ورود اطلاعات فردی
             </Typography>

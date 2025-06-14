@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import WarningsBox from '../components/warningbox';
 import ThemeToggleButton from '../theme/ThemeToggleButton';
@@ -19,8 +19,7 @@ import { Padding } from '@mui/icons-material';
 const Sms_verification = () => {
   const location   = useLocation();
   const phone      = location.state?.phone || '';   
-  const navigate   = useNavigate();
-  const { darkMode, toggleDarkMode } = useOutletContext();
+  // const navigate   = useNavigate();
   const [code, setCode]           = useState('');
   const [loading, setLoading]     = useState(false);
   const [sending, setSending]     = useState(false); 
@@ -105,7 +104,7 @@ const Sms_verification = () => {
     setErrorModal((prev) => ({ ...prev, open: false }));
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: 0, m: 0 }}>
+    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: 0, m: 0 , bgcolor: (theme) => theme.palette.background.default }}>
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}
@@ -140,11 +139,7 @@ const Sms_verification = () => {
           p: { xs: 2, md: 5 },
         }}>
           <Box width="100%">
-            {/* دکمه تغییر تم */}
-            <Box my={1} sx={{ textAlign: 'right' }}>
-              <ThemeToggleButton darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            </Box>
-
+          
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               تأیید شماره همراه
             </Typography>

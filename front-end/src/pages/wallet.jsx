@@ -13,7 +13,6 @@ import SidebarChildrenMenu from '../components/SidebarChildrenMenu';
 import Switchprise from '../components/Switchprise';
 import CryptoTable from '../components/CryptoTable';
 import Navbarbox from '../components/navbarbox';
-import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -26,13 +25,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Wallet = () => {
-  const { darkMode } = useOutletContext();
   const toman = 0;
   const tether = 0;
   const rate = 85000;
   const walletMenu = navItems.find(item => item.label === 'کیف پول');
   return (
-    <Paper sx={{ minHeight: '100vh', bgcolor: darkMode ? '#121212' : '#f5f5f5' }}>
+    <Paper sx={{ minHeight: '100vh', bgcolor: (theme) => theme.palette.background.default }}>
       <Grid container spacing={0} sx={{ height: {xs:'fit-content', md:'fit-content'},justifyContent: { xs: 'flex-end', md: 'flex-end' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }}>
         <Grid item size="auto">
           <Navbarbox />
@@ -109,7 +107,7 @@ const Wallet = () => {
               </Item>
             </Grid>
             <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pl:0, mt: 3}}>
-              <Item sx={{ height: '100%',backgroundColor:'#e9e9e9', display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',p:1}}>
+              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',p:1}}>
                   <Box sx={{display:'felx'}}>
                     <Typography fontWeight={600} textAlign="center" mb={1}>
                       دریافت پاداش خودکار هفتگی

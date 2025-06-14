@@ -128,7 +128,6 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
 
       <Box
         sx={{
-          backgroundColor: '#f0f0ff',
           p: 2,
           borderRadius: 2,
           my: 2,
@@ -141,7 +140,6 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
         <Typography
           variant="h6"
           fontWeight="bold"
-          color="#333"
           sx={{ cursor: 'pointer', userSelect: 'none' }}
           onClick={handleCopyCard}
         >
@@ -306,7 +304,7 @@ const IncomeDepositSection = () => {
   const methods = activeTab === 'toman' ? tomanMethods : cryptoMethods;
 
   return (
-    <Item
+    <Box
       sx={{
         height: '100%',
         display: 'flex',
@@ -397,7 +395,7 @@ const IncomeDepositSection = () => {
           <MethodContent activeMethod={activeMethod} isCrypto={activeTab === 'crypto'} />
         </Box>
       </Box>
-    </Item>
+    </Box>
   );
 };
 

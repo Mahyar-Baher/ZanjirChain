@@ -11,7 +11,6 @@ import {
 import SidebarChildrenMenu from '../components/SidebarChildrenMenu';
 import HistoryLastOutcome from '../components/HistoryLastOutcome';
 import Navbarbox from '../components/navbarbox';
-import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
 import OutcomeDepositSection from '../components/OutcomeDepositSection';
 
@@ -25,10 +24,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Outcome = () => {
-  const { darkMode } = useOutletContext();
   const walletMenu = navItems.find(item => item.label === 'کیف پول');
   return (
-    <Paper sx={{ minHeight: '100vh', bgcolor: darkMode ? '#121212' : '#f5f5f5' }}>
+    <Paper sx={{ minHeight: '100vh',  bgcolor: (theme) => theme.palette.background.default }}>
       <Grid container spacing={0} sx={{ height: {xs:'fit-content', md:'fit-content'},justifyContent: { xs: 'flex-end', md: 'flex-end' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }}>
         <Grid item size="auto">
           <Navbarbox />

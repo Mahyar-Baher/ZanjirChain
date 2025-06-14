@@ -1,4 +1,4 @@
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import {
@@ -18,7 +18,6 @@ import ThemeToggleButton from '../theme/ThemeToggleButton';
 
 function Login() {
   const navigate = useNavigate();
-  const { darkMode, toggleDarkMode } = useOutletContext();
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
 
   const [phone, setPhone] = useState('');
@@ -102,7 +101,7 @@ function Login() {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 300,
-              bgcolor: 'background.paper',
+              bgcolor: (theme) => theme.palette.background.default,
               border: '2px solid #000',
               boxShadow: 24,
               p: 4,
@@ -183,9 +182,6 @@ function Login() {
           }}
         >
           <Box width="100%" maxWidth={'100%'}>
-            <Box my={1}>
-              <ThemeToggleButton darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            </Box>
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               ورود / ثبت‌نام
             </Typography>

@@ -1,15 +1,11 @@
 import { styled } from '@mui/material/styles';
 import {
   Box,
-  Button,
   Typography,
   Grid,
   Paper,
-  Stack,
-  Divider
 } from '@mui/material';
 import Navbarbox from '../components/navbarbox';
-import { useOutletContext } from 'react-router-dom';
 import navItems from '../data/navItems';
 import EasyBuyAndSell from '../components/EasyBuyAndSell';
 import TetherChartDash from '../components/TetherChartDash';
@@ -25,14 +21,13 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Trade = () => {
-  const { darkMode } = useOutletContext();
 //   const toman = 2000000;
 //   const tether = 1000;
 //   const rate = 85000;
 //   const size = 140;
   const TradeMenu = navItems.find(item => item.label === 'کیف پول');
   return (
-    <Paper sx={{ minHeight: '100vh', bgcolor: darkMode ? '#121212' : '#f5f5f5' }}>
+    <Paper sx={{ minHeight: '100vh',  bgcolor: (theme) => theme.palette.background.default }}>
       <Grid container spacing={0} sx={{ height: {xs:'fit-content', md:'fit-content'},justifyContent: { xs: 'flex-end', md: 'flex-end' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }}>
         <Grid item size="auto">
           <Navbarbox />
