@@ -17,6 +17,7 @@ import {
 import { Padding } from '@mui/icons-material';
 
 const Sms_verification = () => {
+  const navigate = useNavigate();
   const location   = useLocation();
   const phone      = location.state?.phone || '';   
   // const navigate   = useNavigate();
@@ -43,7 +44,6 @@ const Sms_verification = () => {
       );
 
       console.log(response.data.randomCode);
-      // موفق: پیام خاصی لازم نداریم؛ می‌توانید نوتیفیکیشن اضافه کنید.
     } catch (err) {
       console.error(err);
       setErrorModal({
@@ -56,55 +56,94 @@ const Sms_verification = () => {
     }
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (code.trim().length !== 4) {
-    return setErrorModal({ open: true, message: 'کد باید دقیقاً ۴ رقم باشد.' });
-  }
+    if (!/^\d{4}$/.test(code.trim())) {
+      return setErrorModal({ open: true, message: 'کد باید دقیقاً ۴ رقم عددی باشد.' });
+    }
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    // اول کوکی CSRF بگیر
-    await axios.get('https://amirrezaei2002x.shop/laravel/sanctum/csrf-cookie', {
-      withCredentials: true,
-    });
-
-    // بعد درخواست verify
-    const response = await axios.post(
-      'https://amirrezaei2002x.shop/laravel/api/verify-code',
-      {
-        mobile_number: phone,
-        code: code.trim(),
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    try {
+      await axios.get('https://amirrezaei2002x.shop/laravel/sanctum/csrf-cookie', {
         withCredentials: true,
-      }
-    );
+      });
+      const response = await axios.post(
+        'https://amirrezaei2002x.shop/laravel/api/verify-code',
+        {
+          mobile_number: phone.trim(),
+          code: code.trim(),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
 
-    console.log(response.data);
-    alert('ارسال موفق');
-  } catch (err) {
-    console.error(err);
-    setErrorModal({
-      open: true,
-      message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.',
-    });
-    alert(err.message || 'خطا در ارسال');
-  } finally {
-    setLoading(false);
-  }
-};
+
+      const { success, user_exist, token } = response.data || {};
+
+      if (success === true) {
+      if (typeof user_exist === 'boolean') {
+        if (token) {
+          localStorage.setItem('access_token', token);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; 
+        }
+        
+        if (user_exist) {
+          navigate('/dashboard', {
+            state: { phone: phone.trim(), code: code.trim(), user_exist, state: { phone } },
+          });
+        } else {
+          navigate('/signup', {
+            state: { phone: phone.trim(), code: code.trim(), user_exist, state: { phone } },
+          });
+        }
+      } else {
+        setErrorModal({
+          open: true,
+          message: 'اطلاعات کاربر قابل تشخیص نیست.',
+        });
+      }
+      } else {
+      setErrorModal({
+        open: true,
+        message: 'کد وارد شده معتبر نیست یا منقضی شده است.',
+      });
+    }
+
+
+    } catch (error) {
+      console.error('خطا در ارسال درخواست:', error);
+      setErrorModal({
+        open: true,
+        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
 
   const closeErrorModal = () =>
     setErrorModal((prev) => ({ ...prev, open: false }));
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: 0, m: 0 , bgcolor: (theme) => theme.palette.background.default }}>
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          bgcolor: (theme) => theme.palette.background.default,
+        }}
+      >
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}

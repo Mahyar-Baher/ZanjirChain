@@ -20,7 +20,6 @@ import Settings from './pages/Settings';
 import User from './pages/User';
 import History from './pages/History';
 import Security from './pages/Security';
-
 import { CustomThemeProvider } from './theme/ThemeContext';
 
 function App() {
@@ -39,7 +38,7 @@ function App() {
             <Route path="/Settings" element={<Settings />} />
             <Route path="/ManageAddresses" element={<ManageAddresses />} />
             <Route path="/ManageMessage" element={<ManageMessage />} />
-            <Route path="/AlertPrice" element={<AlertPrice />} />
+            <Route path="/alertPrice" element={<AlertPrice />} />
             <Route path="/Credits" element={<Credits />} />
             <Route path="/Income" element={<Income />} />
             <Route path="/Dashboard" element={<Dashboard />} />

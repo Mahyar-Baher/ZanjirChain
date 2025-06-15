@@ -49,27 +49,22 @@ const Password = () => {
         }
       );
 
-      // اگر status 2xx باشد، یعنی وارد بلاک try شده‌ایم
       if (response.data && response.data.success === true) {
-        navigate('/wallet');
+        navigate('/wallet',{state:{phone}})
       } else {
-        // اگر سرور با 2xx آمد اما success=false باشد
         setErrorModal({
           open: true,
           message: response.data?.message || 'رمز عبور نادرست است.',
         });
       }
     } catch (error) {
-      // اگر Axios خطا بدهد (مثلاً status 401 یا 400 برای رمز اشتباه):
       if (error.response) {
-        // پاسخ از سرور آمده ولی status غیر از 2xx است
         const serverMsg = error.response.data?.message;
         setErrorModal({
           open: true,
           message: serverMsg || 'رمز عبور نادرست است.',
         });
       } else {
-        // خطای شبکه یا قطع ارتباط
         setErrorModal({
           open: true,
           message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.',
@@ -85,8 +80,16 @@ const Password = () => {
   };
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: '0 !important', m: '0 !important' }}>
-      {/* مودال خطا */}
+    <Container
+          disableGutters
+          maxWidth={false}
+          sx={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            bgcolor: (theme) => theme.palette.background.default,
+          }}
+        >
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}
@@ -153,7 +156,7 @@ const Password = () => {
             </Typography>
 
             <Button
-              onClick={() => navigate('/Sms_verification')}
+              onClick={() => navigate('/Sms_verification', { state: { phone } })}
               startIcon={<i className="fas fa-chevron-left" />}
               sx={{
                 p: 0,

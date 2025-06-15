@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 import {
   Container,
   Grid,
@@ -15,13 +16,93 @@ import {
 import WarningsBox from '../components/warningbox';
 
 function Signup() {
+  const location = useLocation();
+  const mobileNumber = location.state?.phone;
   const navigate = useNavigate();
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
   const [formData, setFormData] = useState({
     name: '',
     fname: '',
     identity_code: '',
+    password: '',
+    password_approve: '',
   });
+  
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (formData.name.trim().length < 2) {
+    setErrorModal({ open: true, message: 'نام باید حداقل ۲ حرف باشد.' });
+    return;
+  }
+
+  if (formData.fname.trim().length < 2) {
+    setErrorModal({ open: true, message: 'نام خانوادگی باید حداقل ۲ حرف باشد.' });
+    return;
+  }
+
+  if (!/^\d{10}$/.test(formData.identity_code)) {
+    setErrorModal({ open: true, message: 'کد ملی باید ۱۰ رقم باشد.' });
+    return;
+  }
+
+  if (formData.password.length < 6) {
+    setErrorModal({ open: true, message: 'رمز عبور باید حداقل ۶ کاراکتر باشد.' });
+    return;
+  }
+
+  if (formData.password !== formData.password_approve) {
+    setErrorModal({ open: true, message: 'رمز عبور و تکرار آن مطابقت ندارند.' });
+    return;
+  }
+
+  const payload = {
+    first_name: formData.name,
+    last_name: formData.fname,
+    national_code: formData.identity_code,
+    password: formData.password,
+    password_confirmation: formData.password_approve,
+    mobile_number: mobileNumber,
+  };
+
+  try {
+    const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/add-user', payload, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    if (response.data.success === true) {
+      // ذخیره توکن در localStorage
+      if(response.data.token){
+        localStorage.setItem('token', response.data.token);
+      }
+      // اگر اطلاعات کاربر و کیف پول هم برگشت داده شد، ذخیره کن
+      if(response.data.user){
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+      if(response.data.wallet){
+        localStorage.setItem('wallet', JSON.stringify(response.data.wallet));
+      }
+
+      navigate('/wallet');
+    } else {
+      const message =
+        response?.data?.message ||
+        Object.values(response?.data?.message || {})[0]?.[0] ||
+        'خطایی در ثبت‌نام رخ داده است.';
+      setErrorModal({ open: true, message });
+    }
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      Object.values(error.response?.data?.errors || {})[0]?.[0] ||
+      'خطایی در ثبت‌نام رخ داده است.';
+    setErrorModal({ open: true, message });
+  }
+};
+
+
   const [errorModal, setErrorModal] = useState({
     open: false,
     message: ''
@@ -34,41 +115,21 @@ function Signup() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (formData.name.trim().length < 2) {
-      setErrorModal({
-        open: true,
-        message: 'نام باید حداقل ۲ حرف باشد.'
-      });
-      return;
-    }
-
-    if (formData.fname.trim().length < 2) {
-      setErrorModal({
-        open: true,
-        message: 'نام خانوادگی باید حداقل ۲ حرف باشد.'
-      });
-      return;
-    }
-
-    if (!/^\d{10}$/.test(formData.identity_code)) {
-      setErrorModal({
-        open: true,
-        message: 'کد ملی باید ۱۰ رقم باشد.'
-      });
-      return;
-    }
-
-    navigate('/wallet');
-  };
-
   const closeErrorModal = () => {
     setErrorModal(prev => ({ ...prev, open: false }));
   };
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: '0 !important', m: '0 !important', bgcolor: (theme) => theme.palette.background.default }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        bgcolor: (theme) => theme.palette.background.default,
+      }}
+    >
       <Modal
         open={isVerySmallScreen}
         closeAfterTransition
@@ -141,35 +202,31 @@ function Signup() {
       </Modal>
 
       <Grid
-        fullWidth
+        container
         sx={{
-          flex: 1,
-          px: { xs: 1, md: 0 },
-          m: 0,
-          display: 'flex',
+          width: '100%',
+          height: '100%',
           flexDirection: { xs: 'column-reverse', md: 'row' },
         }}
       >
-        <Grid item size={{ xs: 12, md: 6}} sx={{ p: 0, m: 0 }}>
+        <Grid
+          item
+          size={{xs:12,md:5}}
+          sx={{ height: { xs: 'auto', md: '100%' } }}
+        >
           <WarningsBox />
         </Grid>
         <Grid
           item
-          xs={12}
-          md={6}
+          size={{xs:12,md:7}}
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            p: 0,
-            m: 0,
-            ml: { xs: 0, md: 2, lg: 0 },
-            mb: { xs: 2, md: 0 },
           }}
         >
-          <Box width="100%" maxWidth={600}>
-
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
+          <Box sx={{px:2, my:{xs:2}}}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom sx={{color: 'text.primary'}}>
               ورود اطلاعات فردی
             </Typography>
 
@@ -205,6 +262,28 @@ function Signup() {
                 placeholder="مثال: 1234567890"
                 variant="outlined"
                 margin="normal"
+                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+              />
+              <TextField
+                fullWidth
+                label="رمز عبور"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                variant="outlined"
+                margin="normal"
+                type="password"
+                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+              />
+              <TextField
+                fullWidth
+                label="تکرار رمز عبور"
+                name="password_approve"
+                value={formData.password_approve}
+                onChange={handleChange}
+                variant="outlined"
+                margin="normal"
+                type="password"
                 sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
               />
 

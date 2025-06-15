@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -11,6 +11,7 @@ import {
   ButtonBase,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import axios from "axios";
 
 const labels = {
   userId: "شناسه کاربری",
@@ -31,14 +32,39 @@ const InfoRow = ({ label, value }) => (
   </Box>
 );
 
-const UserInfo = ({ user, onEdit }) => {
+const UserInfo = () => {
+  const [user, setUser] = useState(null);
+  const [wallet, setWallet] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(user);
+  const [formData, setFormData] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .post("https://amirrezaei2002x.shop/laravel/api/chektoken", { token })
+        .then((response) => {
+          if (response.data.success) {
+            setUser(response.data.user);
+            setWallet(response.data.wallet);
+            setFormData(response.data.user);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("wallet", JSON.stringify(response.data.wallet));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, []);
 
   const handleChange = (field) => (event) => {
     const newData = { ...formData, [field]: event.target.value };
     setFormData(newData);
-    if (isEditing) onEdit(newData); // ذخیره فوری فیلدها
+    if (isEditing) {
+      setUser(newData);
+      // می‌تونی اینجا درخواست ذخیره تغییرات به سرور بزنی
+    }
   };
 
   const handleAvatarChange = (event) => {
@@ -56,7 +82,8 @@ const UserInfo = ({ user, onEdit }) => {
           if (data.avatarUrl) {
             const newData = { ...formData, avatarUrl: data.avatarUrl };
             setFormData(newData);
-            onEdit(newData); // ذخیره آدرس آواتار در دیتابیس
+            setUser(newData);
+            // می‌تونی درخواست ذخیره آواتار به سرور بزنی
           }
         })
         .catch((err) => {
@@ -65,13 +92,15 @@ const UserInfo = ({ user, onEdit }) => {
     }
   };
 
+  if (!user || !formData) return null;
+
   const {
-    userId,
-    firstName,
-    lastName,
-    birthDate,
-    nationalId,
-    phone,
+    id: userId,
+    first_name: firstName,
+    last_name: lastName,
+    birth_date: birthDate,
+    national_code: nationalId,
+    mobile_number: phone,
     email,
     avatarUrl,
   } = formData;
@@ -85,32 +114,30 @@ const UserInfo = ({ user, onEdit }) => {
       <Card elevation={0} sx={{ backgroundColor: "transparent", borderRadius: 3 }}>
         <CardContent>
           <Grid container spacing={3} alignItems="center" flexDirection="row-reverse">
-            <Grid item size={{xs:12 ,md:12,lg:3}}>
+            <Grid item xs={12} md={12} lg={3}>
               <Box display="flex" justifyContent="center">
-                <ButtonBase component="label" sx={{ borderRadius: "40px", overflow: "hidden", position: "relative", width: 80, height: 80 }}>
+                <ButtonBase
+                  component="label"
+                  sx={{ borderRadius: "40px", overflow: "hidden", position: "relative", width: 80, height: 80 }}
+                >
                   <Avatar src={avatarUrl} sx={{ width: 80, height: 80, fontSize: 38 }}>
                     {firstName?.charAt(0)}
                   </Avatar>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handleAvatarChange}
-                  />
+                  <input type="file" accept="image/*" hidden onChange={handleAvatarChange} />
                 </ButtonBase>
               </Box>
             </Grid>
 
-            <Grid item size={{xs:12 ,md:12,lg:9}}>
+            <Grid item xs={12} md={12} lg={9}>
               {isEditing ? (
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
-                  <TextField label={labels.userId} value={userId} onChange={handleChange("userId")} fullWidth size="small" />
-                  <TextField label={labels.firstName} value={firstName} onChange={handleChange("firstName")} fullWidth size="small" />
-                  <TextField label={labels.lastName} value={lastName} onChange={handleChange("lastName")} fullWidth size="small" />
-                  <TextField label={labels.birthDate} value={birthDate} onChange={handleChange("birthDate")} fullWidth size="small" />
-                  <TextField label={labels.nationalId} value={nationalId} onChange={handleChange("nationalId")} fullWidth size="small" />
-                  <TextField label={labels.phone} value={phone} onChange={handleChange("phone")} fullWidth size="small" />
-                  <TextField label={labels.email} value={email} onChange={handleChange("email")} fullWidth size="small" />
+                  <TextField label={labels.userId} value={userId || ""} disabled fullWidth size="small" />
+                  <TextField label={labels.firstName} value={firstName || ""} onChange={handleChange("first_name")} fullWidth size="small" />
+                  <TextField label={labels.lastName} value={lastName || ""} onChange={handleChange("last_name")} fullWidth size="small" />
+                  <TextField label={labels.birthDate} value={birthDate || ""} onChange={handleChange("birth_date")} fullWidth size="small" />
+                  <TextField label={labels.nationalId} value={nationalId || ""} onChange={handleChange("national_code")} fullWidth size="small" />
+                  <TextField label={labels.phone} value={phone || ""} onChange={handleChange("mobile_number")} fullWidth size="small" />
+                  <TextField label={labels.email} value={email || ""} onChange={handleChange("email")} fullWidth size="small" />
                 </Box>
               ) : (
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
@@ -125,13 +152,13 @@ const UserInfo = ({ user, onEdit }) => {
               )}
             </Grid>
 
-            <Grid item size="grow">
+            <Grid item xs={12}>
               <Button
                 fullWidth
                 variant="contained"
                 size="large"
                 sx={{ borderRadius: 2, py: 1.5 }}
-                startIcon={<EditOutlinedIcon sx={{ml:1.3}} />}
+                startIcon={<EditOutlinedIcon sx={{ ml: 1.3 }} />}
                 onClick={() => setIsEditing(!isEditing)}
               >
                 {isEditing ? " پایان ویرایش " : " ویرایش اطلاعات "}

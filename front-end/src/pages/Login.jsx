@@ -52,7 +52,6 @@ function Login() {
         }
       );
 
-      console.log('پاسخ سرور:', response.data);
 
       if (response.data && typeof response.data.exists !== 'undefined') {
         if (response.data.exists === false) {
@@ -86,7 +85,16 @@ function Login() {
   };
 
   return (
-    <Container fullWidth sx={{ height: '100vh', display: 'flex', p: '0 !important', m: '0 !important' }}>
+    <Container
+          disableGutters
+          maxWidth={false}
+          sx={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            bgcolor: (theme) => theme.palette.background.default,
+          }}
+        >
       <Modal
         open={isVerySmallScreen}
         closeAfterTransition
@@ -109,10 +117,10 @@ function Login() {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography variant="h6" sx={{color: 'text.primary',}} component="h2" gutterBottom>
               توجه!
             </Typography>
-            <Typography sx={{ mt: 1 }}>
+            <Typography sx={{ mt: 1, color: 'text.primary', }}>
               عرض صفحه بسیار کم است. لطفاً دستگاه خود را بچرخانید.
             </Typography>
           </Box>
@@ -135,6 +143,7 @@ function Login() {
               transform: 'translate(-50%, -50%)',
               width: 300,
               bgcolor: 'background.paper',
+              color: 'text.primary',
               border: '2px solid #000',
               boxShadow: 24,
               p: 4,
@@ -182,7 +191,7 @@ function Login() {
           }}
         >
           <Box width="100%" maxWidth={'100%'}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
+            <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ color: 'text.primary',}}>
               ورود / ثبت‌نام
             </Typography>
             <form onSubmit={handleSubmit}>
@@ -195,7 +204,7 @@ function Login() {
                 placeholder="مثال: 09123456789"
                 variant="outlined"
                 margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{ bgcolor: 'rgba(0,0,0,0.05)', color: 'text.primary', }}
               />
               <Button
                 type="submit"

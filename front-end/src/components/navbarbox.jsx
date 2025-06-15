@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { lightTheme, darkTheme } from '../theme';
 import React, { useState, useMemo, useEffect } from 'react';
 import navItems from '../data/navItems'; 
+import Token from './Token';
 
 const Navbarbox = () => {
   const navigate = useNavigate();
@@ -104,6 +105,7 @@ const Navbarbox = () => {
           </Box>
         </Paper>
       </Box>
+    <Token/>
     </ThemeProvider>
   );
 };
