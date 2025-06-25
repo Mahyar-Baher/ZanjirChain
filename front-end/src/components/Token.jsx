@@ -1,31 +1,32 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Token = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      navigate('/login');
+      console.warn('⛔️ توکن وجود ندارد، کاربر هنوز لاگین نکرده.');
       return;
     }
 
     axios.post('https://amirrezaei2002x.shop/laravel/api/chektoken', { token })
-      .then(response => {
-        if (response.data.success) {
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-          localStorage.setItem('wallet', JSON.stringify(response.data.wallet));
+      .then((res) => {
+        const { success, user, wallet } = res.data;
+
+        if (success) {
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('wallet', JSON.stringify(wallet));
+          localStorage.setItem('phone', user?.mobile_number || '');
+          console.log('✅ اطلاعات کاربر و کیف پول ذخیره شد.');
         } else {
-          navigate('/login');
+          console.warn('❌ توکن معتبر نیست یا منقضی شده.');
         }
       })
-      .catch(() => {
-        navigate('/login');
+      .catch((err) => {
+        console.error('🚨 خطا در بررسی توکن:', err);
       });
-  }, [navigate]);
+  }, []);
 
   return null;
 };
