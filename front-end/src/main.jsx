@@ -5,11 +5,14 @@ import './index.css';
 import './App.css';
 import './custom.scss';
 import { CustomThemeProvider } from './theme/ThemeContext.jsx';
+import { AuthProvider } from './context/AuthContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CustomThemeProvider>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </CustomThemeProvider>
   </React.StrictMode>
 );

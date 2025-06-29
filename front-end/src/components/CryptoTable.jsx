@@ -31,8 +31,8 @@ const CryptoTable = () => {
   });
 
   return (
-    <Paper sx={{ p: 1, width: '100%', backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}>
-      <Box sx={{ display: 'flex', flexDirection: {xs: 'column', sm:'row'}, alignItems: 'center', justifyContent: {xs: 'center', sm:'space-between'}, mb: 2 }}>
+    <Box sx={{ p: 1, width: '100%', backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}>
+      <Box sx={{ display: 'flex', flexDirection: {xs: 'column', sm:'row'}, alignItems: 'center', justifyContent: {xs: 'center', sm:'space-between'}, mb: 2, px: 3 }}>
         <Typography sx={{ fontWeight: "900", fontSize: '30px', ml: 1 }}>
           لیست ارزها
         </Typography>
@@ -55,8 +55,8 @@ const CryptoTable = () => {
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none', overflow: 'auto' }}>
-        <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
+      <TableContainer sx={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none', overflow: 'auto' }}>
+        <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px', backgroundColor: 'transparent' }}>
           <TableHead sx={{ backgroundColor: '#80808c3f' }}>
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: 'bold', borderTopRightRadius: '22px', borderBottomRightRadius: '22px', borderBottom: 'none' }}>#</TableCell>
@@ -97,7 +97,7 @@ const CryptoTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Paper>
+    </Box>
   );
 }
 
