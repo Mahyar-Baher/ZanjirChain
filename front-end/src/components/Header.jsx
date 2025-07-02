@@ -8,9 +8,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { motion, AnimatePresence } from 'framer-motion';
+// import Menu from '@mui/material/Menu';
+// import MenuItem from '@mui/material/MenuItem';
+import {AnimatePresence } from 'framer-motion';
 import avatarImg from '../assets/icons/avatar.png';
 import { AuthContext } from '../context/AuthContext';
 
