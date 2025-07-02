@@ -138,6 +138,19 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   background-repeat: no-repeat;
   opacity: 0.1;
   z-index: -1;
+}.bg-home::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../public/media/images/bg_home.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  z-index: -1;
 }
 .bg-btn-purple{
   background: #9500EB;

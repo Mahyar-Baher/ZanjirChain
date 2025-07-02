@@ -1,5 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';import { useState, useContext } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -14,12 +13,15 @@ import {
   Fade,
 } from '@mui/material';
 import WarningsBox from '../components/warningbox';
+import { AuthContext } from '../context/AuthContext';
 
 function Signup() {
   const location = useLocation();
   const mobileNumber = location.state?.phone;
   const navigate = useNavigate();
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
+  const { fetchUserFromToken } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     name: '',
     fname: '',
@@ -27,86 +29,141 @@ function Signup() {
     password: '',
     password_approve: '',
   });
-  
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if (formData.name.trim().length < 2) {
-    setErrorModal({ open: true, message: 'نام باید حداقل ۲ حرف باشد.' });
-    return;
-  }
-
-  if (formData.fname.trim().length < 2) {
-    setErrorModal({ open: true, message: 'نام خانوادگی باید حداقل ۲ حرف باشد.' });
-    return;
-  }
-
-  if (!/^\d{10}$/.test(formData.identity_code)) {
-    setErrorModal({ open: true, message: 'کد ملی باید ۱۰ رقم باشد.' });
-    return;
-  }
-
-  if (formData.password.length < 6) {
-    setErrorModal({ open: true, message: 'رمز عبور باید حداقل ۶ کاراکتر باشد.' });
-    return;
-  }
-
-  if (formData.password !== formData.password_approve) {
-    setErrorModal({ open: true, message: 'رمز عبور و تکرار آن مطابقت ندارند.' });
-    return;
-  }
-
-  const payload = {
-    first_name: formData.name,
-    last_name: formData.fname,
-    national_code: formData.identity_code,
-    password: formData.password,
-    password_confirmation: formData.password_approve,
-    mobile_number: mobileNumber,
-  };
-
-  try {
-    const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/add-user', payload, {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
-    if (response.data.success === true) {
-      // ذخیره توکن در localStorage
-      if(response.data.token){
-        localStorage.setItem('token', response.data.token);
-      }
-      // اگر اطلاعات کاربر و کیف پول هم برگشت داده شد، ذخیره کن
-      if(response.data.user){
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
-      if(response.data.wallet){
-        localStorage.setItem('wallet', JSON.stringify(response.data.wallet));
-      }
-
-      navigate('/wallet');
-    } else {
-      const message =
-        response?.data?.message ||
-        Object.values(response?.data?.message || {})[0]?.[0] ||
-        'خطایی در ثبت‌نام رخ داده است.';
-      setErrorModal({ open: true, message });
-    }
-  } catch (error) {
-    const message =
-      error.response?.data?.message ||
-      Object.values(error.response?.data?.errors || {})[0]?.[0] ||
-      'خطایی در ثبت‌نام رخ داده است.';
-    setErrorModal({ open: true, message });
-  }
-};
-
 
   const [errorModal, setErrorModal] = useState({
     open: false,
     message: ''
   });
+
+  const getUserIP = async () => {
+    try {
+      const res = await axios.get('https://api.ipify.org?format=json');
+      return res.data.ip || '0.0.0.0';
+    } catch {
+      return '0.0.0.0';
+    }
+  };
+
+  const parseUserAgent = async () => {
+    const ua = navigator.userAgent;
+    const ip = await getUserIP();
+    let os = 'Unknown OS';
+    let browser = 'Unknown Browser';
+    let device = 'Desktop';
+
+    if (/Windows NT 10.0;.*64/.test(ua)) os = 'Windows 11';
+    else if (/Windows NT 10.0/.test(ua)) os = 'Windows 10';
+    else if (/Windows NT 6.1/.test(ua)) os = 'Windows 7';
+    else if (/Mac OS X/.test(ua)) os = 'macOS';
+    else if (/Linux/.test(ua)) os = 'Linux';
+
+    if (/Chrome\/(\S+)/.test(ua)) {
+      const version = ua.match(/Chrome\/(\S+)/)[1];
+      browser = 'Chrome ' + version;
+    } else if (/Firefox\/(\S+)/.test(ua)) {
+      const version = ua.match(/Firefox\/(\S+)/)[1];
+      browser = 'Firefox ' + version;
+    } else if (/Safari\/(\S+)/.test(ua) && !/Chrome/.test(ua)) {
+      const version = ua.match(/Version\/(\S+)/)?.[1] || '';
+      browser = 'Safari ' + version;
+    }
+
+    return {
+      device,
+      os,
+      browser,
+      ip,
+      current: true,
+      last_active_at: new Date().toISOString(),
+    };
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.name.trim().length < 2) {
+      return setErrorModal({ open: true, message: 'نام باید حداقل ۲ حرف باشد.' });
+    }
+
+    if (formData.fname.trim().length < 2) {
+      return setErrorModal({ open: true, message: 'نام خانوادگی باید حداقل ۲ حرف باشد.' });
+    }
+
+    if (!/^\d{10}$/.test(formData.identity_code)) {
+      return setErrorModal({ open: true, message: 'کد ملی باید ۱۰ رقم باشد.' });
+    }
+
+    if (formData.password.length < 6) {
+      return setErrorModal({ open: true, message: 'رمز عبور باید حداقل ۶ کاراکتر باشد.' });
+    }
+
+    if (formData.password !== formData.password_approve) {
+      return setErrorModal({ open: true, message: 'رمز عبور و تکرار آن مطابقت ندارند.' });
+    }
+
+    const session = await parseUserAgent();
+
+    const payload = {
+      first_name: formData.name,
+      last_name: formData.fname,
+      national_code: formData.identity_code,
+      password: formData.password,
+      password_confirmation: formData.password_approve,
+      mobile_number: mobileNumber,
+      active_sessions: [session],
+    };
+
+    try {
+      const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/add-user', payload, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.data.success === true && response.data.token) {
+        const initialToken = response.data.token;
+        localStorage.setItem('token', initialToken);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
+
+        try {
+          const verifyRes = await axios.post(
+            'https://amirrezaei2002x.shop/laravel/api/verifyPasscodeToken',
+            { mobile_number: mobileNumber.trim() },
+            {
+              headers: { Authorization: `Bearer ${initialToken}` }
+            }
+          );
+
+          if (verifyRes.data.success && verifyRes.data.token) {
+            const finalToken = verifyRes.data.token;
+            localStorage.setItem('token', finalToken);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${finalToken}`;
+            await fetchUserFromToken(finalToken);
+            navigate('/dashboard');
+          } else {
+            const msg = verifyRes.data.message || 'خطا در دریافت توکن نهایی';
+            setErrorModal({ open: true, message: msg });
+          }
+        } catch (error) {
+          setErrorModal({ open: true, message: 'خطا در ارتباط با سرور' });
+          console.error(error);
+        }
+      } else {
+        const message =
+          response?.data?.message ||
+          Object.values(response?.data?.message || {})[0]?.[0] ||
+          'خطایی در ثبت‌نام رخ داده است.';
+        setErrorModal({ open: true, message });
+      }
+
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        Object.values(error.response?.data?.errors || {})[0]?.[0] ||
+        'خطایی در ثبت‌نام رخ داده است.';
+      setErrorModal({ open: true, message });
+    }
+  };
 
   const handleChange = (e) => {
     setFormData(prev => ({

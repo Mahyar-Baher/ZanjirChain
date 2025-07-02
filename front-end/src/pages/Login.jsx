@@ -14,7 +14,6 @@ import {
   Fade,
 } from '@mui/material';
 import WarningsBox from '../components/warningbox';
-import ThemeToggleButton from '../theme/ThemeToggleButton';
 
 function Login() {
   const navigate = useNavigate();
@@ -22,10 +21,7 @@ function Login() {
 
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorModal, setErrorModal] = useState({
-    open: false,
-    message: ''
-  });
+  const [errorModal, setErrorModal] = useState({ open: false, message: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +31,7 @@ function Login() {
     if (!/^09\d{9}$/.test(trimmedPhone)) {
       setErrorModal({
         open: true,
-        message: 'شماره موبایل نامعتبر است.'
+        message: 'شماره موبایل نامعتبر است.',
       });
       return;
     }
@@ -45,35 +41,22 @@ function Login() {
       const response = await axios.post(
         'https://amirrezaei2002x.shop/laravel/api/check-phone',
         { mobile_number: trimmedPhone },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
-
       if (response.data && typeof response.data.exists !== 'undefined') {
-        if (response.data.exists === false) {
-          navigate('/sms_verification', {
-            state: { phone: trimmedPhone, exists: response.data.exists },
-          });
-        } else {
-          navigate('/Password', {
-            state: { phone: trimmedPhone, exists: response.data.exists },
-          });
-        }
+        const target = response.data.exists ? '/Password' : '/sms_verification';
+        navigate(target, { state: { phone: trimmedPhone, exists: response.data.exists } });
       } else {
         setErrorModal({
           open: true,
-          message: 'پاسخ نامعتبر از سرور دریافت شد.'
+          message: 'پاسخ نامعتبر از سرور دریافت شد.',
         });
       }
     } catch (error) {
-      console.error('خطا در ارسال درخواست:', error);
       setErrorModal({
         open: true,
-        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.'
+        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.',
       });
     } finally {
       setLoading(false);
@@ -81,20 +64,20 @@ function Login() {
   };
 
   const closeErrorModal = () => {
-    setErrorModal(prev => ({ ...prev, open: false }));
+    setErrorModal((prev) => ({ ...prev, open: false }));
   };
 
   return (
     <Container
-          disableGutters
-          maxWidth={false}
-          sx={{
-            width: '100vw',
-            height: '100vh',
-            display: 'flex',
-            bgcolor: (theme) => theme.palette.background.default,
-          }}
-        >
+      disableGutters
+      maxWidth={false}
+      sx={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        bgcolor: (theme) => theme.palette.background.default,
+      }}
+    >
       <Modal
         open={isVerySmallScreen}
         closeAfterTransition
@@ -117,16 +100,15 @@ function Login() {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" sx={{color: 'text.primary',}} component="h2" gutterBottom>
+            <Typography variant="h6" component="h2" gutterBottom>
               توجه!
             </Typography>
-            <Typography sx={{ mt: 1, color: 'text.primary', }}>
+            <Typography sx={{ mt: 1 }}>
               عرض صفحه بسیار کم است. لطفاً دستگاه خود را بچرخانید.
             </Typography>
           </Box>
         </Fade>
       </Modal>
-
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}
@@ -143,7 +125,6 @@ function Login() {
               transform: 'translate(-50%, -50%)',
               width: 300,
               bgcolor: 'background.paper',
-              color: 'text.primary',
               border: '2px solid #000',
               boxShadow: 24,
               p: 4,
@@ -154,65 +135,80 @@ function Login() {
             <Typography variant="h6" component="h2" gutterBottom>
               خطا در ورود اطلاعات
             </Typography>
-            <Typography sx={{ mt: 2, mb: 3 }}>
-              {errorModal.message}
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={closeErrorModal}
-              sx={{ width: '100%' }}
-            >
+            <Typography sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
+            <Button variant="contained" onClick={closeErrorModal} sx={{ width: '100%' }}>
               فهمیدم
             </Button>
           </Box>
         </Fade>
       </Modal>
-
       <Grid
-        fullWidth
+        container
         sx={{
           flex: 1,
-          px: { xs: 1, md: 0 },
           m: 0,
           display: 'flex',
           flexDirection: { xs: 'column-reverse', md: 'row' },
         }}
       >
-        <Grid item size={{xs:12,md:6}}>
+        <Grid item size={{ xs: 12, md: 6 }} sx={{ p: 0, m: 0 }}>
           <WarningsBox />
         </Grid>
-        <Grid item size={{xs:12, md:6}}
+
+        <Grid
+          item
+          size={{ xs: 12, md: 6 }}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            px: 2,
-            mb: { xs: 2, md: 0 },
+            justifyContent: 'flex-start',
+            p: { xs: 2, md: 5 },
           }}
         >
-          <Box width="100%" maxWidth={'100%'}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ color: 'text.primary',}}>
+          <Box width="100%" maxWidth={600}>
+            <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
               ورود / ثبت‌نام
             </Typography>
+
+            <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
+              شماره موبایل خود را وارد کنید تا وارد حساب شوید یا ثبت‌نام انجام دهید.
+            </Typography>
+
             <form onSubmit={handleSubmit}>
               <TextField
-                fullWidth
                 label="شماره موبایل"
-                name="phone"
+                type="tel"
+                variant="outlined"
+                placeholder="مثال: 09123456789"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="مثال: 09123456789"
-                variant="outlined"
-                margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)', color: 'text.primary', }}
+                fullWidth
+                sx={{
+                  mb: 3,
+                  '& label': {
+                    right: 30,
+                    left: 'auto',
+                    transformOrigin: 'top right',
+                    textAlign: 'right',
+                  },
+                  '& .MuiInputBase-input': {
+                    textAlign: 'right',
+                  },
+                }}
+                inputProps={{ dir: 'rtl' }}
+                InputLabelProps={{ sx: { direction: 'rtl' } }}
               />
+
               <Button
                 type="submit"
-                fullWidth
                 variant="contained"
-                size="large"
+                fullWidth
                 disabled={loading}
-                sx={{ height: 60, borderRadius: 0, fontSize: '1.1rem', mt: 2 }}
+                sx={{
+                  height: 60,
+                  fontSize: '1.1rem',
+                  borderRadius: 0,
+                }}
               >
                 {loading ? 'در حال بررسی...' : 'ورود / ثبت‌نام'}
               </Button>

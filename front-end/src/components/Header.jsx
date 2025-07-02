@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { useContext, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import { motion, AnimatePresence } from 'framer-motion';
 import avatarImg from '../assets/icons/avatar.png';
+import { AuthContext } from '../context/AuthContext';
 
 const pages = ['خانه', 'راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'سرویس ها'];
 const pageRoutes = {
@@ -21,28 +20,28 @@ const pageRoutes = {
   'راهنمای استفاده': '/guide',
   'بلاگ': '/blog',
   'دعوت دوستان': '/invite',
-  'سرویس ها': '/services'
+  'ارتباط با ما': '/contact'
 };
 
-const settings = ['داشبورد', 'پروفایل', 'کیف پول', 'خروج از حساب'];
-const settingRoutes = {
-  'داشبورد': '/dashboard',
-  'پروفایل': '/profile',
-  'کیف پول': '/wallet',
-  'خروج از حساب': '/logout',
-};
+const menuItems = [
+  { label: 'داشبورد', to: '/dashboard' },
+  { label: 'ولت', to: '/wallet' },
+  { label: 'خرید آسان', to: '/trade' },
+  { label: 'خروج', to: '/logout' },
+];
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { user } = useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const avatarRef = useRef(null);
 
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
-  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
-  const handleCloseNavMenu = () => setAnchorElNav(null);
-  const handleCloseUserMenu = () => setAnchorElUser(null);
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position="static">
@@ -50,7 +49,6 @@ function Header() {
         <Toolbar disableGutters>
 
           {/* لوگو و عنوان سمت چپ */}
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -67,49 +65,6 @@ function Header() {
             تترکروز
           </Typography>
 
-          {/* منوی صفحات برای موبایل */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton onClick={handleOpenNavMenu} color="inherit">
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElNav}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography
-                    component={Link}
-                    to={pageRoutes[page]}
-                    sx={{ textDecoration: 'none', color: 'inherit' }}
-                  >
-                    {page}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          {/* عنوان برای موبایل */}
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            تترکروز
-          </Typography>
-
           {/* دکمه‌های اصلی */}
           <Box sx={{ flexGrow: 1, mx: 4, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -117,7 +72,6 @@ function Header() {
                 key={page}
                 component={Link}
                 to={pageRoutes[page]}
-                onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -125,33 +79,85 @@ function Header() {
             ))}
           </Box>
 
-          {/* آواتار کاربر یا دکمه ورود */}
-          <Box sx={{ flexGrow: 0 }}>
-            {token ? (
+          {/* آواتار و نام کاربر یا دکمه ورود */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2, position: 'relative' }}>
+            {user ? (
               <>
-                <Tooltip title="مشاهده منو">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="avatar" src={user?.avatarUrl || avatarImg} />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: '45px' }}
-                  anchorEl={anchorElUser}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
+                <Avatar
+                  alt={user?.first_name || 'کاربر'}
+                  src={user?.avatarUrl || avatarImg}
+                  sx={{ width: 30, height: 30, cursor: 'pointer' }}
+                  onMouseEnter={handleOpen}
+                  ref={avatarRef}
+                  aria-controls={open ? 'user-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography
-                        component={Link}
-                        to={settingRoutes[setting]}
-                        sx={{ textDecoration: 'none', color: 'inherit' }}
-                      >
-                        {setting}
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
+                  {user?.first_name?.[0] || 'ک'}
+                </Avatar>
+                <Typography
+                  variant="subtitle1"
+                  color="inherit"
+                  noWrap
+                  onMouseEnter={handleOpen}
+                  sx={{ cursor: 'pointer', userSelect: 'none' }}
+                >
+                  {user?.first_name ? `${user.first_name} ${user.last_name || ''}` : 'کاربر'}
+                </Typography>
+
+                <AnimatePresence>
+                  {open && (
+                    <motion.div
+                      key="menu"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      onMouseLeave={handleClose}
+                      style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 8px)',
+                        right: 0,
+                        backgroundColor: '#222',
+                        borderRadius: 8,
+                        boxShadow: '0 6px 12px rgba(0,0,0,0.3)',
+                        minWidth: 150,
+                        zIndex: 1300,
+                        color: 'white',
+                        userSelect: 'none',
+                      }}
+                      aria-labelledby="user-menu"
+                      role="menu"
+                    >
+                      {menuItems.map(({ label, to }) => (
+                        <Link
+                          key={label}
+                          to={to}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
+                          onClick={handleClose}
+                        >
+                          <Box
+                            component="div"
+                            sx={{
+                              px: 2,
+                              py: 1.5,
+                              cursor: 'pointer',
+                              '&:hover': {
+                                backgroundColor: '#555',
+                              },
+                              fontWeight: 500,
+                              fontSize: 14,
+                              direction: 'rtl',
+                            }}
+                            role="menuitem"
+                          >
+                            {label}
+                          </Box>
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </>
             ) : (
               <Button
@@ -164,6 +170,7 @@ function Header() {
               </Button>
             )}
           </Box>
+
         </Toolbar>
       </Container>
     </AppBar>

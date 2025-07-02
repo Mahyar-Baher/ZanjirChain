@@ -30,7 +30,7 @@ const AddsMaster = () => {
   return (
     <>
       {adItems.map((item, index) => (
-        <Grid key={index} item size={{xs: 12,sm: 12, md: 12, lg:4}} sx={{pl:0, mt: {xl:3}}}>
+        <Grid key={index} item size={{xs: 12,sm: 12, md: 12, lg:4}} sx={{pl:0, mt: {xl:1}, display: 'flex', justifyContent: 'space-between'}}>
           <Paper
             sx={{
               borderRadius: 3,

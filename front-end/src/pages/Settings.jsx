@@ -51,9 +51,9 @@ const Settings = () => {
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0 }} className='bg-img-hexed'>
                 <MarketSettings />
               </Item>
-              <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 3, mt: 3 }} className='bg-img-hexed'>
+              {/* <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 3, mt: 3 }} className='bg-img-hexed'>
                 <MessagesSetting />
-              </Item>
+              </Item> */}
             </Grid>
             <Grid item size={{ xs: 12, sm: 6, md: 12, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' },pt:3 }}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0 }} className='bg-img-hexed'>

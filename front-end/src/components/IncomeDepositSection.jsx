@@ -298,7 +298,7 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
 };
 
 const IncomeDepositSection = () => {
-  const [activeTab, setActiveTab]       = useState('toman');
+  const [activeTab, setActiveTab] = useState('toman');
   const [activeMethod, setActiveMethod] = useState(0);
 
   const methods = activeTab === 'toman' ? tomanMethods : cryptoMethods;

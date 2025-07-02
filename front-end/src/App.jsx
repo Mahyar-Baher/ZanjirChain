@@ -20,6 +20,8 @@ import Settings from './pages/Settings';
 import User from './pages/User';
 import History from './pages/History';
 import Security from './pages/Security';
+import LogOut from './pages/LogOut';
+import Guide from './pages/Guide';
 import { CustomThemeProvider } from './theme/ThemeContext';
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
             <Route path="/History" element={<History />} />
             <Route path="/Security" element={<Security />} />
             <Route path="/Settings" element={<Settings />} />
+            <Route path="/Guide" element={<Guide />} />
             <Route path="/ManageAddresses" element={<ManageAddresses />} />
             <Route path="/ManageMessage" element={<ManageMessage />} />
             <Route path="/alertPrice" element={<AlertPrice />} />
@@ -48,6 +51,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/Password" element={<Password />} />
             <Route path="/sms_verification" element={<Sms_verification />} />
+            <Route path="/LogOut" element={<LogOut />} />
           </Route>
         </Routes>
       </Router>

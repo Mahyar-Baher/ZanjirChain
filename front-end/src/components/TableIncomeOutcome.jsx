@@ -37,36 +37,12 @@ const styleModal = {
 };
 
 const columns = [
-  { key: 'amount', label: 'مبلغ (تومان)' },
-  { key: 'tetherQty', label: 'مقدار تتر' },
-  { key: 'date', label: 'تاریخ' },
-  { key: 'iban', label: 'شماره شبا' },
-  { key: 'method', label: 'شیوه' },
-  { key: 'tracking', label: 'کد پیگیری' },
-  { key: 'type', label: 'واریز / برداشت' }
-];
-
-const incomeOutcomeData = [
-  {
-    id: 1,
-    amount: '۱۰٬۰۰۰٬۰۰۰',
-    tetherQty: '۱۵۰',
-    date: '۱۴ شهریور ۱۴۰۴',
-    iban: 'IR12 3456 7890 1234 5678 9012 34',
-    method: 'کارت به کارت',
-    tracking: 'TRK12345',
-    type: 'واریز',
-  },
-  {
-    id: 2,
-    amount: '۵٬۰۰۰٬۰۰۰',
-    tetherQty: '۷۵',
-    date: '۱۵ شهریور ۱۴۰۴',
-    iban: 'IR98 7654 3210 9876 5432 1098 76',
-    method: 'درگاه بانکی',
-    tracking: 'TRK67890',
-    type: 'برداشت',
-  }
+  { key: 'ba_toman', label: 'مبلغ (تومان)' },
+  { key: 'ba_tether', label: 'مقدار تتر' },
+  { key: 'created_at', label: 'تاریخ' },
+  { key: 'payment_method', label: 'شیوه' },
+  { key: 'custom_tracking_code', label: 'کد پیگیری' },
+  { key: 'transaction_type', label: 'واریز / برداشت' }
 ];
 
 const numMap = {
@@ -75,8 +51,19 @@ const numMap = {
 };
 const toEnDigits = (s) => s.replace(/[۰-۹٠-٩]/g, (d) => numMap[d] || d);
 const toNumber   = (s) => +toEnDigits(String(s)).replace(/[^0-9.-]/g, '');
+const transactionTypeMap = {
+  0: 'واریز مستقیم تومان',
+  1: 'واریز مستقیم تتر',
+  2: 'برداشت مستقیم تومان',
+  3: 'برداشت مستقیم تتر',
+  4: 'تبدیل تومان به تتر',
+  5: 'تبدیل تتر به تومان',
+};
 
 const TableIncomeOutcome = () => {
+  const storedOrders = localStorage.getItem('orders');
+  const incomeOutcomeData = storedOrders ? JSON.parse(storedOrders) : [];
+
   const [collapsed, setCollapsed]   = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortKey, setSortKey]       = useState('');
@@ -85,17 +72,18 @@ const TableIncomeOutcome = () => {
   const [methodFilter, setMethodFilter] = useState([]);
   const [visibleCols, setVisibleCols] = useState(() => Object.fromEntries(columns.map((c) => [c.key, true])));
 
-  const uniqueMethods = [...new Set(incomeOutcomeData.map((r) => r.method))];
+  const uniqueMethods = [...new Set(incomeOutcomeData.map((r) => r.payment_method))];
 
   const rows = useMemo(() => {
     let data = incomeOutcomeData.filter((r) => {
       if (typeFilter === 'all') return true;
-      if (typeFilter === 'deposit') return r.type === 'واریز';
-      return r.type === 'برداشت';
+      if (typeFilter === 'deposit') return r.transaction_type === 1;
+      if (typeFilter === 'withdraw') return r.transaction_type === 2;
+      return true;
     });
 
-    if (sortKey === 'method' && methodFilter.length) {
-      data = data.filter((r) => methodFilter.includes(r.method));
+    if (sortKey === 'payment_method' && methodFilter.length) {
+      data = data.filter((r) => methodFilter.includes(r.payment_method));
     }
 
     if (sortKey) {
@@ -109,7 +97,7 @@ const TableIncomeOutcome = () => {
       });
     }
     return data;
-  }, [sortKey, sortOrder, typeFilter, methodFilter]);
+  }, [sortKey, sortOrder, typeFilter, methodFilter, incomeOutcomeData]);
 
   const getRadiusStyle = (key, pos) => {
     const visibleKeys = columns.filter((c) => visibleCols[c.key]).map((c) => c.key);
@@ -154,9 +142,24 @@ const TableIncomeOutcome = () => {
                   {columns.map((col) => {
                     if (!visibleCols[col.key]) return null;
                     let content = row[col.key];
-                    if (col.key === 'type') content = <Chip label={row.type} color={row.type === 'واریز' ? 'success' : 'error'} variant="outlined" size="small" sx={{ borderRadius: 0, borderTop: 0, borderLeft: 0, borderRight: 0 }} />;
+                    if (col.key === 'transaction_type') {
+                      content = (
+                        <Chip
+                          label={transactionTypeMap[row.transaction_type] || 'نامشخص'}
+                          color={row.transaction_type === 1 ? 'success' : (row.transaction_type === 2 ? 'error' : 'default')}
+                          variant="outlined"
+                          size="small"
+                          sx={{ borderRadius: 0, borderTop: 0, borderLeft: 0, borderRight: 0 }}
+                        />
+                      );
+                    }
+                    if (col.key === 'created_at') {
+                      content = new Date(row.created_at).toLocaleDateString('fa-IR');
+                    }
                     return (
-                      <TableCell key={col.key} align="center" sx={{ ...getRadiusStyle(col.key, 'right'), ...getRadiusStyle(col.key, 'left') }}>{content}</TableCell>
+                      <TableCell key={col.key} align="center" sx={{ ...getRadiusStyle(col.key, 'right'), ...getRadiusStyle(col.key, 'left') }}>
+                        {content}
+                      </TableCell>
                     );
                   })}
                 </TableRow>
@@ -177,21 +180,21 @@ const TableIncomeOutcome = () => {
                 ))}
               </RadioGroup>
               <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                    <Button
-                    size="small"
-                    variant={sortOrder === 'desc' ? 'contained' : 'outlined'}
-                    onClick={() => setSortOrder('desc')}
-                    >
-                    صعودی
-                    </Button>
-                    <Button
-                    size="small"
-                    variant={sortOrder === 'asc' ? 'contained' : 'outlined'}
-                    onClick={() => setSortOrder('asc')}
-                    >
-                    نزولی
-                    </Button>
-                </Box>
+                <Button
+                  size="small"
+                  variant={sortOrder === 'desc' ? 'contained' : 'outlined'}
+                  onClick={() => setSortOrder('desc')}
+                >
+                  صعودی
+                </Button>
+                <Button
+                  size="small"
+                  variant={sortOrder === 'asc' ? 'contained' : 'outlined'}
+                  onClick={() => setSortOrder('asc')}
+                >
+                  نزولی
+                </Button>
+              </Box>
             </Box>
 
             <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
@@ -217,13 +220,13 @@ const TableIncomeOutcome = () => {
           <Divider sx={{ my: 2 }} />
 
           <FormLabel>نوع تراکنش</FormLabel>
-          <RadioGroup row value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} sx={{ mb: sortKey === 'method' ? 2 : 1 }}>
+          <RadioGroup row value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} sx={{ mb: sortKey === 'payment_method' ? 2 : 1 }}>
             <FormControlLabel value="all" control={<Radio size="small" />} label="همه" />
             <FormControlLabel value="deposit" control={<Radio size="small" />} label="واریز" />
             <FormControlLabel value="withdraw" control={<Radio size="small" />} label="برداشت" />
           </RadioGroup>
 
-          {sortKey === 'method' && (
+          {sortKey === 'payment_method' && (
             <>
               <FormLabel>فیلتر شیوه‌ها</FormLabel>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, maxHeight: 140, overflowY: 'auto', mb: 2 }}>
