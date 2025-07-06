@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import WarningsBox from '../components/warningbox';
@@ -17,6 +17,9 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { Icon } from '@iconify/react';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import CircleIcon from '@mui/icons-material/Circle';
 
 const Password = () => {
   const navigate = useNavigate();
@@ -31,6 +34,30 @@ const Password = () => {
     open: false,
     message: '',
   });
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    minLength: false,
+    hasUpperLower: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
+
+  useEffect(() => {
+    validatePassword(password);
+  }, [password]);
+
+  const validatePassword = (pass) => {
+    const hasMinLength = pass.length >= 8;
+    const hasUpperLower = /[a-z]/.test(pass) && /[A-Z]/.test(pass);
+    const hasNumber = /\d/.test(pass);
+    const hasSpecialChar = /[!@#$%^&*]/.test(pass);
+
+    setPasswordRequirements({
+      minLength: hasMinLength,
+      hasUpperLower,
+      hasNumber,
+      hasSpecialChar,
+    });
+  };
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -38,43 +65,33 @@ const Password = () => {
 
   const parseUserAgent = () => {
     const ua = navigator.userAgent;
-
-    // Detect device
     let device = 'Desktop';
     if (/mobile/i.test(ua)) device = 'Mobile';
     else if (/tablet/i.test(ua)) device = 'Tablet';
 
     let os = 'Unknown OS';
-
-      if (/Windows NT 10.0/.test(ua)) os = 'Windows 10';
-      else if (/Windows NT 6.3/.test(ua)) os = 'Windows 8.1';
-      else if (/Windows NT 6.2/.test(ua)) os = 'Windows 8';
-      else if (/Windows NT 6.1/.test(ua)) os = 'Windows 7';
-      else if (/Windows NT 10.0; Win64; x64;/.test(ua)) os = 'Windows 11';  // Windows 11 user agent includes this string usually
-      // For better Windows 11 detection, you can also check for "Windows NT 10.0" + "Win64; x64" and other indicators
-
-      // Linux distros detection (general Linux)
-      else if (/Linux/.test(ua)) {
-        if (/Ubuntu/.test(ua)) os = 'Ubuntu Linux';
-        else if (/Fedora/.test(ua)) os = 'Fedora Linux';
-        else if (/Debian/.test(ua)) os = 'Debian Linux';
-        else if (/Mint/.test(ua)) os = 'Linux Mint';
-        else os = 'Linux';
+    if (/Windows NT 10.0/.test(ua)) os = 'Windows 10';
+    else if (/Windows NT 6.3/.test(ua)) os = 'Windows 8.1';
+    else if (/Windows NT 6.2/.test(ua)) os = 'Windows 8';
+    else if (/Windows NT 6.1/.test(ua)) os = 'Windows 7';
+    else if (/Windows NT 10.0; Win64; x64;/.test(ua)) os = 'Windows 11';
+    else if (/Linux/.test(ua)) {
+      if (/Ubuntu/.test(ua)) os = 'Ubuntu Linux';
+      else if (/Fedora/.test(ua)) os = 'Fedora Linux';
+      else if (/Debian/.test(ua)) os = 'Debian Linux';
+      else if (/Mint/.test(ua)) os = 'Linux Mint';
+      else os = 'Linux';
+    }
+    else if (/Mac OS X 10[._]\d+/.test(ua)) {
+      const macVersionMatch = ua.match(/Mac OS X 10[._]\d+([._]\d+)?/);
+      if (macVersionMatch) {
+        const versionString = macVersionMatch[0].replace(/_/g, '.');
+        os = `macOS ${versionString.replace('Mac OS X', '')}`.trim();
+      } else {
+        os = 'macOS';
       }
+    }
 
-      // macOS with version extraction
-      else if (/Mac OS X 10[._]\d+/.test(ua)) {
-        const macVersionMatch = ua.match(/Mac OS X 10[._]\d+([._]\d+)?/);
-        if (macVersionMatch) {
-          const versionString = macVersionMatch[0].replace(/_/g, '.');
-          os = `macOS ${versionString.replace('Mac OS X', '')}`.trim();
-        } else {
-          os = 'macOS';
-        }
-      }
-
-
-    // Detect browser
     let browser = 'Unknown Browser';
     if (/Chrome\/([\d.]+)/.test(ua) && !/Edge\/([\d.]+)/.test(ua)) {
       const version = ua.match(/Chrome\/([\d.]+)/)[1];
@@ -193,7 +210,11 @@ const Password = () => {
         onClose={closeErrorModal}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
-        slotProps={{ backdrop: { timeout: 500 } }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
       >
         <Fade in={errorModal.open}>
           <Box
@@ -203,7 +224,7 @@ const Password = () => {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 300,
-              bgcolor: (theme) => theme.palette.background.default,
+              bgcolor: 'background.paper',
               border: '2px solid #000',
               boxShadow: 24,
               p: 4,
@@ -223,33 +244,32 @@ const Password = () => {
       </Modal>
 
       <Grid container sx={{ flex: 1, m: 0, flexDirection: { xs: 'column-reverse', md: 'row' } }}>
-        <Grid item xs={12} md={6}>
+        <Grid item size={{xs:12, md:5}}>
           <WarningsBox />
         </Grid>
 
         <Grid
           item
-          xs={12}
-          md={6}
+          size={{xs: 12, md: 7}}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'start',
             p: { xs: 2, md: 5 },
           }}
         >
-          <Box width="100%" maxWidth={600}>
-            <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
+          <Box width="100%" maxWidth={500}>
+            <Typography variant="h5" fontWeight="bold" color="text.secondary" gutterBottom>
               وارد کردن رمز عبور
             </Typography>
 
-            <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               رمز عبور خود را وارد کنید یا درصورت فراموشی از رمز یکبار مصرف استفاده کنید
             </Typography>
 
             <Button
               onClick={() => navigate('/Sms_verification', { state: { phone } })}
-              startIcon={<i className="fas fa-chevron-left" />}
+              startIcon={<Icon icon="mdi:chevron-left" />}
               sx={{
                 p: 0,
                 mb: 3,
@@ -267,32 +287,19 @@ const Password = () => {
                 label="رمز عبور"
                 type={showPassword ? 'text' : 'password'}
                 variant="outlined"
-                placeholder="مثال: 123456"
+                placeholder="مثال: Tether01@#"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                sx={{
-                  mb: 3,
-                  '& label': {
-                    right: 30,
-                    left: 'auto',
-                    transformOrigin: 'top right',
-                    textAlign: 'right',
-                  },
-                  '& .MuiInputBase-input': {
-                    textAlign: 'right',
-                  },
-                }}
+                sx={{ mb: 3 }}
                 InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePassword} edge="end">
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton onClick={handleTogglePassword} edge="start">
                         <Icon icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'} />
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
-                inputProps={{ dir: 'rtl' }}
-                InputLabelProps={{ sx: { direction: 'rtl' } }}
               />
 
               <Button
@@ -300,11 +307,51 @@ const Password = () => {
                 variant="contained"
                 fullWidth
                 disabled={loading}
-                sx={{ height: 60, fontSize: '1.1rem', borderRadius: 0 }}
+                sx={{ height: 50, fontSize: '1rem', mb: 3 }}
               >
                 {loading ? 'در حال بررسی...' : 'ورود'}
               </Button>
             </form>
+
+            <Box sx={{  p: 2, borderRadius: 2 }}>
+              <Typography variant="body2" fontWeight="bold" gutterBottom>
+                شرایط رمز عبور:
+              </Typography>
+              <Box component="ul" sx={{ pl: 2, mb: 2 }}>
+                <Box component="li" display="flex" alignItems="center">
+                  {passwordRequirements.minLength ? (
+                    <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                  ) : (
+                    <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                  )}
+                  <Typography variant="body2">حداقل ۸ کاراکتر</Typography>
+                </Box>
+                <Box component="li" display="flex" alignItems="center">
+                  {passwordRequirements.hasUpperLower ? (
+                    <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                  ) : (
+                    <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                  )}
+                  <Typography variant="body2">حروف کوچک و بزرگ</Typography>
+                </Box>
+                <Box component="li" display="flex" alignItems="center">
+                  {passwordRequirements.hasNumber ? (
+                    <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                  ) : (
+                    <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                  )}
+                  <Typography variant="body2">حداقل یک عدد</Typography>
+                </Box>
+                <Box component="li" display="flex" alignItems="center">
+                  {passwordRequirements.hasSpecialChar ? (
+                    <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                  ) : (
+                    <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                  )}
+                  <Typography variant="body2">کاراکتر خاص (!@#...)</Typography>
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </Grid>
       </Grid>

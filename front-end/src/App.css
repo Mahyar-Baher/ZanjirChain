@@ -50,7 +50,7 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
 .btn-nav-bo:hover{
     background-color: #9500EB !important;
 }
-.custom-nav-button {
+/* .custom-nav-button {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
@@ -64,44 +64,56 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
 
 .custom-nav-button.active {
   font-weight: 500;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: black;
   background-color: #fff;
 }
 
 .custom-nav-button.active i {
   color: black;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
+} */
+.custom-nav-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.custom-nav-button i {
-  font-size: 1.4rem;
-  margin-left: 12px;
-  transition: font-size 0.3s, color 0.3s;
-}
 .custom-nav-button::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  transform: translateX(-50%) scale(0);
-  width: 300px;
+  right: 0;
+  width: 0;
   height: 100%;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 25%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.3));
   z-index: -1;
-  transition: transform 0.3s ease-in-out;
-  transform-origin: left;
+  transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: skewX(-15deg);
+  transform-origin: right;
 }
 
 .custom-nav-button:hover::before {
-  transform: translateX(-50%) scaleX(1.4) scaleY(1.5);
+  width: 150%;
+  transform: skewX(0);
 }
 
-.custom-nav-button:hover {
-  font-weight: 500;
-  font-size: 1.4rem;
-  color: black;
+.custom-nav-button.active {
+  box-shadow: 0 0 15px rgba(255,255,255,0.6) inset;
+}
+
+.custom-nav-button.active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 .bg-img-hexed {
   position: relative;

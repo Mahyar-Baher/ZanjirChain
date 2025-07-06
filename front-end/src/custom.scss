@@ -59,19 +59,9 @@ $primary: #7878FF;
   transform-origin: 50% 50%;
   display: inline-block;
 }
-// global.scss یا هر فایل scss عمومی که در پروژه‌ات import میشه
-
-.MuiFormControl-root {
-  direction: rtl; // مهم برای حالت‌های ورودی کلی
-
-  .MuiInputLabel-root {
-    right: 30px;
-    left: auto;
-    transform-origin: top right;
-    text-align: right;
-  }
-
-  .MuiInputBase-input {
-    text-align: right;
-  }
+label{
+  direction: ltr;
+}
+input{
+  direction: rtl !important;
 }

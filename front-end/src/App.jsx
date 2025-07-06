@@ -22,6 +22,10 @@ import History from './pages/History';
 import Security from './pages/Security';
 import LogOut from './pages/LogOut';
 import Guide from './pages/Guide';
+import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import Invite from './pages/invite';
+import Services from './pages/Services';
 import { CustomThemeProvider } from './theme/ThemeContext';
 
 function App() {
@@ -31,6 +35,11 @@ function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route path="/Guide" element={<Guide />} />
+            <Route path="/Blog" element={<Blog />} />
+            <Route path="/Invite" element={<Invite />} />
+            <Route path="/Services" element={<Services />} />
           </Route>
           <Route element={<EmptyLayout />}>
             <Route path="/wallet" element={<Wallet />} />
@@ -38,7 +47,6 @@ function App() {
             <Route path="/History" element={<History />} />
             <Route path="/Security" element={<Security />} />
             <Route path="/Settings" element={<Settings />} />
-            <Route path="/Guide" element={<Guide />} />
             <Route path="/ManageAddresses" element={<ManageAddresses />} />
             <Route path="/ManageMessage" element={<ManageMessage />} />
             <Route path="/alertPrice" element={<AlertPrice />} />

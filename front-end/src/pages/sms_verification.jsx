@@ -260,21 +260,21 @@ const Sms_verification = () => {
       </Modal>
 
       <Grid container sx={{ flex: 1, m: 0, p: 0, flexDirection: { xs: 'column-reverse', md: 'row' } }}>
-        <Grid item size={{ xs: 12, md: 6 }} sx={{ p: 0 }}>
+        <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0 }}>
           <WarningsBox />
         </Grid>
 
         <Grid
           item
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 7 }}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'start',
             p: { xs: 2, md: 5 },
           }}
         >
-          <Box width="100%">
+          <Box width="100%" maxWidth={500}>
             <Typography variant="h5" fontWeight="bold" color="text.primary" gutterBottom>
               تأیید شماره همراه
             </Typography>
@@ -312,22 +312,11 @@ const Sms_verification = () => {
                 onChange={(e) => setCode(e.target.value)}
                 sx={{
                   mb: 3,
-                  '& label': {
-                    right: 30,
-                    left: 'auto',
-                    transformOrigin: 'top right',
-                    textAlign: 'right',
-                  },
-                  '& .MuiInputBase-input': {
-                    textAlign: 'right',
-                  },
                 }}
-                inputProps={{ dir: 'rtl' }}
-                InputLabelProps={{ sx: { direction: 'rtl' } }}
                 InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setShowCode((prev) => !prev)} edge="end">
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton onClick={() => setShowCode((prev) => !prev)} edge="start">
                         <Icon icon={showCode ? 'mdi:eye-off' : 'mdi:eye'} />
                       </IconButton>
                     </InputAdornment>

@@ -8,13 +8,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-// import Menu from '@mui/material/Menu';
-// import MenuItem from '@mui/material/MenuItem';
-import {AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import avatarImg from '../assets/icons/avatar.png';
 import { AuthContext } from '../context/AuthContext';
 
-const pages = ['خانه', 'راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'سرویس ها'];
+const pages = ['خانه', 'راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'ارتباط با ما'];
 const pageRoutes = {
   'خانه': '/',
   'راهنمای استفاده': '/guide',
@@ -80,7 +78,7 @@ function Header() {
           </Box>
 
           {/* آواتار و نام کاربر یا دکمه ورود */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2, position: 'relative' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2, position: 'relative', zIndex: 1300 }}>
             {user ? (
               <>
                 <Avatar
@@ -122,9 +120,10 @@ function Header() {
                         borderRadius: 8,
                         boxShadow: '0 6px 12px rgba(0,0,0,0.3)',
                         minWidth: 150,
-                        zIndex: 1300,
+                        zIndex: 9999,
                         color: 'white',
                         userSelect: 'none',
+                        overflow: 'hidden',
                       }}
                       aria-labelledby="user-menu"
                       role="menu"

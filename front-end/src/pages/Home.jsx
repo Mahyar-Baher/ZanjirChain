@@ -18,7 +18,7 @@ const features = [
     title: 'راهنمای استفاده',
     description: 'آموزش کامل نحوه استفاده از پلتفرم برای خرید و فروش ارز دیجیتال.',
     icon: 'mdi:book-open-variant',
-    link: '/guide',
+    link: '/Guide',
   },
   {
     title: 'خدمات ما',

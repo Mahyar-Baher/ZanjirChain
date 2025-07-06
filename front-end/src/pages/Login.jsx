@@ -151,21 +151,21 @@ function Login() {
           flexDirection: { xs: 'column-reverse', md: 'row' },
         }}
       >
-        <Grid item size={{ xs: 12, md: 6 }} sx={{ p: 0, m: 0 }}>
+        <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0, m: 0 }}>
           <WarningsBox />
         </Grid>
 
         <Grid
           item
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 7 }}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-start',
+            justifyContent: 'start',
             p: { xs: 2, md: 5 },
           }}
         >
-          <Box width="100%" maxWidth={600}>
+          <Box width="100%" maxWidth={500}>
             <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
               ورود / ثبت‌نام
             </Typography>
@@ -185,18 +185,8 @@ function Login() {
                 fullWidth
                 sx={{
                   mb: 3,
-                  '& label': {
-                    right: 30,
-                    left: 'auto',
-                    transformOrigin: 'top right',
-                    textAlign: 'right',
-                  },
-                  '& .MuiInputBase-input': {
-                    textAlign: 'right',
-                  },
+                  
                 }}
-                inputProps={{ dir: 'rtl' }}
-                InputLabelProps={{ sx: { direction: 'rtl' } }}
               />
 
               <Button

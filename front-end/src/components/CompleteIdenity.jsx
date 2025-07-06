@@ -22,7 +22,7 @@ const StepArrow = ({ text, color, width }) => (
         '&::before': {
           content: '""',
           position: 'absolute',
-          left: -20,
+          left: -19.5,
           top: 0,
           width: 20,
           height: '100%',
@@ -38,9 +38,9 @@ const StepArrow = ({ text, color, width }) => (
 
 const CompleteIdenity = ({ activeStep = 0 }) => {
   const steps = [
-    { label: 'احراز هویت پیشرفته' },
-    { label: 'ارتقای سطح کاربردی' },
-    { label: 'ارتقای سطح پایه' },
+    { label: 'سطح پیشرفته' },
+    { label: 'سطح کاربردی' },
+    { label: 'سطح پایه' },
   ];
 
   const colors = {
