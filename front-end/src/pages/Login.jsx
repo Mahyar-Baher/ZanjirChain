@@ -100,10 +100,10 @@ function Login() {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography variant="h6" color="text.primary" component="h2" gutterBottom>
               توجه!
             </Typography>
-            <Typography sx={{ mt: 1 }}>
+            <Typography color="text.primary" sx={{ mt: 1 }}>
               عرض صفحه بسیار کم است. لطفاً دستگاه خود را بچرخانید.
             </Typography>
           </Box>
@@ -132,10 +132,10 @@ function Login() {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography variant="h6" color="text.primary" component="h2" gutterBottom>
               خطا در ورود اطلاعات
             </Typography>
-            <Typography sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
+            <Typography color="text.primary" sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
             <Button variant="contained" onClick={closeErrorModal} sx={{ width: '100%' }}>
               فهمیدم
             </Button>
@@ -185,7 +185,6 @@ function Login() {
                 fullWidth
                 sx={{
                   mb: 3,
-                  
                 }}
               />
 

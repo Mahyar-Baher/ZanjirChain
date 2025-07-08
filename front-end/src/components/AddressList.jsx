@@ -13,14 +13,38 @@ import {
   Paper,
   Divider,
   TableContainer,
+  MenuItem,
+  Select,
+  InputAdornment,
+  IconButton
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import NoDataImage from '/media/images/empty_box.webp';
+
+const networkOptions = [
+  'TRC20 (Tron Network)',
+  'ERC20 (Ethereum Network)',
+  'BEP20 (Binance Smart Chain)',
+  'OMNI (Bitcoin Omni Layer)',
+  'Polygon (MATIC)',
+  'SOL (Solana)',
+  'AVAX-C (Avalanche C-Chain)',
+  'Arbitrum One',
+  'Optimism',
+  'TON (The Open Network)',
+  'دیگر شبکه ها'
+];
+
 
 const AddressList = () => {
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState('');
+  const [network, setNetwork] = useState('');
+  const [customNetwork, setCustomNetwork] = useState('');
   const [rows, setRows] = useState([]);
+  const [isCustomNetwork, setIsCustomNetwork] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -30,10 +54,19 @@ const AddressList = () => {
   }, []);
 
   const handleAdd = () => {
-    if (address) {
-      const updatedRows = [...rows, address];
+    if (address && (network || customNetwork)) {
+      const networkName = isCustomNetwork ? customNetwork : network;
+      const newAddress = {
+        address,
+        network: networkName
+      };
+
+      const updatedRows = [...rows, newAddress];
       setRows(updatedRows);
       setAddress('');
+      setNetwork('');
+      setCustomNetwork('');
+      setIsCustomNetwork(false);
       setOpen(false);
 
       const user = JSON.parse(localStorage.getItem('user'));
@@ -53,6 +86,18 @@ const AddressList = () => {
     if (user) {
       user.wallet_addresses = updatedRows;
       localStorage.setItem('user', JSON.stringify(user));
+    }
+  };
+
+  const handleNetworkChange = (e) => {
+    const value = e.target.value;
+    if (value === 'دیگر شبکه ها') {
+      setIsCustomNetwork(true);
+      setNetwork('');
+    } else {
+      setIsCustomNetwork(false);
+      setNetwork(value);
+      setCustomNetwork('');
     }
   };
 
@@ -85,16 +130,18 @@ const AddressList = () => {
         <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
           <TableHead sx={{ backgroundColor: '#80808c3f' }}>
             <TableRow>
-              <TableCell align="center" sx={{ fontWeight: 'bold', borderRadius: '22px 0 0 22px', borderBottom: 'none' }}>آدرس</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', borderRadius: '22px 0 0 22px', borderBottom: 'none' }}>شبکه</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', borderBottom: 'none' }}>آدرس</TableCell>
               <TableCell align="center" sx={{ fontWeight: 'bold', borderRadius: '0 22px 22px 0', borderBottom: 'none' }}>عملیات</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody sx={{ backgroundColor: '#80808c3f' }}>
             {rows.length > 0 ? (
-              rows.map((address, index) => (
+              rows.map((row, index) => (
                 <TableRow key={index} sx={{ '& td': { borderBottom: 'none' } }}>
-                  <TableCell align="center" sx={{ borderRadius: '22px 0 0 22px' }}>{address}</TableCell>
+                  <TableCell align="center" sx={{ borderRadius: '22px 0 0 22px' }}>{row.network}</TableCell>
+                  <TableCell align="center">{row.address}</TableCell>
                   <TableCell align="center" sx={{ borderRadius: '0 22px 22px 0' }}>
                     <Button color="error" size="small" onClick={() => handleDelete(index)}>
                       حذف
@@ -104,7 +151,7 @@ const AddressList = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={2} align="center" sx={{ borderBottom: 'none', py: 5 }}>
+                <TableCell colSpan={3} align="center" sx={{ borderBottom: 'none', py: 5 }}>
                   <img src={NoDataImage} alt="No data" width={120} />
                   <Typography sx={{ mt: 2, color: 'text.secondary' }}>
                     هیچ آدرسی برای نمایش وجود ندارد
@@ -116,7 +163,12 @@ const AddressList = () => {
         </Table>
       </TableContainer>
 
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} onClose={() => {
+        setOpen(false);
+        setIsCustomNetwork(false);
+        setNetwork('');
+        setCustomNetwork('');
+      }}>
         <Box sx={{
           position: 'absolute',
           top: '50%',
@@ -132,6 +184,42 @@ const AddressList = () => {
           gap: 2,
         }}>
           <Typography variant="h6" fontWeight="bold" sx={{ color: 'text.primary' }}>افزودن آدرس جدید</Typography>
+          
+          {isCustomNetwork ? (
+            <TextField
+              label="نام شبکه"
+              value={customNetwork}
+              onChange={(e) => setCustomNetwork(e.target.value)}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => {
+                      setIsCustomNetwork(false);
+                      setCustomNetwork('');
+                    }}>
+                      <CloseIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          ) : (
+            <Select
+              value={network}
+              onChange={handleNetworkChange}
+              displayEmpty
+              fullWidth
+              renderValue={(selected) => selected || "انتخاب شبکه"}
+            >
+              {networkOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+
           <TextField
             label="آدرس"
             value={address}
@@ -140,7 +228,15 @@ const AddressList = () => {
             multiline
             rows={3}
           />
-          <Button variant="contained" sx={{ fontWeight: '800', fontSize: '16px', color: 'text.primary' }} onClick={handleAdd}>ثبت</Button>
+
+          <Button 
+            variant="contained" 
+            sx={{ fontWeight: '800', fontSize: '16px', color: 'text.primary' }} 
+            onClick={handleAdd}
+            disabled={!address || (!network && !customNetwork)}
+          >
+            ثبت
+          </Button>
         </Box>
       </Modal>
     </Paper>

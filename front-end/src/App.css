@@ -77,7 +77,7 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .custom-nav-button::before {
@@ -89,7 +89,7 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   height: 100%;
   background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.3));
   z-index: -1;
-  transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: width 1s cubic-bezier(0.165, 0.84, 0.44, 1);
   transform: skewX(-15deg);
   transform-origin: right;
 }

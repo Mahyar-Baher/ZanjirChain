@@ -248,10 +248,10 @@ const Sms_verification = () => {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" gutterBottom>
+            <Typography color="text.primary" variant="h6" gutterBottom>
               خطا
             </Typography>
-            <Typography sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
+            <Typography color="text.primary" sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
             <Button variant="contained" fullWidth onClick={closeErrorModal}>
               فهمیدم
             </Button>

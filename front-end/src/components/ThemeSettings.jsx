@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, Typography, Divider, Switch, Stack } from '@mui/material';
-import { ThemeContext } from '../theme/ThemeContext';
+import { useThemeContext } from '../theme/ThemeContext';
 
 const ThemeSettings = () => {
   const {
@@ -8,7 +8,9 @@ const ThemeSettings = () => {
     toggleDarkMode,
     accessibilityMode,
     toggleAccessibilityMode,
-  } = useContext(ThemeContext);
+    persianNumbers,
+    togglePersianNumbers,
+  } = useThemeContext();
 
   return (
     <Box

@@ -59,9 +59,17 @@ $primary: #7878FF;
   transform-origin: 50% 50%;
   display: inline-block;
 }
-label{
-  direction: ltr;
+.MuiInputLabel-root {
+  right: 0 !important;
+  left:  auto !important;
+  transform-origin: top right !important;
 }
-input{
-  direction: rtl !important;
+
+.MuiInputLabel-outlined {
+  width: fit-content;
+  transform: translate(-14px, 12px) scale(1) !important;
+}
+
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  transform: translate(-13px, -9px) scale(0.75) !important;
 }

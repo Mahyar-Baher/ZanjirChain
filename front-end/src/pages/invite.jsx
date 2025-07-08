@@ -155,11 +155,11 @@ const Invite = () => {
                   borderRadius: 3,
                   mb: 4
                 }}>
-                  <Typography variant="h6" fontWeight="bold">
+                  <Typography variant="h6" color="text.primary" fontWeight="bold">
                     کد دعوت شما:
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Typography variant="h5" fontWeight="bold" fontFamily="monospace">
+                    <Typography variant="h5" color="text.primary" fontWeight="bold" fontFamily="monospace">
                       {referralCode}
                     </Typography>
                     <Tooltip title={copied ? "کپی شد!" : "کپی کنید"} arrow>
@@ -187,7 +187,7 @@ const Invite = () => {
                     <Typography variant="h3" fontWeight="bold" color="#7878FF">
                       ۳
                     </Typography>
-                    <Typography variant="body1" color="text.secondary">
+                    <Typography color="text.primary" variant="body1">
                       دوستان دعوت شده
                     </Typography>
                   </Box>

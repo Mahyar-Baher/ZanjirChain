@@ -283,7 +283,7 @@ const Services = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        mr: 2
+                        mx: 2
                       }}>
                         {service.icon}
                       </Box>
@@ -403,15 +403,15 @@ const Services = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     background: activeServiceData.color,
-                    mr: 3
+                    mx: 3
                   }}>
                     {activeServiceData.icon}
                   </Box>
                   <Box>
-                    <Typography variant="h4" color="text.primary" sx={{ fontWeight: 800, mb: 1.5 }}>
+                    <Typography variant="h4" color="white" sx={{ fontWeight: 800, mb: 1.5 }}>
                       {activeServiceData.title}
                     </Typography>
-                    <Typography variant="body1" color="text.primary">
+                    <Typography variant="body1" color="white">
                       {activeServiceData.description}
                     </Typography>
                   </Box>
@@ -426,7 +426,7 @@ const Services = () => {
                   </Box>
                   <Grid container spacing={2} sx={{ mb: 4 }}>
                     {activeServiceData.features.map((feature, index) => (
-                      <Grid item xs={12} sm={6} key={index}>
+                      <Grid item size={{xs:12, md:6}} key={index}>
                         <Card sx={{ 
                           p: 2, 
                           bgcolor: 'rgba(55, 75, 120, 0.3)', 
@@ -442,7 +442,7 @@ const Services = () => {
                             mt: 1.5,
                             mr: 1.5
                           }} />
-                          <Typography variant="body1">
+                          <Typography variant="body1" color="white">
                             {feature}
                           </Typography>
                         </Card>
@@ -453,7 +453,7 @@ const Services = () => {
                   <Button
                     variant="contained"
                     size="large"
-                    endIcon={<ArrowForward />}
+                    startIcon={<ArrowForward sx={{mx:1}} />}
                     sx={{
                       background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
                       borderRadius: 50,
@@ -482,10 +482,10 @@ const Services = () => {
       {/* Testimonials Section */}
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: 8 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>
+          <Typography variant="h4" color="text.primary" sx={{ fontWeight: 800, mb: 2 }}>
             نظرات کاربران
           </Typography>
-          <Typography variant="body1" sx={{ color: 'grey.300', maxWidth: 600, mx: 'auto' }}>
+          <Typography variant="body1" color="text.primary" sx={{ color: 'grey.300', maxWidth: 600, mx: 'auto' }}>
             تجربه کاربران ما از خدمات صرافی
           </Typography>
         </Box>

@@ -26,6 +26,7 @@ import Contact from './pages/Contact';
 import Blog from './pages/Blog';
 import Invite from './pages/invite';
 import Services from './pages/Services';
+import NotFound from './pages/NotFound';
 import { CustomThemeProvider } from './theme/ThemeContext';
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
             <Route path="/sms_verification" element={<Sms_verification />} />
             <Route path="/LogOut" element={<LogOut />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </CustomThemeProvider>

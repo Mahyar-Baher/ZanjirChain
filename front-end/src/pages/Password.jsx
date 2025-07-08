@@ -232,10 +232,10 @@ const Password = () => {
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography color="text.primary" variant="h6" component="h2" gutterBottom>
               خطا
             </Typography>
-            <Typography sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
+            <Typography color="text.primary" sx={{ mt: 2, mb: 3 }}>{errorModal.message}</Typography>
             <Button variant="contained" onClick={closeErrorModal} sx={{ width: '100%' }}>
               فهمیدم
             </Button>
@@ -324,7 +324,7 @@ const Password = () => {
                   ) : (
                     <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
                   )}
-                  <Typography variant="body2">حداقل ۸ کاراکتر</Typography>
+                  <Typography color="text.primary" variant="body2">حداقل ۸ کاراکتر</Typography>
                 </Box>
                 <Box component="li" display="flex" alignItems="center">
                   {passwordRequirements.hasUpperLower ? (
@@ -332,7 +332,7 @@ const Password = () => {
                   ) : (
                     <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
                   )}
-                  <Typography variant="body2">حروف کوچک و بزرگ</Typography>
+                  <Typography color="text.primary" variant="body2">حروف کوچک و بزرگ</Typography>
                 </Box>
                 <Box component="li" display="flex" alignItems="center">
                   {passwordRequirements.hasNumber ? (
@@ -340,7 +340,7 @@ const Password = () => {
                   ) : (
                     <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
                   )}
-                  <Typography variant="body2">حداقل یک عدد</Typography>
+                  <Typography color="text.primary" variant="body2">حداقل یک عدد</Typography>
                 </Box>
                 <Box component="li" display="flex" alignItems="center">
                   {passwordRequirements.hasSpecialChar ? (
@@ -348,7 +348,7 @@ const Password = () => {
                   ) : (
                     <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
                   )}
-                  <Typography variant="body2">کاراکتر خاص (!@#...)</Typography>
+                  <Typography color="text.primary" variant="body2">کاراکتر خاص (!@#...)</Typography>
                 </Box>
               </Box>
             </Box>
