@@ -11,16 +11,16 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserFromToken = async (tokenFromParam = null) => {
     const token = tokenFromParam || localStorage.getItem('token');
-
-    if (!token) {
-      console.log("⛔️ توکن موجود نیست. کاربر وارد نشده.");
-      return;
-    }
+    if (!token) return;
 
     try {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.timeout = 10000;
 
+      const t0 = Date.now();
       const response = await axios.post("https://amirrezaei2002x.shop/laravel/api/check-token-api");
+      const t1 = Date.now();
+      console.log(`⏱ زمان پاسخ API: ${t1 - t0}ms`);
 
       if (response.data.success) {
         const user = response.data.user;
@@ -43,28 +43,47 @@ export const AuthProvider = ({ children }) => {
         delete axios.defaults.headers.common['Authorization'];
       }
     } catch (err) {
-      console.error("🚨 خطا در دریافت اطلاعات کاربر:", err?.response?.data || err.message);
+      console.error("🚨 خطای API:", err?.response?.data || err.message);
       localStorage.removeItem("token");
       delete axios.defaults.headers.common['Authorization'];
     }
   };
 
+  // ⚡ فقط اگر token وجود داشته باشه، درخواست می‌زنیم
   useEffect(() => {
-    fetchUserFromToken();
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserFromToken(token);
+    }
   }, []);
 
   const logout = () => {
     setUser(null);
     setWallet(null);
+    setOrders(null);
+    setMessages(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('wallet');
+    localStorage.removeItem('orders');
+    localStorage.removeItem('messages');
     localStorage.removeItem('phone');
     delete axios.defaults.headers.common['Authorization'];
   };
 
   return (
-    <AuthContext.Provider value={{ user, wallet, setUser, setWallet, logout, fetchUserFromToken }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        wallet,
+        orders,
+        messages,
+        setUser,
+        setWallet,
+        logout,
+        fetchUserFromToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

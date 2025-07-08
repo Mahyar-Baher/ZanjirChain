@@ -5,19 +5,4 @@
 }
 body {
   margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-}
-
-.persian-numbers {
-  font-feature-settings: "ss01", "tnum";
-  -moz-font-feature-settings: "ss01", "tnum";
-  -webkit-font-feature-settings: "ss01", "tnum";
-}
-.persian-numbers input,
-.persian-numbers textarea {
-  font-feature-settings: "ss01", "tnum" !important;
-  direction: ltr;
-  text-align: left;
 }

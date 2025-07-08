@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Box, 
   Typography, 
@@ -8,8 +8,6 @@ import {
   Container,
   useTheme,
   useMediaQuery,
-  keyframes,
-  styled 
 } from '@mui/material';
 import { 
   CurrencyExchange,
@@ -25,39 +23,16 @@ import {
   ArrowForward,
   Star
 } from '@mui/icons-material';
-
-const pulse = keyframes`
-  0% { opacity: 0.1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 0.1; }
-`;
-
-const AnimatedParticle = styled(Box)(({ theme, delay }) => ({
-  position: 'absolute',
-  borderRadius: '50%',
-  backgroundColor: theme.palette.primary.light,
-  opacity: 0.1,
-  animation: `${pulse} ${Math.random() * 10 + 10}s infinite`,
-  animationDelay: `${delay}s`,
-}));
+import { useNavigate } from 'react-router-dom';
 
 const Services = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [activeService, setActiveService] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isHovering) {
-        setActiveService(prev => prev === 7 ? 0 : prev + 1);
-      }
-    }, 3000);
-    
-    return () => clearInterval(interval);
-  }, [isHovering]);
-
-  const services = [
+  const services = useMemo(() => [
     { 
       id: 0, 
       title: 'صرافی ارز دیجیتال', 
@@ -75,122 +50,116 @@ const Services = () => {
       id: 1, 
       title: 'کیف پول امن', 
       icon: <AccountBalanceWallet sx={{ fontSize: 40 }} />, 
-      description: 'ذخیره‌سازی امن دارایی‌های دیجیتال با قابلیت‌های پیشرفته',
-      color: 'linear-gradient(135deg, #10b981 0%, #0d9488 100%)',
+      description: 'مدیریت دارایی‌های دیجیتال با بالاترین سطح امنیتی',
+      color: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       features: [
-        'ذخیره‌سازی سرد و گرم',
-        'بیمه دارایی‌های دیجیتال',
-        'دسترسی چندامضایی',
-        'پشتیبان‌گیری ابری امن'
+        'ذخیره سازی سرد و گرم',
+        'پشتیبان‌گیری چندگانه',
+        'دسترسی چند امضایی',
+        'مدیریت آسان دارایی‌ها'
       ]
     },
     { 
       id: 2, 
-      title: 'خرید/فروش آنی', 
-      icon: <Paid sx={{ fontSize: 40 }} />, 
-      description: 'تبدیل سریع ارزهای دیجیتال به ریال و بالعکس',
-      color: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
+      title: 'امنیت پیشرفته', 
+      icon: <Security sx={{ fontSize: 40 }} />, 
+      description: 'سیستم‌های امنیتی چند لایه برای محافظت از دارایی‌های شما',
+      color: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
       features: [
-        'تبدیل مستقیم به حساب بانکی',
-        'پرداخت آنی بدون تأخیر',
-        'پشتیبانی از تمامی بانک‌ها',
-        'حداقل و حداکثر مبادله نامحدود'
+        'احراز هویت دو مرحله‌ای',
+        'رمزنگاری پیشرفته',
+        'نظارت 24 ساعته',
+        'سیستم هشدار فوری'
       ]
     },
     { 
       id: 3, 
-      title: 'امنیت پیشرفته', 
-      icon: <Lock sx={{ fontSize: 40 }} />, 
-      description: 'سیستم‌های امنیتی سطح بانکی برای محافظت از دارایی‌ها',
-      color: 'linear-gradient(135deg, #ef4444 0%, #ec4899 100%)',
+      title: 'دریافت وام', 
+      icon: <Paid sx={{ fontSize: 40 }} />, 
+      description: 'دریافت وام با وثیقه ارز دیجیتال بدون نیاز به ضامن',
+      color: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
       features: [
-        'احراز هویت چندمرحله‌ای',
-        'نظارت 24 ساعته امنیتی',
-        'رمزنگاری پیشرفته دارایی‌ها',
-        'سیستم هشدار لحظه‌ای'
+        'سریع‌ترین فرآیند وام‌دهی',
+        'نرخ سود رقابتی',
+        'انعطاف در بازپرداخت',
+        'پشتیبانی از دارایی‌های متنوع'
       ]
     },
     { 
       id: 4, 
-      title: 'معاملات مارجین', 
-      icon: <BarChart sx={{ fontSize: 40 }} />, 
-      description: 'معاملات اهرمی با لوریج تا 10x برای سود بیشتر',
-      color: 'linear-gradient(135deg, #6366f1 0%, #3b82f6 100%)',
+      title: 'تبدیل خودکار', 
+      icon: <SwapHoriz sx={{ fontSize: 40 }} />, 
+      description: 'تبدیل خودکار ارزها با بهترین نرخ بدون کارمزد اضافی',
+      color: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
       features: [
-        'لوریج قابل تنظیم',
-        'سیستم مدیریت ریسک هوشمند',
-        'پلتفرم معاملاتی پیشرفته',
-        'پشتیبانی 24/7'
+        'تبدیل لحظه‌ای ارزها',
+        'بدون کارمزد اضافی',
+        'پشتیبانی از جفت ارزهای متنوع',
+        'قابلیت برنامه‌ریزی زمانی'
       ]
     },
     { 
       id: 5, 
       title: 'استیکینگ', 
-      icon: <AccountBalance sx={{ fontSize: 40 }} />, 
-      description: 'دریافت سود از دارایی‌های دیجیتال بدون نیاز به معامله',
-      color: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+      icon: <Lock sx={{ fontSize: 40 }} />, 
+      description: 'کسب سود از دارایی‌های دیجیتال بدون نیاز به معامله',
+      color: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
       features: [
-        'سود روزانه تا 25% سالانه',
+        'سود روزانه تا 20% APR',
+        'قابلیت لغو هر زمان',
         'پشتیبانی از ارزهای متنوع',
-        'برداشت لحظه‌ای سود',
-        'بدون قفل‌سازی اجباری'
+        'سود مرکب'
       ]
     },
     { 
       id: 6, 
-      title: 'API توسعه‌دهندگان', 
-      icon: <Api sx={{ fontSize: 40 }} />, 
-      description: 'ابزارهای یکپارچه‌سازی برای توسعه‌دهندگان و تریدرها',
-      color: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+      title: 'تحلیل بازار', 
+      icon: <BarChart sx={{ fontSize: 40 }} />, 
+      description: 'ابزارهای حرفه‌ای تحلیل بازار و پیش‌بینی روندها',
+      color: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
       features: [
-        'API معاملاتی REST و WebSocket',
-        'کتابخانه‌های SDK چندزبانه',
-        'داشبورد مدیریتی پیشرفته',
-        'پشتیبانی فنی اختصاصی'
+        'نمودارهای پیشرفته',
+        'اندیکاتورهای تخصصی',
+        'هشدارهای قیمتی',
+        'تحلیل‌گر خودکار'
       ]
     },
     { 
       id: 7, 
-      title: 'تبدیل خودکار', 
-      icon: <SwapHoriz sx={{ fontSize: 40 }} />, 
-      description: 'تبدیل خودکار بین ارزهای دیجیتال با بهترین نرخ',
-      color: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+      title: 'API معاملاتی', 
+      icon: <Api sx={{ fontSize: 40 }} />, 
+      description: 'اتصال سیستم‌های معاملاتی شخصی به صرافی',
+      color: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
       features: [
-        'تبدیل لحظه‌ای بدون کارمزد',
-        'پشتیبانی از جفت‌ارزهای متنوع',
-        'قابلیت برنامه‌ریزی زمانبندی',
-        'هشدارهای قیمتی هوشمند'
+        'API قدرتمند REST و Websocket',
+        'پشتیبانی از زبان‌های برنامه‌نویسی',
+        'امکان ایجاد ربات معامله‌گر',
+        'مستندات کامل'
       ]
     }
-  ];
+  ], []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isHovering) {
+        setActiveService(prev => prev === 7 ? 0 : prev + 1);
+      }
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [isHovering]);
 
   const activeServiceData = services[activeService];
 
   return (
     <Box sx={{
       minHeight: '100vh',
-    //   background: 'linear-gradient(135deg, #0a1929 0%, #0d1b2a 100%)',
-
       bgcolor: theme.palette.background.default,
       color: 'white',
       position: 'relative',
       overflow: 'hidden',
       pt: 8
     }}>
-      {/* Animated Particles */}
-      {[...Array(20)].map((_, i) => (
-        <AnimatedParticle
-          key={i}
-          delay={i * 0.5}
-          sx={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            width: `${Math.random() * 10 + 5}px`,
-            height: `${Math.random() * 10 + 5}px`,
-          }}
-        />
-      ))}
-      
       {/* Header Section */}
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: 8, textAlign: 'center' }}>
         <Typography 
@@ -225,28 +194,26 @@ const Services = () => {
           {/* Services List */}
           <Grid item size={{xs:12, md:4}}>
             <Card sx={{ 
-              background: 'rgba(21, 41, 75, 0.7)',
-              backdropFilter: 'blur(10px)',
+              background: theme.palette.mode === 'dark' 
+                ? 'rgba(21, 41, 75, 0.7)' 
+                : 'rgba(240, 240, 245, 0.9)',
               borderRadius: 4,
               p: 3,
-              border: '1px solid',
-              borderColor: 'rgba(100, 149, 237, 0.2)',
-              boxShadow: '0 8px 32px rgba(31, 38, 135, 0.2)'
             }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, color: 'primary.light', ml: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, ml: 1, color: 'text.primary' }}>
                   خدمات صرافی
                 </Typography>
                 <Box sx={{
                   width: 36,
                   height: 36,
                   borderRadius: '50%',
-                  bgcolor: 'primary.dark',
+                  bgcolor: 'primary.main',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <CurrencyExchange sx={{ fontSize: 20 }} />
+                  <CurrencyExchange sx={{ fontSize: 20, color: 'white' }} />
                 </Box>
               </Box>
               
@@ -259,12 +226,14 @@ const Services = () => {
                       borderRadius: 3,
                       cursor: 'pointer',
                       transition: 'all 0.3s ease',
-                      background: activeService === service.id ? service.color : 'rgba(55, 65, 100, 0.4)',
-                      color: activeService === service.id ? 'white' : 'grey.300',
+                      background: activeService === service.id ? service.color : 
+                        theme.palette.mode === 'dark' 
+                          ? 'rgba(55, 65, 100, 0.4)' 
+                          : 'rgba(230, 230, 245, 0.7)',
+                      color: activeService === service.id ? 'white' : 'text.primary',
                       boxShadow: activeService === service.id ? 3 : 0,
                       '&:hover': {
                         transform: 'translateY(-3px)',
-                        boxShadow: '0 6px 15px rgba(0, 150, 255, 0.3)'
                       }
                     }}
                     onClick={() => {
@@ -279,7 +248,7 @@ const Services = () => {
                         width: 48,
                         height: 48,
                         borderRadius: '50%',
-                        bgcolor: 'rgba(0, 0, 0, 0.2)',
+                        bgcolor: 'rgba(0, 0, 0, 0.1)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -299,99 +268,51 @@ const Services = () => {
             {/* Stats Card */}
             <Card sx={{ 
               mt: 4,
-              background: 'linear-gradient(135deg, rgba(30, 64, 175, 0.5) 0%, rgba(76, 29, 149, 0.5) 100%)',
-              backdropFilter: 'blur(10px)',
+              background: theme.palette.mode === 'dark'
+                ? 'rgba(30, 64, 175, 0.3)'
+                : 'rgba(230, 230, 245, 0.7)',
               borderRadius: 4,
               p: 3,
-              border: '1px solid',
-              borderColor: 'rgba(100, 149, 237, 0.3)',
-              boxShadow: '0 8px 32px rgba(31, 38, 135, 0.2)'
             }}>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Card sx={{ textAlign: 'center', p: 2, bgcolor: 'rgba(21, 41, 75, 0.3)' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.light' }}>
-                      ۱M+
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'grey.300', mt: 1 }}>
-                      کاربر فعال
-                    </Typography>
-                  </Card>
-                </Grid>
-                <Grid item xs={6}>
-                  <Card sx={{ textAlign: 'center', p: 2, bgcolor: 'rgba(21, 41, 75, 0.3)' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.light' }}>
-                      ۹۹.۹٪
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'grey.300', mt: 1 }}>
-                      امنیت دارایی
-                    </Typography>
-                  </Card>
-                </Grid>
-                <Grid item xs={6}>
-                  <Card sx={{ textAlign: 'center', p: 2, bgcolor: 'rgba(21, 41, 75, 0.3)' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.light' }}>
-                      ۲۴/۷
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'grey.300', mt: 1 }}>
-                      پشتیبانی
-                    </Typography>
-                  </Card>
-                </Grid>
-                <Grid item xs={6}>
-                  <Card sx={{ textAlign: 'center', p: 2, bgcolor: 'rgba(21, 41, 75, 0.3)' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.light' }}>
-                      ۰.۱٪
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'grey.300', mt: 1 }}>
-                      کارمزد معاملات
-                    </Typography>
-                  </Card>
-                </Grid>
+                {[
+                  { value: '۱M+', label: 'کاربر فعال' },
+                  { value: '۹۹.۹٪', label: 'امنیت دارایی' },
+                  { value: '۲۴/۷', label: 'پشتیبانی' },
+                  { value: '۰.۱٪', label: 'کارمزد معاملات' }
+                ].map((stat, i) => (
+                  <Grid item size={{xs:6}} key={i}>
+                    <Card sx={{ 
+                      textAlign: 'center', 
+                      p: 2, 
+                      bgcolor: theme.palette.mode === 'dark'
+                        ? 'rgba(21, 41, 75, 0.3)'
+                        : 'rgba(245, 245, 255, 0.5)'
+                    }}>
+                      <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main' }}>
+                        {stat.value}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+                        {stat.label}
+                      </Typography>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
             </Card>
           </Grid>
           
           {/* Service Details */}
-          <Grid item size={{xs: 12,md:8}}>
+          <Grid item size={{xs:12, md:8}}>
             <Card sx={{ 
               height: '100%',
-              background: 'linear-gradient(135deg, #0f1e3c 0%, #0a1529 100%)',
+              background: theme.palette.mode === 'dark'
+                ? 'linear-gradient(135deg, #0f1e3c 0%, #0a1529 100%)'
+                : 'linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%)',
               borderRadius: 4,
               p: isMobile ? 3 : 4,
-              border: '1px solid',
-              borderColor: 'rgba(100, 149, 237, 0.2)',
-              boxShadow: '0 12px 40px rgba(0, 100, 255, 0.2)',
               position: 'relative',
-              overflow: 'hidden'
             }}>
-              {/* Animated Background Elements */}
-              <Box sx={{
-                position: 'absolute',
-                top: 40,
-                right: 40,
-                width: 80,
-                height: 80,
-                borderRadius: '50%',
-                bgcolor: 'primary.light',
-                opacity: 0.1,
-                filter: 'blur(20px)',
-                animation: `${pulse} 4s infinite`
-              }} />
-              <Box sx={{
-                position: 'absolute',
-                bottom: 80,
-                left: 80,
-                width: 64,
-                height: 64,
-                borderRadius: '50%',
-                bgcolor: 'secondary.light',
-                opacity: 0.1,
-                filter: 'blur(20px)',
-                animation: `${pulse} 5s infinite`,
-                animationDelay: '0.5s'
-              }} />
-              
               {/* Service Content */}
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
@@ -408,10 +329,17 @@ const Services = () => {
                     {activeServiceData.icon}
                   </Box>
                   <Box>
-                    <Typography variant="h4" color="white" sx={{ fontWeight: 800, mb: 1.5 }}>
+                    <Typography 
+                      variant="h4" 
+                      sx={{ 
+                        fontWeight: 800, 
+                        mb: 1.5,
+                        color: theme.palette.mode === 'dark' ? 'white' : 'text.primary'
+                      }}
+                    >
                       {activeServiceData.title}
                     </Typography>
-                    <Typography variant="body1" color="white">
+                    <Typography variant="body1" color="text.primary">
                       {activeServiceData.description}
                     </Typography>
                   </Box>
@@ -419,8 +347,14 @@ const Services = () => {
                 
                 <Box sx={{ mt: 4 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                    <CheckCircle sx={{ color: 'primary.light', mr: 1 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.light' }}>
+                    <CheckCircle sx={{ color: 'primary.main', mr: 1 }} />
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        fontWeight: 600, 
+                        color: 'primary.main' 
+                      }}
+                    >
                       ویژگی‌های کلیدی
                     </Typography>
                   </Box>
@@ -429,20 +363,21 @@ const Services = () => {
                       <Grid item size={{xs:12, md:6}} key={index}>
                         <Card sx={{ 
                           p: 2, 
-                          bgcolor: 'rgba(55, 75, 120, 0.3)', 
+                          bgcolor: theme.palette.mode === 'dark'
+                            ? 'rgba(55, 75, 120, 0.3)'
+                            : 'rgba(245, 245, 255, 0.7)',
                           display: 'flex', 
                           alignItems: 'flex-start',
-                          border: '1px solid rgba(100, 149, 237, 0.1)'
                         }}>
                           <Box sx={{
                             width: 8,
                             height: 8,
                             borderRadius: '50%',
-                            bgcolor: 'primary.light',
+                            bgcolor: 'primary.main',
                             mt: 1.5,
                             mr: 1.5
                           }} />
-                          <Typography variant="body1" color="white">
+                          <Typography variant="body1" color="text.primary">
                             {feature}
                           </Typography>
                         </Card>
@@ -453,7 +388,8 @@ const Services = () => {
                   <Button
                     variant="contained"
                     size="large"
-                    startIcon={<ArrowForward sx={{mx:1}} />}
+                    onClick={()=> {navigate("/login")}}
+                    startIcon={<ArrowForward />}
                     sx={{
                       background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
                       borderRadius: 50,
@@ -461,12 +397,7 @@ const Services = () => {
                       py: 1.5,
                       fontWeight: 700,
                       fontSize: '1.1rem',
-                      boxShadow: '0 4px 20px rgba(0, 201, 255, 0.3)',
-                      '&:hover': {
-                        transform: 'translateY(-3px)',
-                        boxShadow: '0 6px 25px rgba(0, 201, 255, 0.4)',
-                        background: 'linear-gradient(90deg, #00b4f0 0%, #2a75f5 100%)'
-                      },
+                      boxShadow: '0 4px 10px rgba(0, 201, 255, 0.3)',
                       transition: 'all 0.3s ease'
                     }}
                   >
@@ -482,24 +413,23 @@ const Services = () => {
       {/* Testimonials Section */}
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: 8 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" color="text.primary" sx={{ fontWeight: 800, mb: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, mb: 2, color: 'text.primary' }}>
             نظرات کاربران
           </Typography>
-          <Typography variant="body1" color="text.primary" sx={{ color: 'grey.300', maxWidth: 600, mx: 'auto' }}>
+          <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: 600, mx: 'auto' }}>
             تجربه کاربران ما از خدمات صرافی
           </Typography>
         </Box>
         
         <Grid container spacing={4}>
           {[1, 2, 3].map((item) => (
-            <Grid item size={{xs: 12, md:4}} key={item}>
+            <Grid item size={{xs:12, md:4}} key={item}>
               <Card sx={{ 
-                bgcolor: 'rgba(21, 41, 75, 0.5)',
-                backdropFilter: 'blur(10px)',
+                bgcolor: theme.palette.mode === 'dark'
+                  ? 'rgba(21, 41, 75, 0.5)'
+                  : 'rgba(240, 240, 245, 0.8)',
                 borderRadius: 4,
                 p: 3,
-                border: '1px solid',
-                borderColor: 'rgba(100, 149, 237, 0.2)',
                 height: '100%'
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -513,20 +443,21 @@ const Services = () => {
                     justifyContent: 'center',
                     fontSize: '1.25rem',
                     fontWeight: 700,
-                    mr: 2
+                    mr: 2,
+                    color: 'white'
                   }}>
                     {item}
                   </Box>
                   <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
                       کاربر حرفه‌ای
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'grey.400' }}>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                       معامله‌گر ارز دیجیتال
                     </Typography>
                   </Box>
                 </Box>
-                <Typography variant="body1" sx={{ color: 'grey.300', mb: 3 }}>
+                <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3 }}>
                   "سرعت و امنیت بالای این صرافی واقعاً قابل توجهه. کارمزد پایین و پشتیبانی 24 ساعته باعث شده تمام معاملاتم رو از اینجا انجام بدم."
                 </Typography>
                 <Box sx={{ display: 'flex', color: 'warning.main' }}>
@@ -544,18 +475,14 @@ const Services = () => {
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, py: 6 }}>
         <Card sx={{ 
           background: 'linear-gradient(135deg, rgba(8, 80, 178, 0.5) 0%, rgba(30, 30, 175, 0.5) 100%)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 4,
           p: isMobile ? 4 : 6,
-          border: '1px solid',
-          borderColor: 'rgba(100, 149, 237, 0.3)',
-          boxShadow: '0 12px 40px rgba(0, 100, 255, 0.2)',
           textAlign: 'center'
         }}>
-          <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, mb: 2, color: 'text.primary' }}>
             آماده شروع معاملات هستید؟
           </Typography>
-          <Typography variant="body1" sx={{ color: 'grey.300', mb: 4, maxWidth: 600, mx: 'auto' }}>
+          <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 600, mx: 'auto' }}>
             همین حالا ثبت‌نام کنید و از خدمات حرفه‌ای صرافی ما بهره‌مند شوید
           </Typography>
           <Box sx={{ 
@@ -567,6 +494,7 @@ const Services = () => {
             <Button
               variant="contained"
               size="large"
+              onClick={()=> {navigate('/login')}}
               sx={{
                 background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
                 borderRadius: 50,
@@ -574,81 +502,15 @@ const Services = () => {
                 py: 1.5,
                 fontWeight: 700,
                 fontSize: '1.1rem',
-                boxShadow: '0 4px 20px rgba(0, 201, 255, 0.3)',
-                '&:hover': {
-                  transform: 'translateY(-3px)',
-                  boxShadow: '0 6px 25px rgba(0, 201, 255, 0.4)',
-                  background: 'linear-gradient(90deg, #00b4f0 0%, #2a75f5 100%)'
-                },
+                boxShadow: '0 4px 10px rgba(0, 201, 255, 0.3)',
                 transition: 'all 0.3s ease'
               }}
             >
               ثبت‌نام و شروع معامله
             </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              sx={{
-                borderColor: 'primary.light',
-                color: 'white',
-                borderRadius: 50,
-                px: 4,
-                py: 1.5,
-                fontWeight: 700,
-                fontSize: '1.1rem',
-                '&:hover': {
-                  bgcolor: 'rgba(0, 201, 255, 0.1)',
-                  borderColor: 'primary.main',
-                  transform: 'translateY(-3px)'
-                },
-                transition: 'all 0.3s ease'
-              }}
-            >
-              مشاهده راهنما
-            </Button>
           </Box>
         </Card>
       </Container>
-      
-      {/* Floating Decorations */}
-      <Box sx={{
-        position: 'fixed',
-        top: '25%',
-        right: 40,
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-        bgcolor: 'primary.light',
-        opacity: 0.2,
-        zIndex: 0,
-        animation: `${pulse} 3s infinite`
-      }} />
-      <Box sx={{
-        position: 'fixed',
-        bottom: '33%',
-        left: 40,
-        width: 20,
-        height: 20,
-        borderRadius: '50%',
-        bgcolor: 'secondary.light',
-        opacity: 0.2,
-        zIndex: 0,
-        animation: `${pulse} 4s infinite`,
-        animationDelay: '0.5s'
-      }} />
-      <Box sx={{
-        position: 'fixed',
-        top: '33%',
-        left: '25%',
-        width: 32,
-        height: 32,
-        borderRadius: '50%',
-        bgcolor: 'primary.dark',
-        opacity: 0.15,
-        zIndex: 0,
-        animation: `${pulse} 5s infinite`,
-        animationDelay: '1s'
-      }} />
     </Box>
   );
 };

@@ -130,9 +130,9 @@ const AddressList = () => {
         <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
           <TableHead sx={{ backgroundColor: '#80808c3f' }}>
             <TableRow>
-              <TableCell align="center" sx={{ fontWeight: 'bold', borderRadius: '22px 0 0 22px', borderBottom: 'none' }}>شبکه</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', borderBottom: 'none' }}>شبکه</TableCell>
               <TableCell align="center" sx={{ fontWeight: 'bold', borderBottom: 'none' }}>آدرس</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold', borderRadius: '0 22px 22px 0', borderBottom: 'none' }}>عملیات</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', borderBottom: 'none' }}>عملیات</TableCell>
             </TableRow>
           </TableHead>
 
@@ -140,9 +140,9 @@ const AddressList = () => {
             {rows.length > 0 ? (
               rows.map((row, index) => (
                 <TableRow key={index} sx={{ '& td': { borderBottom: 'none' } }}>
-                  <TableCell align="center" sx={{ borderRadius: '22px 0 0 22px' }}>{row.network}</TableCell>
+                  <TableCell align="center">{row.network}</TableCell>
                   <TableCell align="center">{row.address}</TableCell>
-                  <TableCell align="center" sx={{ borderRadius: '0 22px 22px 0' }}>
+                  <TableCell align="center">
                     <Button color="error" size="small" onClick={() => handleDelete(index)}>
                       حذف
                     </Button>

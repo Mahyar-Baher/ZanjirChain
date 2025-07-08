@@ -314,7 +314,7 @@ const Password = () => {
             </form>
 
             <Box sx={{  p: 2, borderRadius: 2 }}>
-              <Typography variant="body2" fontWeight="bold" gutterBottom>
+              <Typography color="text.primary" variant="body2" fontWeight="bold" gutterBottom>
                 شرایط رمز عبور:
               </Typography>
               <Box component="ul" sx={{ pl: 2, mb: 2 }}>

@@ -5,6 +5,8 @@ import './index.css';
 import './App.css';
 import './fonts.css';
 import './custom.scss';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import { CustomThemeProvider } from './theme/ThemeContext.jsx';
 import { AuthProvider } from './context/AuthContext';
 
