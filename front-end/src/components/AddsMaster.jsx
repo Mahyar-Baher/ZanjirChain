@@ -37,7 +37,7 @@ const AddsMaster = () => {
               overflow: 'hidden',
               background: item.bg
                 ? `url(${item.bg})`
-                : 'linear-gradient(135deg, #9500EB 0%, #7878FF 100%)',
+                : 'linear-gradient(135deg, #1a652a 0%, #1a652a 100%)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               p: 3,

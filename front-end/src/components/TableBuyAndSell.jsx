@@ -124,9 +124,9 @@ const TableBuyAndSell = () => {
             setVisible(5);
           }}
           sx={{
-            borderColor: '#7878FF',
-            color: active === 'buy' ? '#fff' : '#7878FF',
-            backgroundColor: active === 'buy' ? '#7878FF' : 'transparent',
+            borderColor: '#1a652a',
+            color: active === 'buy' ? '#fff' : '#1a652a',
+            backgroundColor: active === 'buy' ? '#1a652a' : 'transparent',
             whiteSpace: 'nowrap',
             px: 3,
           }}
@@ -141,9 +141,9 @@ const TableBuyAndSell = () => {
             setVisible(5);
           }}
           sx={{
-            borderColor: '#7878FF',
-            color: active === 'sell' ? '#fff' : '#7878FF',
-            backgroundColor: active === 'sell' ? '#7878FF' : 'transparent',
+            borderColor: '#1a652a',
+            color: active === 'sell' ? '#fff' : '#1a652a',
+            backgroundColor: active === 'sell' ? '#1a652a' : 'transparent',
             whiteSpace: 'nowrap',
             px: 3,
           }}
@@ -154,7 +154,7 @@ const TableBuyAndSell = () => {
         <Divider
           sx={{
             borderStyle: 'dashed',
-            borderColor: 'rgba(120, 120, 255, 0.5)',
+            borderColor: '#1a652a',
             height: 2,
           }}
         />

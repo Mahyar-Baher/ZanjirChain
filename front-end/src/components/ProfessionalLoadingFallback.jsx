@@ -9,9 +9,9 @@ import {
 import { keyframes } from '@emotion/react';
 
 const pulseAnimation = keyframes`
-  0% { opacity: 0.6; }
+  0% { opacity: 0.7; }
   50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  100% { opacity: 0.7; }
 `;
 
 const ProfessionalLoadingFallback = () => {
@@ -27,8 +27,8 @@ const ProfessionalLoadingFallback = () => {
           alignItems: 'center',
           minHeight: '100vh',
           background: theme.palette.mode === 'dark'
-            ? `linear-gradient(135deg, ${theme.palette.background.default} 0%, #121212 100%)`
-            : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, #f5f5f5 100%)`,
+            ? `linear-gradient(135deg, ${theme.palette.background.default} 0%,rgb(6, 19, 9) 100%)`
+            : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, rgb(8, 3, 3) 100%)`,
           animation: `${pulseAnimation} 2s infinite ease-in-out`,
           p: 3,
           textAlign: 'center'
@@ -38,7 +38,7 @@ const ProfessionalLoadingFallback = () => {
           size={64}
           thickness={3}
           sx={{
-            color: theme.palette.primary.main,
+            color: "#1A652A",
             mb: 3,
             '& circle': { strokeLinecap: 'round' },
             '& .MuiCircularProgress-circle': { animationDuration: '1.5s' }
@@ -49,7 +49,7 @@ const ProfessionalLoadingFallback = () => {
           variant="h6"
           component="div"
           sx={{
-            color: theme.palette.text.primary,
+            color: "#1A652A",
             fontWeight: 600,
             position: 'relative',
             '&::after': {
@@ -72,7 +72,7 @@ const ProfessionalLoadingFallback = () => {
           variant="caption"
           sx={{
             mt: 2,
-            color: theme.palette.text.secondary,
+            color: "#1A652A",
             maxWidth: 500,
             lineHeight: 1.7
           }}
@@ -94,7 +94,7 @@ const ProfessionalLoadingFallback = () => {
               position: 'absolute',
               height: '100%',
               width: '50%',
-              background: `linear-gradient(90deg, transparent, ${theme.palette.primary.main}, transparent)`,
+              background: `linear-gradient(90deg, transparent, #1A652A, transparent)`,
               animation: `${keyframes`
                 0% { transform: translateX(-100%); }
                 100% { transform: translateX(200%); }

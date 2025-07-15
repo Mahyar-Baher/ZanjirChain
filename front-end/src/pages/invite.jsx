@@ -60,7 +60,7 @@ const Invite = () => {
                 color="text.primary"
                 sx={{ mb: 3 }}
               >
-                <Box component="span" color="#7878FF">دوستان خود را دعوت کنید</Box> و تتر پاداش بگیرید!
+                <Box component="span" color="#1a652a">دوستان خود را دعوت کنید</Box> و تتر پاداش بگیرید!
               </Typography>
               <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
                 با دعوت هر دوست و اولین معامله او، ۱۰ تتر پاداش دریافت کنید و دوست شما نیز ۵ تتر هدیه بگیرد
@@ -77,7 +77,7 @@ const Invite = () => {
                     variant="contained"
                     size="large"
                     sx={{
-                      bgcolor: '#7878FF',
+                      bgcolor: '#1a652a',
                       px: 4,
                       py: 1.5,
                       borderRadius: 3,
@@ -134,7 +134,7 @@ const Invite = () => {
                   position: 'absolute',
                   top: -40,
                   right: 40,
-                  bgcolor: '#7878FF',
+                  bgcolor: '#1a652a',
                   color: 'white',
                   px: 3,
                   py: 1,
@@ -150,7 +150,7 @@ const Invite = () => {
                   display: 'flex', 
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  bgcolor: 'rgba(120, 120, 255, 0.1)',
+                  bgcolor: '#1a652a',
                   p: 3,
                   borderRadius: 3,
                   mb: 4
@@ -166,7 +166,7 @@ const Invite = () => {
                       <IconButton 
                         onClick={copyToClipboard}
                         sx={{ 
-                          bgcolor: '#7878FF',
+                          bgcolor: '#1a652a',
                           color: 'white',
                           '&:hover': { bgcolor: '#6969E0' }
                         }}
@@ -184,7 +184,7 @@ const Invite = () => {
                   mt: 4
                 }}>
                   <Box>
-                    <Typography variant="h3" fontWeight="bold" color="#7878FF">
+                    <Typography variant="h3" fontWeight="bold" color="#1a652a">
                       ۳
                     </Typography>
                     <Typography color="text.primary" variant="body1">
@@ -192,7 +192,7 @@ const Invite = () => {
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography variant="h3" fontWeight="bold" color="#7878FF">
+                    <Typography variant="h3" fontWeight="bold" color="#1a652a">
                       ۱۵
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
@@ -200,7 +200,7 @@ const Invite = () => {
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography variant="h3" fontWeight="bold" color="#7878FF">
+                    <Typography variant="h3" fontWeight="bold" color="#1a652a">
                       ۲
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
@@ -241,7 +241,7 @@ const Invite = () => {
                 }}>
                   <Box sx={{
                     display: 'inline-flex',
-                    bgcolor: 'rgba(120, 120, 255, 0.1)',
+                    bgcolor: '#1a652a',
                     width: 80,
                     height: 80,
                     borderRadius: '50%',
@@ -249,7 +249,7 @@ const Invite = () => {
                     justifyContent: 'center',
                     mb: 3
                   }}>
-                    <Icon icon={benefit.icon} width="40" height="40" color="#7878FF" />
+                    <Icon icon={benefit.icon} width="40" height="40" color="#1a652a" />
                   </Box>
                   <Typography variant="h5" fontWeight="bold" mb={2}>
                     {benefit.title}
@@ -294,12 +294,12 @@ const Invite = () => {
                         borderRadius: 3,
                         p: 4,
                         border: '1px solid',
-                        borderColor: 'rgba(120, 120, 255, 0.1)',
+                        borderColor: '#1a652a',
                         boxShadow: '0 4px 20px rgba(120, 120, 255, 0.05)',
                         transition: 'all 0.3s ease',
                         '&:hover': {
-                        boxShadow: '0 8px 25px rgba(120, 120, 255, 0.1)',
-                        borderColor: 'rgba(120, 120, 255, 0.2)',
+                        boxShadow: '0 8px 25px #1a652a',
+                        borderColor: '#1a652a',
                         }
                     }}>
                         <Box sx={{
@@ -312,14 +312,14 @@ const Invite = () => {
                             width: 48,
                             height: 48,
                             borderRadius: '50%',
-                            bgcolor: 'rgba(120, 120, 255, 0.1)',
+                            bgcolor: '#1a652a',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             mr: 2,
                             flexShrink: 0
                         }}>
-                            <Typography variant="h5" fontWeight="bold" color="#7878FF">
+                            <Typography variant="h5" fontWeight="bold" color="#1a652a">
                             {step}
                             </Typography>
                         </Box>
@@ -341,12 +341,12 @@ const Invite = () => {
                             } 
                             width="32" 
                             height="32" 
-                            color="#7878FF" 
+                            color="#1a652a" 
                             />
                         </Box>
                         </Box>
 
-                        <Typography variant="h6" fontWeight="bold" mb={1} color="#7878FF">
+                        <Typography variant="h6" fontWeight="bold" mb={1} color="#1a652a">
                         {index === 0 && 'کپی کد دعوت'}
                         {index === 1 && 'اشتراک‌گذاری دعوت'}
                         {index === 2 && 'دریافت پاداش'}
@@ -428,7 +428,7 @@ const Invite = () => {
                       p: 3,
                       borderRadius: 3,
                       bgcolor: 'rgba(120, 120, 255, 0.05)',
-                      borderLeft: '4px solid #7878FF'
+                      borderLeft: '4px solid #1a652a'
                     }}>
                       <Avatar sx={{ width: 60, height: 60, mr: 3 }} />
                       <Box>
@@ -441,13 +441,13 @@ const Invite = () => {
                         <Box sx={{ 
                           display: 'flex', 
                           alignItems: 'center',
-                          bgcolor: 'rgba(120, 120, 255, 0.1)',
+                          bgcolor: '#1a652a',
                           px: 2,
                           py: 1,
                           borderRadius: 2,
                           width: 'fit-content'
                         }}>
-                          <Icon icon="mdi:gift" width="20" height="20" color="#7878FF" />
+                          <Icon icon="mdi:gift" width="20" height="20" color="#1a652a" />
                           <Typography variant="body2" fontWeight="bold" sx={{ ml: 1 }}>
                             {friend.reward} تتر جایزه
                           </Typography>
@@ -465,7 +465,7 @@ const Invite = () => {
               bgcolor: 'rgba(120, 120, 255, 0.05)',
               borderRadius: 3
             }}>
-              <Icon icon="mdi:account-group" width="80" height="80" color="#7878FF" />
+              <Icon icon="mdi:account-group" width="80" height="80" color="#1a652a" />
               <Typography variant="h6" mt={2} mb={1}>
                 هنوز دوستی دعوت نکرده‌اید
               </Typography>
@@ -483,7 +483,7 @@ const Invite = () => {
           mb: 6
         }}>
           <Typography variant="h3" fontWeight="bold" mb={4} color="text.primary">
-            همین حالا دعوت دوستان را شروع کنید!
+            همین حالا دعوت دوستان را #1a652a!
           </Typography>
           <Typography variant="h6" color="text.secondary" mb={6} sx={{ maxWidth: 700, mx: 'auto' }}>
             با هر دعوت موفق، ۱۰ تتر پاداش نقدی دریافت کنید و دوست شما نیز ۵ تتر هدیه بگیرد
@@ -494,7 +494,7 @@ const Invite = () => {
               variant="contained"
               size="large"
               sx={{
-                bgcolor: '#7878FF',
+                bgcolor: '#1a652a',
                 px: 6,
                 py: 2,
                 borderRadius: 3,

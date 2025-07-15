@@ -7,7 +7,6 @@ import legacy from '@vitejs/plugin-legacy'
 export default defineConfig({
   plugins: [
     react(),
-    babel(),
     viteImagemin({
       gifsicle: { optimizationLevel: 7 },
       mozjpeg: { quality: 70 },

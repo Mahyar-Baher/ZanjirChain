@@ -116,10 +116,10 @@ const TableIncomeOutcome = () => {
   return (
     <Box sx={{ mt: 2, width: '100%' }}>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', alignItems: 'center', gap: 1, mb: 1 }}>
-        <IconButton sx={{ color: '#7878FF', fontSize: 13 }} onClick={() => setFilterOpen(true)}>
+        <IconButton sx={{ color: '#1a652a', fontSize: 13 }} onClick={() => setFilterOpen(true)}>
           فیلتر <Icon icon="mdi:filter-variant" width={24} height={24} />
         </IconButton>
-        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(120, 120, 255, 0.5)', height: 2 }} />
+        <Divider sx={{ borderStyle: 'dashed', borderColor: '#1a652a', height: 2 }} />
         <Button variant="text" onClick={() => setCollapsed((p) => !p)} sx={{ whiteSpace: 'nowrap' }}>
           {collapsed ? 'نمایش جدول' : 'بستن جدول'}
         </Button>

@@ -64,7 +64,7 @@ const TetherChartDash = () => {
     labels: dataPoints.map((p) => p.time),
     datasets: [{
       data: dataPoints.map((p) => p.usd * TOMAN_RATE),
-      borderColor: '#7878FF',
+      borderColor: '#1a652a',
       tension: 0.3,
       pointRadius: 0,
     }],
@@ -97,11 +97,11 @@ const TetherChartDash = () => {
                 width: '100%',
               }}
             >
-              <Typography noWrap color="#7878FF">
+              <Typography noWrap color="#1a652a">
                 {k === 'high' ? 'بالاترین:' : 'پایین‌ترین:'}
               </Typography>
-              <Divider sx={{ borderStyle: 'dashed', borderColor: '#7878FF', height: 2 }} />
-              <Typography noWrap color="#7878FF">
+              <Divider sx={{ borderStyle: 'dashed', borderColor: '#1a652a', height: 2 }} />
+              <Typography noWrap color="#1a652a">
                 {stats[k].toLocaleString()} تومان
               </Typography>
             </Box>
@@ -145,9 +145,9 @@ const TetherChartDash = () => {
               width: '100%',
             }}
           >
-            <Typography noWrap color="#7878FF">نرخ لحظه‌ای: </Typography>
-            <Divider sx={{ borderStyle: 'dashed', borderColor: '#7878FF', height: 2 }} />
-            <Typography noWrap color="#7878FF">
+            <Typography noWrap color="#1a652a">نرخ لحظه‌ای: </Typography>
+            <Divider sx={{ borderStyle: 'dashed', borderColor: '#1a652a', height: 2 }} />
+            <Typography noWrap color="#1a652a">
               {stats.latest.toLocaleString()} تومان
             </Typography>
           </Box>

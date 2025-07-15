@@ -13,7 +13,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <Box sx={{ backgroundColor: 'background.paper', pt: 6, pb: 4, borderTop: '0.1px solid #ccc' }}>
+    <Box sx={{ backgroundColor: 'background.paper', pt: 6, pb: 4, borderTop: '0.1px solid #1a652a' }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="space-between">
           {/* Brand Info */}

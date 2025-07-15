@@ -109,7 +109,7 @@ const Contact = () => {
             gutterBottom
             sx={{ textAlign: 'center' }}
           >
-            تماس با <span style={{ color: '#7878FF' }}>تترکروز</span> 📞
+            تماس با <span style={{ color: '#1a652a' }}>تترکروز</span> 📞
           </Typography>
           <Typography 
             variant="body1" 
@@ -134,29 +134,29 @@ const Contact = () => {
             >
               <Card elevation={2} sx={{ borderRadius: 4, height: '100%' }}>
                 <CardContent sx={{ p: 4 }}>
-                  <Typography variant="h6" fontWeight="bold" mb={3} color="#7878FF">
+                  <Typography variant="h6" fontWeight="bold" mb={3} color="#1a652a">
                     اطلاعات تماس
                   </Typography>
                   
                   <ContactInfoItem 
-                    icon={<LocationOn sx={{ color: '#7878FF' }} />}
+                    icon={<LocationOn sx={{ color: '#1a652a' }} />}
                     title="آدرس دفتر"
                     content="خیابان انقلاب، بین دانشگاه و ابوریحان، ساختمان فروردین"
                   />
                   <ContactInfoItem 
-                    icon={<Phone sx={{ color: '#7878FF' }} />}
+                    icon={<Phone sx={{ color: '#1a652a' }} />}
                     title="تلفن پشتیبانی"
                     content="+۹۸ ۲۱ ۲۲۲۲ ۱۲۳۴"
                     />
                   
                   <ContactInfoItem 
-                    icon={<Email sx={{ color: '#7878FF' }} />}
+                    icon={<Email sx={{ color: '#1a652a' }} />}
                     title="ایمیل"
                     content="support@tetrocruz.ir"
                   />
 
                   <Box sx={{ mt: 4 }}>
-                    <Typography variant="h6" fontWeight="bold" mb={2} color="#7878FF">
+                    <Typography variant="h6" fontWeight="bold" mb={2} color="#1a652a">
                       ساعات کاری
                     </Typography>
                     <Typography variant="body1" fontWeight='900' color="text.secondary">
@@ -185,7 +185,7 @@ const Contact = () => {
                       animate={{ opacity: 1 }}
                       style={{ textAlign: 'center', padding: '40px 0' }}
                     >
-                      <CheckCircle sx={{ fontSize: 60, color: '#7878FF', mb: 2 }} />
+                      <CheckCircle sx={{ fontSize: 60, color: '#1a652a', mb: 2 }} />
                       <Typography variant="h6" fontWeight="bold">
                         پیام شما ارسال شد!
                       </Typography>
@@ -195,7 +195,7 @@ const Contact = () => {
                     </motion.div>
                   ) : (
                     <>
-                      <Typography variant="h6" fontWeight="bold" mb={3} color="#7878FF">
+                      <Typography variant="h6" fontWeight="bold" mb={3} color="#1a652a">
                         فرم تماس
                       </Typography>
                       <form onSubmit={handleSubmit}>
@@ -271,7 +271,7 @@ const Contact = () => {
                                   py: 1.5,
                                   fontWeight: 700,
                                   fontSize: '1rem',
-                                  backgroundColor: '#7878FF',
+                                  backgroundColor: '#1a652a',
                                   '&:hover': {
                                     backgroundColor: '#6969E0'
                                   }

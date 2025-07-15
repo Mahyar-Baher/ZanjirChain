@@ -147,13 +147,13 @@ const MessageList = () => {
                       size="small"
                       onClick={() => handleOpenModal(msg.body)}
                       sx={{
-                        borderColor: '#7878FF',
-                        color: '#7878FF',
+                        borderColor: '#1a652a',
+                        color: '#1a652a',
                         textTransform: 'none',
                         px: 2,
                         borderRadius: 2,
                         fontSize: 13,
-                        '&:hover': { bgcolor: '#7878FF', color: 'white' },
+                        '&:hover': { bgcolor: '#1a652a', color: 'white' },
                       }}
                     >
                       مشاهده
@@ -192,7 +192,7 @@ const MessageList = () => {
             variant="contained"
             color="primary"
             sx={{
-              bgcolor: '#7878FF',
+              bgcolor: '#1a652a',
               textTransform: 'none',
               borderRadius: 2,
               px: 3,
@@ -227,7 +227,7 @@ const MessageList = () => {
             <Button
               variant="contained"
               onClick={handleCloseModal}
-              sx={{ bgcolor: '#7878FF', '&:hover': { bgcolor: '#5c5cff' } }}
+              sx={{ bgcolor: '#1a652a', '&:hover': { bgcolor: '#5c5cff' } }}
             >
               بستن
             </Button>

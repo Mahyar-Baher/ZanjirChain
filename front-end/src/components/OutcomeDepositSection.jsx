@@ -202,7 +202,7 @@ const MethodContent = ({ activeMethod, isCrypto, balanceToman, balanceTether }) 
           </Button>
         ))}
       </Box>
-      <Box sx={{ mt: 2, p: 2, bgcolor: '#7878FF', borderRadius: 2, color: '#fff' }}>
+      <Box sx={{ mt: 2, p: 2, bgcolor: '#1a652a', borderRadius: 2, color: '#fff' }}>
         {[['کارمزد', feeToman], ['خالص دریافتی', netToman], ['مبلغ وارد شده', parsedToman]].map(
           ([label, val]) => (
             <Box
@@ -257,7 +257,7 @@ const MethodContent = ({ activeMethod, isCrypto, balanceToman, balanceTether }) 
         value={cryptoAmount}
         onChange={(e) => setCryptoAmount(e.target.value)}
       />
-      <Box sx={{ mt: 2, p: 2, bgcolor: '#7878FF', borderRadius: 2, color: '#fff' }}>
+      <Box sx={{ mt: 2, p: 2, bgcolor: '#1a652a', borderRadius: 2, color: '#fff' }}>
         {[['کارمزد', feeTether], ['خالص دریافتی', netTether], ['مقدار وارد شده', parsedTether]].map(
           ([label, val]) => (
             <Box
@@ -308,7 +308,7 @@ const WithdrawalSection = () => {
 
   return (
     <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Stack direction="row" spacing={0} sx={{ border: '1px solid #7878FF', borderRadius: 1, p: 0.4 }}>
+      <Stack direction="row" spacing={0} sx={{ border: '1px solid #1a652a', borderRadius: 1, p: 0.4 }}>
         {[
           { key: 'toman', label: 'برداشت تومان' },
           { key: 'crypto', label: 'برداشت رمزارز' },
@@ -323,8 +323,8 @@ const WithdrawalSection = () => {
             }}
             sx={{
               fontSize: 12,
-              color: tab === key ? '#fff' : '#7878FF',
-              backgroundColor: tab === key ? '#7878FF' : 'transparent',
+              color: tab === key ? '#fff' : '#1a652a',
+              backgroundColor: tab === key ? '#1a652a' : 'transparent',
             }}
           >
             {label}
@@ -345,12 +345,12 @@ const WithdrawalSection = () => {
             direction: { xs: 'ltr', sm: 'rtl' },
             borderTop: '1px solid #eee',
             '& .MuiTabs-indicator': {
-              backgroundColor: '#7878FF',
+              backgroundColor: '#1a652a',
               top: 0,
               bottom: 'unset',
             },
             '& .Mui-selected': {
-              color: '#7878FF !important',
+              color: '#1a652a !important',
             },
             '& .MuiTab-root': {
               fontSize: '12px',

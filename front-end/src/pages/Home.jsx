@@ -83,10 +83,10 @@ const Home = () => {
         transition={{ duration: 0.7 }}
       >
         <Typography variant="h4" fontWeight="bold" color="text.secondary" gutterBottom>
-          به <span style={{ color: '#7878FF' }}>تترکروز</span> خوش آمدید 👋
+          به <span style={{ color: '#1a652a' }}>تترکروز</span> خوش آمدید 👋
         </Typography>
         <Typography variant="body1" color="text.secondary" mb={4}>
-          ساده‌ترین راه برای معامله و مدیریت ارزهای دیجیتال، با سرعت، امنیت و پشتیبانی لحظه‌ای.
+        با کم‌ترین کارمزد، تتر را سریع، امن و بی‌دغدغه معامله کنید همراه با پشتیبانی لحظه‌ای
         </Typography>
       </motion.div>
 
@@ -102,7 +102,7 @@ const Home = () => {
                 <CardActionArea href={feature.link}>
                   <CardContent sx={{ textAlign: 'center', py: 4 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                      <Icon icon={feature.icon} width="48" height="48" color="#7878FF" />
+                      <Icon icon={feature.icon} width="48" height="48" color="#1a652a" />
                     </Box>
                     <Typography variant="h6" fontWeight="bold">
                       {feature.title}

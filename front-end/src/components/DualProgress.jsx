@@ -26,7 +26,7 @@ const DualProgress = ({ tether, toman, rate = 89000, size = 150, stroke = 13 }) 
                         r={radius}
                         cx={size / 2}
                         cy={size / 2}
-                        stroke="#9500EB"
+                        stroke="#26A17B"
                         strokeWidth={stroke}
                         strokeDasharray={`${tetherLength} ${circumference - tetherLength}`}
                         strokeLinecap="round"
@@ -37,7 +37,7 @@ const DualProgress = ({ tether, toman, rate = 89000, size = 150, stroke = 13 }) 
                         r={radius}
                         cx={size / 2}
                         cy={size / 2}
-                        stroke="#7878FF"
+                        stroke="#1a652a"
                         strokeWidth={stroke}
                         strokeDasharray={`${tomanLength} ${circumference - tomanLength}`}
                         strokeLinecap="round"
@@ -59,10 +59,10 @@ const DualProgress = ({ tether, toman, rate = 89000, size = 150, stroke = 13 }) 
                 padding={0}
                 margin={0}
             >
-                <Typography variant="body2" sx={{ textAlign: 'center', mt: 1, px: 2 }} color="#7878FF">
+                <Typography variant="body2" sx={{ textAlign: 'center', mt: 1, px: 2 }} color="#1a652a">
                     {`${toman.toLocaleString()} تومان`}
                 </Typography>
-                <Typography variant="body2" sx={{ textAlign: 'center', px: 2 }} color="#9500EB">
+                <Typography variant="body2" sx={{ textAlign: 'center', px: 2 }} color="#26A17B">
                     {`$${tether} تتر`}
                 </Typography>
             </Box>

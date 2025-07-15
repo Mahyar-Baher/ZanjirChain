@@ -44,9 +44,9 @@ const CompleteIdenity = ({ activeStep = 0 }) => {
   ];
 
   const colors = {
-    active: '#7878FF',
-    inactive1: '#A3A8FF', 
-    inactive2: '#D1D4FF', 
+    active: "#1a652a",
+    inactive1: "#3a8149",
+    inactive2: "#5d9d69"
   };
 
   return (

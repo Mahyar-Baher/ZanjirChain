@@ -15,10 +15,10 @@ import { AuthContext } from '../context/AuthContext';
 
 const labelSx = {
   color: '#fff',
-  backgroundColor: '#7878FF',
+  backgroundColor: '#1a652a',
   p: 0.55,
   borderRadius: '4px',
-  '&.Mui-focused': { color: '#fff', backgroundColor: '#7878FF' }
+  '&.Mui-focused': { color: '#fff', backgroundColor: '#1a652a' }
 };
 
 const USDT_PRICE = 84000;

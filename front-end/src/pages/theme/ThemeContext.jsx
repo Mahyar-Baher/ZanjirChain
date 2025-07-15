@@ -7,7 +7,7 @@ export const useThemeContext = () => useContext(ThemeContext);
 
 export const CustomThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
-  const [primaryColor, setPrimaryColor] = useState('#7878FF');
+  const [primaryColor, setPrimaryColor] = useState('#1a652a');
   const [accessibilityMode, setAccessibilityMode] = useState(false);
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);

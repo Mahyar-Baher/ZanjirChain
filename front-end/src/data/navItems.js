@@ -29,7 +29,7 @@ const navItems = [
       { label: 'امنیت', icon: 'mdi:shield-outline', path: '/security' }
     ]
   },
-  { label: 'خروج از حساب', icon: 'token-branded:catgirl', path: '/logout' },
+  { label: 'خروج از حساب', icon: 'mdi:logout', path: '/logout' },
 ];
 
 export default navItems;

@@ -145,7 +145,7 @@ const Blog = () => {
                     borderColor: 'divider',
                     cursor: 'pointer',
                     '&:hover': {
-                      color: '#7878FF'
+                      color: '#1a652a'
                     }
                   }}
                 >
@@ -154,7 +154,7 @@ const Blog = () => {
                     label={category.count} 
                     size="small" 
                     sx={{ 
-                      bgcolor: '#7878FF',
+                      bgcolor: '#1a652a',
                       color: 'white'
                     }} 
                   />
@@ -177,7 +177,7 @@ const Blog = () => {
                     cursor: 'pointer',
                     '&:hover': {
                       '& .title': {
-                        color: '#7878FF'
+                        color: '#1a652a'
                       }
                     }
                   }}
@@ -243,7 +243,7 @@ const Blog = () => {
                           size="small" 
                           sx={{ 
                             mb: 2,
-                            bgcolor: '#7878FF',
+                            bgcolor: '#1a652a',
                             color: 'white'
                           }} 
                         />
@@ -301,12 +301,12 @@ const Blog = () => {
                   borderRadius: 3,
                   px: 4,
                   py: 1,
-                  borderColor: '#7878FF',
-                  color: '#7878FF',
+                  borderColor: '#1a652a',
+                  color: '#1a652a',
                   '&:hover': {
-                    bgcolor: '#7878FF',
+                    bgcolor: '#1a652a',
                     color: 'white',
-                    borderColor: '#7878FF'
+                    borderColor: '#1a652a'
                   }
                 }}
               >

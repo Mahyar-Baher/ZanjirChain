@@ -1,8 +1,8 @@
 .bg-purple{
-    /* background: #9500EB;
-background: linear-gradient(80deg, rgba(149, 0, 235, 0.9) 0%, rgba(149, 0, 235, 0.9) 21%, #7878FF 100%); */
-background: #9500EB;
-background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0.6) 100%);
+    background: #1a652a;
+/* background: linear-gradient(80deg, #1a652a 0%, #1a652a 21%, #1a652a 100%); */
+/* background: #1a652a;
+background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0.6) 100%); */
 
 }
 .ic {
@@ -45,10 +45,10 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
     background-image: url('./assets/icons/power-off.png');
 }
 .placeholder-opacity-10::placeholder {
-  color: #a200ff85 !important;
+  color: #1a652a !important;
 }
 .btn-nav-bo:hover{
-    background-color: #9500EB !important;
+    background-color: #1a652a !important;
 }
 /* .custom-nav-button {
   position: relative;
@@ -111,7 +111,7 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   transform: translateY(-50%);
   width: 6px;
   height: 6px;
-  background: #fff;
+  background: #1a652a;
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
@@ -166,15 +166,15 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   z-index: -1;
 }
 .bg-btn-purple{
-  background: #9500EB;
-  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(149, 0, 235, 0.6) 100%);
+  background: #1a652a;
+  /* background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(149, 0, 235, 0.6) 100%); */
   transition: all 4s ease-in-out;
 }
 .bg-btn-purple::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(149, 0, 235, 0.6) 100%);
+  background: linear-gradient(90deg, #1a652a 20%, #0d3a1a 100%);
   opacity: 0.6;
   z-index: -1;
 }
@@ -182,15 +182,15 @@ background: linear-gradient(90deg, rgba(149, 0, 235, 1) 20%, rgba(235, 184, 0, 0
   animation: btn-purple infinite 4s ease-in-out;
 }
 .bg-btn-sky{
-  background: #7878FF;
-  background: linear-gradient(90deg, #7878FF 20%, rgba(255, 255, 255, 0.4) 100%);
+  background: #1a652a;
+  /* background: linear-gradient(90deg, #1a652a 20%, rgba(255, 255, 255, 0.4) 100%); */
   transition: all 4s ease-in-out;
 }
 .bg-btn-sky::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #7878FF 80%, rgba(255, 255, 255, 0.4) 100%);
+  background: linear-gradient(90deg, #1a652a 80%, rgba(255, 255, 255, 0.4) 100%);
   opacity: 0.6;
   z-index: -1;
 }

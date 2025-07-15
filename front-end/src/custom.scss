@@ -1,5 +1,128 @@
 @use "sass:math";
-$primary: #7878FF;
+:root {
+  --green-main: #1a652a;
+  --green-hover: #104620;
+  --green-active: #0d3a1a;
+  --green-text: #ffffff;
+}
+
+/* Buttons */
+.MuiButton-root.MuiButton-containedPrimary {
+  background-color: var(--green-main) !important;
+  color: var(--green-text) !important;
+  border-color: var(--green-main);
+
+  &:hover {
+    background-color: var(--green-hover) !important;
+    border-color: var(--green-main);
+  }
+
+  &:active {
+    background-color: var(--green-active) !important;
+    border-color: var(--green-main);
+  }
+}
+
+/* TextField */
+.MuiOutlinedInput-root {
+  fieldset {
+    border-color: var(--green-main);
+  }
+
+  &:hover fieldset {
+    border-color: var(--green-hover);
+  }
+
+  &.Mui-focused fieldset {
+    border-color: var(--green-active);
+  }
+}
+
+/* Input Label */
+.MuiInputLabel-root {
+  color: var(--green-main);
+
+  &.Mui-focused {
+    color: var(--green-active);
+  }
+}
+
+/* Select */
+.MuiSelect-outlined {
+  border-color: var(--green-main) !important;
+
+  &:hover {
+    border-color: var(--green-hover) !important;
+  }
+
+  &.Mui-focused {
+    border-color: var(--green-active) !important;
+  }
+}
+
+/* Switch */
+.MuiSwitch-root {
+  .MuiSwitch-switchBase.Mui-checked {
+    color: var(--green-main);
+
+    + .MuiSwitch-track {
+      background-color: var(--green-main);
+    }
+  }
+}
+
+/* Checkbox & Radio */
+.MuiCheckbox-root.Mui-checked,
+.MuiRadio-root.Mui-checked {
+  color: var(--green-main) !important;
+}
+
+/* Slider */
+.MuiSlider-root {
+  color: var(--green-main) !important;
+}
+
+/* Tooltip */
+.MuiTooltip-tooltip {
+  background-color: var(--green-main) !important;
+  color: white;
+}
+.MuiTooltip-arrow {
+  color: var(--green-main) !important;
+}
+
+/* Tabs */
+.MuiTabs-indicator {
+  background-color: var(--green-main) !important;
+}
+.MuiTab-root.Mui-selected {
+  color: var(--green-main) !important;
+}
+.MuiTab-root:hover {
+  color: var(--green-hover) !important;
+}
+
+/* Accordion */
+.MuiAccordionSummary-root.Mui-expanded {
+  background-color: rgba(26, 101, 42, 0.1);
+  color: var(--green-main);
+}
+
+/* Menu & Popover */
+.MuiPopover-paper,
+.MuiMenu-paper {
+  border: 1px solid var(--green-main);
+}
+.MuiMenuItem-root.Mui-selected {
+  background-color: rgba(26, 101, 42, 0.1);
+  color: var(--green-main);
+}
+
+
+.MuiAvatar-root {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+$primary: #1a652a;
 @function gradient-percent($i) {
   $min: 20%;
   $max: 80%;
@@ -18,8 +141,8 @@ $primary: #7878FF;
       $percent: gradient-percent($i);
       background: linear-gradient(
         90deg,
-        #9500EB #{$percent},
-        rgba(149, 0, 235, 0.6) 100%
+        #1a652a #{$percent},
+        #0d3a1a 100%
       );
     }
   }
@@ -31,8 +154,8 @@ $primary: #7878FF;
       $percent: gradient-percent($i);
       background: linear-gradient(
         90deg,
-        #7878FF #{$percent},
-        rgba(120, 120, 255, 0.6) 100%
+        #1a652a #{$percent},
+        #0d3a1a 100%
       );
     }
   }

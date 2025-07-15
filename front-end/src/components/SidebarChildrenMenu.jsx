@@ -10,7 +10,8 @@ const SidebarChildrenMenu = ({ childrenItems = [] }) => {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(180deg, #9A5BFF, #5040B2)',
+        background: '#1a652a', 
+        // 'linear-gradient(180deg, #9A5BFF, #5040B2)',
         borderRadius: '30px',
         overflow: 'hidden',
         height: 'fit-content',
@@ -27,7 +28,7 @@ const SidebarChildrenMenu = ({ childrenItems = [] }) => {
           sx={{
             justifyContent: 'flex-start',
             color: location.pathname === child.path ? '#fff' : '#fff',
-            backgroundColor: location.pathname === child.path ? '#1a0033' : 'transparent',
+            backgroundColor: location.pathname === child.path ? '#023020' : 'transparent',
             pr: 2,
             py: 1.2,
             borderBottom: '1px dashed rgba(255,255,255,0.3)',

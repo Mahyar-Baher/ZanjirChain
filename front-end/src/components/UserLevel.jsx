@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { styled, keyframes } from "@mui/material/styles";
 
 // رنگ‌های ثابت سطوح
-const purple = "#9500EB";   // بنفش
+const purple = "#1a652a";   // بنفش
 const gold = "#FFD700";   // طلایی
 const silver = "#C0C0C0"; // نقره‌ای
 const bronze = "#CD7F32"; // برنز

@@ -15,12 +15,12 @@ import { AuthContext } from '../context/AuthContext'; // مسیر فایل AuthC
 
 const labelSx = { 
   color: '#fff', 
-  backgroundColor: '#7878FF', 
+  backgroundColor: '#1a652a', 
   p: 0.55, 
   borderRadius: '4px', 
   '&.Mui-focused': { 
     color: '#fff', 
-    backgroundColor: '#7878FF' 
+    backgroundColor: '#1a652a' 
   } 
 };
 

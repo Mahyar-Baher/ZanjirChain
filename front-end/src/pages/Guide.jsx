@@ -117,7 +117,7 @@ const Guide = () => {
                             sx={{
                               width: 50,
                               height: 50,
-                              bgcolor: '#7878FF',
+                              bgcolor: '#1a652a',
                               color: '#fff',
                               fontSize: 20,
                               borderRadius: '50%',
@@ -129,7 +129,7 @@ const Guide = () => {
                           >
                             {step.number}
                           </Box>
-                          <Icon icon={step.icon} width={36} height={36} color="#7878FF" />
+                          <Icon icon={step.icon} width={36} height={36} color="#1a652a" />
                           <Typography variant="h6" fontWeight={600}>
                             {step.title}
                           </Typography>
@@ -169,7 +169,7 @@ const Guide = () => {
                           },
                         }}
                       >
-                        <Icon icon={item.icon} width={40} height={40} color="#7878FF" />
+                        <Icon icon={item.icon} width={40} height={40} color="#1a652a" />
                         <Typography variant="h6" mt={2} fontWeight={600}>
                           {item.title}
                         </Typography>
@@ -193,7 +193,7 @@ const Guide = () => {
                 onClick={() => navigate('/login')}
                 sx={{
                   width: '90%',
-                  backgroundColor: '#7878FF',
+                  backgroundColor: '#1a652a',
                   px: 0,
                   py: 1.5,
                   borderRadius: 3,

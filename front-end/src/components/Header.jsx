@@ -42,7 +42,13 @@ function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar 
+      position="static"
+      sx={{
+        backgroundColor: '#1a652a',
+        color: 'white',
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
 
@@ -58,6 +64,9 @@ function Header() {
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
+              '&:hover': {
+                color: '#d1e7dd',
+              }
             }}
           >
             تترکروز
@@ -70,7 +79,14 @@ function Header() {
                 key={page}
                 component={Link}
                 to={pageRoutes[page]}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ 
+                  my: 2, 
+                  color: 'white', 
+                  display: 'block',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  }
+                }}
               >
                 {page}
               </Button>
@@ -84,7 +100,14 @@ function Header() {
                 <Avatar
                   alt={user?.first_name || 'کاربر'}
                   src={user?.avatarUrl || avatarImg}
-                  sx={{ width: 30, height: 30, cursor: 'pointer' }}
+                  sx={{ 
+                    width: 30, 
+                    height: 30, 
+                    cursor: 'pointer',
+                    '&:hover': {
+                      boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.5)',
+                    }
+                  }}
                   onMouseEnter={handleOpen}
                   ref={avatarRef}
                   aria-controls={open ? 'user-menu' : undefined}
@@ -98,7 +121,13 @@ function Header() {
                   color="inherit"
                   noWrap
                   onMouseEnter={handleOpen}
-                  sx={{ cursor: 'pointer', userSelect: 'none' }}
+                  sx={{ 
+                    cursor: 'pointer', 
+                    userSelect: 'none',
+                    '&:hover': {
+                      color: '#d1e7dd',
+                    }
+                  }}
                 >
                   {user?.first_name ? `${user.first_name} ${user.last_name || ''}` : 'کاربر'}
                 </Typography>
@@ -116,7 +145,8 @@ function Header() {
                         position: 'absolute',
                         top: 'calc(100% + 8px)',
                         right: 0,
-                        backgroundColor: '#222',
+                        backgroundColor: '#1a652a',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         borderRadius: 8,
                         boxShadow: '0 6px 12px rgba(0,0,0,0.3)',
                         minWidth: 150,
@@ -142,7 +172,7 @@ function Header() {
                               py: 1.5,
                               cursor: 'pointer',
                               '&:hover': {
-                                backgroundColor: '#555',
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                               },
                               fontWeight: 500,
                               fontSize: 14,
@@ -164,6 +194,15 @@ function Header() {
                 to="/login"
                 variant="outlined"
                 color="inherit"
+                sx={{
+                  borderColor: 'white',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderColor: '#d1e7dd',
+                    color: '#d1e7dd',
+                  }
+                }}
               >
                 ورود
               </Button>

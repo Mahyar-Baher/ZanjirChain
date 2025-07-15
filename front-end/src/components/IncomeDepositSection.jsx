@@ -102,13 +102,13 @@ const MethodContent = ({ activeMethod, isCrypto }) => {
         {recentPays.map((recentPay) => (
           <Typography
             key={recentPay}
-            sx={{ p: 1, m: 0.5, color: '#fff', borderRadius: 2, backgroundColor: '#7878FF', opacity: 0.7 }}
+            sx={{ p: 1, m: 0.5, color: '#fff', borderRadius: 2, backgroundColor: '#1a652a', opacity: 0.7 }}
           >
             {recentPay} تومان
           </Typography>
         ))}
       </Box>
-      <Box sx={{ mt: 2, p: 2, border: '1px solid #ccc', borderRadius: 2, display: 'flex', flexDirection: 'column', gap: 1, color: '#fff', backgroundColor: '#7878FF', opacity: 0.85 }}>
+      <Box sx={{ mt: 2, p: 2, border: '1px solid #ccc', borderRadius: 2, display: 'flex', flexDirection: 'column', gap: 1, color: '#fff', backgroundColor: '#1a652a', opacity: 0.85 }}>
         <Box sx={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', alignItems: 'center', gap: 1, width: '100%' }}>
           <Typography noWrap>کارمزد درگاه پرداخت</Typography>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.5)', height: 2 }} />
@@ -242,11 +242,11 @@ const IncomeDepositSection = () => {
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 3 }}>
-      <Stack direction="row" spacing={0} mt={3} sx={{ border: '1px solid #7878FF', p: 0.4 }}>
+      <Stack direction="row" spacing={0} mt={3} sx={{ border: '1px solid #1a652a', p: 0.4 }}>
         <Button
           fullWidth
           variant={activeTab === 'toman' ? 'contained' : 'text'}
-          sx={{ fontSize: 12, ml: 0.5, color: activeTab === 'toman' ? '#fff' : '#7878FF', backgroundColor: activeTab === 'toman' ? '#7878FF' : 'transparent' }}
+          sx={{ fontSize: 12, ml: 0.5, color: activeTab === 'toman' ? '#fff' : '#1a652a', backgroundColor: activeTab === 'toman' ? '#1a652a' : 'transparent' }}
           onClick={() => { setActiveTab('toman'); setActiveMethod(0); }}
         >
           واریز تومان
@@ -254,7 +254,7 @@ const IncomeDepositSection = () => {
         <Button
           fullWidth
           variant={activeTab === 'crypto' ? 'contained' : 'text'}
-          sx={{ fontSize: 12, mr: 0.5, color: activeTab === 'crypto' ? '#fff' : '#7878FF', backgroundColor: activeTab === 'crypto' ? '#7878FF' : 'transparent' }}
+          sx={{ fontSize: 12, mr: 0.5, color: activeTab === 'crypto' ? '#fff' : '#1a652a', backgroundColor: activeTab === 'crypto' ? '#1a652a' : 'transparent' }}
           onClick={() => { setActiveTab('crypto'); setActiveMethod(0); }}
         >
           واریز رمز ارز
@@ -269,8 +269,8 @@ const IncomeDepositSection = () => {
             direction: 'rtl',
             mt: 1,
             borderTop: '1px solid #eee',
-            '& .MuiTabs-indicator': { backgroundColor: '#7878FF', top: 0, bottom: 'unset' },
-            '& .MuiSelected': { color: '#7878FF !important' },
+            '& .MuiTabs-indicator': { backgroundColor: '#1a652a', top: 0, bottom: 'unset' },
+            '& .MuiSelected': { color: '#1a652a !important' },
             '& .MuiTab-root': { fontSize: 12, p: 0 },
             mb: 1,
           }}

@@ -43,8 +43,8 @@ const Navbarbox = () => {
             height: '100vh',
             width: collapsed ? 72 : 250,
             borderRadius: '90px 0 0 90px',
-            background:
-              'linear-gradient(80deg, rgba(149,0,235,0.9) 0%, rgba(149,0,235,0.9) 21%, rgba(0,0,255,0.9) 100%)',
+            background: "#1A652A", 
+            // 'linear-gradient(80deg, rgba(149,0,235,0.9) 0%, rgba(149,0,235,0.9) 21%, rgba(0,0,255,0.9) 100%)',
             color: '#fff',
             position: 'fixed',
             transition: 'width 0.3s ease',

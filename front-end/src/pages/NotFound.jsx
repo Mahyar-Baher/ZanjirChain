@@ -54,8 +54,8 @@ const NotFound = () => {
         <Box
           sx={{
             background: theme.palette.mode === 'dark' 
-              ? 'linear-gradient(45deg, #ff416c, #ff4b2b)' 
-              : 'linear-gradient(45deg, #2196f3, #21cbf3)',
+              ? 'linear-gradient(45deg, #26A17B, #1A652A)' 
+              : 'linear-gradient(45deg, #1A652A, #26A17B)',
             py: 3,
             textAlign: 'center',
           }}
@@ -152,8 +152,8 @@ const NotFound = () => {
               fontWeight: 600,
               fontSize: '1.1rem',
               background: theme.palette.mode === 'dark' 
-                ? 'linear-gradient(45deg, #ff416c, #ff4b2b)' 
-                : 'linear-gradient(45deg, #2196f3, #21cbf3)',
+              ? 'linear-gradient(45deg, #26A17B, #1A652A)' 
+              : 'linear-gradient(45deg, #1A652A, #26A17B)',
               boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
               '&:hover': {
                 transform: 'scale(1.05)',

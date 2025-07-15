@@ -117,7 +117,7 @@ const AddressList = () => {
             textTransform: 'none',
             px: 2,
             py: 0.7,
-            borderColor: '#7878FF',
+            borderColor: '#1a652a',
             gap: 0.5,
             fontWeight: '500'
           }}
