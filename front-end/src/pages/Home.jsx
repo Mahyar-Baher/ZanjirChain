@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState  } from 'react';
 import {
   Box,
   Grid,
@@ -11,7 +11,9 @@ import {
 } from '@mui/material';
 import { Icon } from '@iconify/react';
 import Dashboard from './Dashboard';
-import { motion } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+import { AuthContext } from '../context/AuthContext'; // import AuthContext
 
 const features = [
   {
@@ -41,14 +43,20 @@ const features = [
 ];
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const { user, token, fetchUserFromToken } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
+    const checkAuth = async () => {
+      if (token) {
+        await fetchUserFromToken(token); // فچ داده‌ها با توکن
+      }
+      setIsLoading(false); // لودینگ تموم شد
+    };
+    checkAuth();
+  }, [token, fetchUserFromToken]);
 
-  if (isLoggedIn === null) {
+  if (isLoading) {
     return (
       <Box
         sx={{
@@ -63,7 +71,7 @@ const Home = () => {
     );
   }
 
-  if (isLoggedIn) {
+  if (user) {
     return <Dashboard hideNavBox={true} />;
   }
 
@@ -86,13 +94,13 @@ const Home = () => {
           به <span style={{ color: '#1a652a' }}>تترکروز</span> خوش آمدید 👋
         </Typography>
         <Typography variant="body1" color="text.secondary" mb={4}>
-        با کم‌ترین کارمزد، تتر را سریع، امن و بی‌دغدغه معامله کنید همراه با پشتیبانی لحظه‌ای
+          با کم‌ترین کارمزد، تتر را سریع، امن و بی‌دغدغه معامله کنید همراه با پشتیبانی لحظه‌ای
         </Typography>
       </motion.div>
 
       <Grid container spacing={2}>
         {features.map((feature, index) => (
-          <Grid item size={{xs:12, md:6, lg:3}} key={index}>
+          <Grid item size={{ xs: 12, md: 6, lg: 3 }} key={index}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

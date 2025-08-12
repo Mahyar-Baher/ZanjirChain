@@ -73,14 +73,14 @@ const TetherChartDash = () => {
   return (
     <Paper sx={{ p: 2, borderRadius: 3 }}>
       <Stack spacing={2}>
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          centered
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{ p: 0 }}
-        >
+      <Tabs
+        value={tab}
+        onChange={(_, v) => setTab(v)}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
+        sx={{ p: 0 }}
+      >
           {timeOptions.map((t) => (
             <Tab key={t.fa} label={t.fa} value={t.fa} />
           ))}

@@ -21,22 +21,9 @@ const labelSx = {
   '&.Mui-focused': { color: '#fff', backgroundColor: '#1a652a' }
 };
 
-const USDT_PRICE = 84000;
+const USDT_PRICE = 31667;
 const FEE_PERCENT = 2;
 
-const generateTrackingCode = () => {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const seconds = now.getSeconds().toString().padStart(2, '0');
-  const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
-  const timePart = hours + minutes + seconds + milliseconds.slice(0, 2);
-  let randomPart = '';
-  for (let i = 0; i < 3; i++) {
-    randomPart += Math.floor(Math.random() * 10);
-  }
-  return timePart + randomPart;
-};
 
 const toEnglishNumber = (str) => {
   return str.replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
@@ -98,63 +85,79 @@ const QuickBuyAndSell = () => {
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token');
-    const trackingCode = generateTrackingCode();
     const isBuy = !isReversed;
-
+  
     const ba_toman = parseFloat(toEnglishNumber(toman)) || 0;
     const ba_tether = parseFloat(toEnglishNumber(tether)) || 0;
-
-    const fee = isBuy
-      ? (ba_toman * FEE_PERCENT) / 100
-      : (ba_tether * FEE_PERCENT) / 100;
-
-    const fp_tether = isBuy ? (ba_toman - fee) / USDT_PRICE : 0;
-    const fp_toman = !isBuy ? (ba_tether - fee) * USDT_PRICE : 0;
-
+  
+    // Validate inputs
+    if (isBuy && ba_toman <= 0) {
+      setSnackMessage('مقدار تومان نامعتبر است');
+      setSnackOpen(true);
+      return;
+    }
+    if (!isBuy && ba_tether <= 0) {
+      setSnackMessage('مقدار تتر نامعتبر است');
+      setSnackOpen(true);
+      return;
+    }
+  
+    // Check wallet balance
     if (isBuy && ba_toman > wallet.balance_toman) {
       setSnackMessage('موجودی تومان کافی نیست');
       setSnackOpen(true);
       return;
     }
-
     if (!isBuy && ba_tether > wallet.balance_tether) {
       setSnackMessage('موجودی تتر کافی نیست');
       setSnackOpen(true);
       return;
     }
-
+  
     const data = {
-      receipt_url: null,
-      payment_method: 'internal_network',
-      transaction_type: isBuy ? 4 : 5,
-      bank_tracking_code: `conversion_${trackingCode}`,
-      custom_tracking_code: trackingCode,
-      fee: fee,
-      is_paid: true,
-      financial_status: 0,
-      currency: isBuy ? 'toman' : 'tether',
-      fp_tether: isBuy ? parseFloat(fp_tether.toFixed(4)) : 0,
-      fp_toman: isBuy ? 0 : Math.round(fp_toman),
-      ba_tether: ba_tether,
-      ba_toman: ba_toman
+      amount: isBuy ? ba_toman : ba_tether,
+      currency: 'USDT',
+      network: 'Ethereum',
+      whatTOwhat: isBuy ? 0 : 1,
+      ExchangeRate: USDT_PRICE,
+      automatic: true
     };
-
+  
+    console.log('Request payload:', data); // Log payload for debugging
+  
     try {
-      await axios.post('https://amirrezaei2002x.shop/laravel/api/orders', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      const response = await axios.post(
+        'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 30000
         }
-      });
-      await fetchUserFromToken();
-      setSnackMessage(isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد');
-      setSnackOpen(true);
-      setToman('');
-      setTether('');
-      console.log(data);
+      );
+  
+      if (response.data.status) {
+        await fetchUserFromToken();
+        setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
+        setSnackOpen(true);
+        setToman('');
+        setTether('');
+      } else {
+        throw new Error(response.data.message || 'خطا در انجام عملیات');
+      }
     } catch (error) {
-      console.error('Error submitting order:', error);
-      setSnackMessage('خطا در انجام عملیات');
+      console.error('Error submitting order:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        status: error.response?.status,
+        isBuy: isBuy
+      });
+      const errorMessage = error.response?.data?.message || 
+        (!isBuy ? 'خطا در فروش تتر' : 'خطا در خرید تتر');
+      setSnackMessage(errorMessage);
       setSnackOpen(true);
     }
   };

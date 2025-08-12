@@ -29,6 +29,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Blog = lazy(() => import('./pages/Blog'));
 const Invite = lazy(() => import('./pages/invite'));
 const Services = lazy(() => import('./pages/Services'));
+const GoogleAuthenticator = lazy(() => import('./pages/GoogleAuthenticator'));
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
               <Route path="/outcome" element={<Outcome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/GoogleAuthenticator" element={<GoogleAuthenticator />} />
               <Route path="/Password" element={<Password />} />
               <Route path="/sms_verification" element={<Sms_verification />} />
               <Route path="/LogOut" element={<LogOut />} />

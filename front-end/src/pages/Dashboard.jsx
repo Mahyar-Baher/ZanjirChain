@@ -40,9 +40,9 @@ const Dashboard = ({ hideNavBox = false }) => {
           <Grid container spacing={{ xs: 1, md: 2 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >
             <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pr:{lg:2}}}>
               <Box sx={{display: 'grid',gridTemplateColumns: 'auto 1fr auto',alignItems: 'center',gap: 1,width: '100%',py:2}}>
-                <Typography Wrap sx={{fontWeight: '900'}}>سطح ارتقای احراز هویت</Typography>
+                <Typography wrap sx={{fontWeight: '900'}}>سطح ارتقای احراز هویت</Typography>
                 <Divider  sx={{    borderStyle: 'dashed',   borderColor: 'rgba(0, 0, 0, 0.5)',   height: 2 }}/>
-                <Typography fontSize='12px' color="text.secondary" Wrap>مرحله به مرحله پیش بروید تا خدمات بهتری را دریافت نمایید</Typography>
+                <Typography fontSize='12px' color="text.secondary" wrap>مرحله به مرحله پیش بروید تا خدمات بهتری را دریافت نمایید</Typography>
               </Box>
             </Grid>
             <Grid item size={{xs: 12,sm: 12, md: 9, lg:9}} sx={{py:0}}>

@@ -139,7 +139,7 @@ function Signup() {
             localStorage.setItem('token', finalToken);
             axios.defaults.headers.common['Authorization'] = `Bearer ${finalToken}`;
             await fetchUserFromToken(finalToken);
-            navigate('/dashboard');
+            navigate('/GoogleAuthenticator');
           } else {
             const msg = verifyRes.data.message || 'خطا در دریافت توکن نهایی';
             setErrorModal({ open: true, message: msg });

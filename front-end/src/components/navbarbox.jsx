@@ -17,10 +17,10 @@ import navItems from '../data/navItems';
 const Navbarbox = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [hovered, setHovered] = useState(null);
+  const [, setHovered] = useState(null);
   const isMobile = useMediaQuery('(max-width:900px)');
   const [collapsed, setCollapsed] = useState(isMobile);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode,] = useState(false);
 
   useEffect(() => {
     setCollapsed(isMobile);
