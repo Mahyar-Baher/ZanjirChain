@@ -17,9 +17,3 @@
   -moz-font-feature-settings: "ss01", "tnum";
   -webkit-font-feature-settings: "ss01", "tnum";
 }
-.persian-numbers input,
-.persian-numbers textarea {
-  font-feature-settings: "ss01", "tnum" !important;
-  direction: ltr;
-  text-align: left;
-}

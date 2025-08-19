@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import QRCode from 'qrcode';
@@ -20,13 +20,14 @@ import {
   ListItemText,
 } from '@mui/material';
 import { Circle } from '@mui/icons-material';
-import { AuthContext } from '../context/AuthContext';
+import useAuthStore from '../context/authStore';
 
 const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
   const navigate = useNavigate();
-  const { fetchUserFromToken } = useContext(AuthContext);
+  const { user, token, setToken, fetchUserFromToken } = useAuthStore();
 
-  const [, setQrValue] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [qrValue, setQrValue] = useState('');
   const [qrImageUrl, setQrImageUrl] = useState('');
   const [secretCode, setSecretCode] = useState('');
   const [code, setCode] = useState('');
@@ -34,27 +35,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
   const [qrLoading, setQrLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({ open: false, message: '' });
 
-  const getUserIdFromStorage = () => {
-    try {
-      const rawUser = localStorage.getItem('user');
-      if (rawUser) {
-        const parsed = JSON.parse(rawUser);
-        return parsed?.id ?? parsed?.user_id ?? parsed?.userId ?? null;
-      }
-      const keys = ['user_id', 'userId', 'id'];
-      for (const k of keys) {
-        const v = localStorage.getItem(k);
-        if (v) return /^\d+$/.test(v) ? Number(v) : v;
-      }
-    } catch (err) {
-      console.error('getUserIdFromStorage: parse error', err);
-    }
-    return null;
-  };
-
-  const storedToken = localStorage.getItem('token');
-  const authToken = propToken || storedToken || null;
-  const userIdFromStorage = getUserIdFromStorage();
+  const userId = user?.id ?? user?.user_id ?? user?.userId ?? null;
+  const authToken = propToken || token || null;
 
   const extractSecretFromOtpAuthUrl = (url) => {
     try {
@@ -65,21 +47,17 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
       return '';
     }
   };
-  
-  useEffect(() => {
-    if (authToken === null || phone === undefined) return;
 
+  useEffect(() => {
+    if (!authToken || !phone || !userId) {
+      setErrorModal({
+        open: true,
+        message: 'توکن، شماره موبایل یا شناسه کاربر نامعتبر است.',
+      });
+      return;
+    }
 
     const fetchQrCode = async () => {
-      const userId = userIdFromStorage;
-      if (!authToken || !phone || !userId) {
-        setErrorModal({
-          open: true,
-          message: 'توکن، شماره موبایل یا شناسه کاربر نامعتبر است.',
-        });
-        return;
-      }
-
       setQrLoading(true);
       try {
         const res = await axios.post(
@@ -93,12 +71,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
           setQrValue(url);
           const secret = extractSecretFromOtpAuthUrl(url);
           setSecretCode(secret);
-          try {
-            const qrImage = await QRCode.toDataURL(url, { width: 200, margin: 1, errorCorrectionLevel: 'H' });
-            setQrImageUrl(qrImage);
-          } catch (err) {
-            console.error('QR generation error:', err);
-          }
+          const qrImage = await QRCode.toDataURL(url, { width: 200, margin: 1, errorCorrectionLevel: 'H' });
+          setQrImageUrl(qrImage);
         } else {
           setErrorModal({ open: true, message: 'لینک QR کد معتبر نیست.' });
         }
@@ -111,7 +85,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
     };
 
     fetchQrCode();
-  }, [authToken, navigate, phone, userIdFromStorage]);
+  }, [authToken, phone, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,8 +98,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
       return;
     }
 
-    const currentUserId = userIdFromStorage;
-    if (!currentUserId) {
+    if (!userId) {
       setErrorModal({
         open: true,
         message: 'شناسه کاربر یافت نشد.',
@@ -138,8 +111,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
       const payload = {
         mobile_number: phone,
         uesrEnterCode: code.trim(),
-        userEnterCode: code.trim(),
-        user_id: currentUserId,
+        google2afactive: true,
       };
 
       const response = await axios.post(
@@ -150,17 +122,18 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
 
       if (response.data?.success) {
         const newToken = response.data?.token || authToken || null;
-        const returnedUserId = response.data?.user_id || currentUserId;
+        const returnedUserId = response.data?.user_id || userId;
 
         if (newToken) {
+          setToken(newToken);
           localStorage.setItem('token', newToken);
           axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-        } else if (storedToken) {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+        } else if (authToken) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
         }
 
         const activePayload = { user_id: returnedUserId, status: true };
-        const tokenForActive = newToken || storedToken || null;
+        const tokenForActive = newToken || authToken || null;
 
         const statusResponse = await axios.post(
           'https://amirrezaei2002x.shop/laravel/api/activegoogle2af',
@@ -189,10 +162,9 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
           await fetchUserFromToken(newToken || tokenForActive);
           navigate('/dashboard', { state: { phone } });
         } else {
-          const serverMsg = statusData?.message || statusData?.error || `پاسخ نامشخص از سرور (HTTP ${httpStatus})`;
           setErrorModal({
             open: true,
-            message: serverMsg || 'خطا در به‌روزرسانی وضعیت تأیید.',
+            message: statusData?.message || statusData?.error || `پاسخ نامشخص از سرور (HTTP ${httpStatus})`,
           });
         }
       } else {
@@ -262,22 +234,21 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
         </Fade>
       </Modal>
       <Grid container>
-        
-        <Grid size={{xs:6}}>
+        <Grid size={{ xs: 6 }}>
           <Grid container justifyContent="center" sx={{ maxWidth: 500, mx: 'auto', px: { xs: 2, sm: 3 }, py: 1 }}>
-            <Grid size={{xs:12}}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h5" fontWeight="bold" color="text.secondary" textAlign="center" gutterBottom>
                 فعال‌سازی تأیید هویت دو مرحله‌ای
               </Typography>
             </Grid>
 
             {qrLoading ? (
-              <Grid size={{xs:12}} display="flex" justifyContent="center" my={2}>
+              <Grid size={{ xs: 12 }} display="flex" justifyContent="center" my={2}>
                 <CircularProgress />
               </Grid>
             ) : qrImageUrl ? (
               <>
-                <Grid size={{xs:12}} display="flex" justifyContent="center" sx={{ mb: 2 }}>
+                <Grid size={{ xs: 12 }} display="flex" justifyContent="center" sx={{ mb: 2 }}>
                   <Paper
                     sx={{
                       p: 2,
@@ -290,22 +261,22 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   </Paper>
                 </Grid>
 
-                <Grid size={{xs:12}} sx={{ mb: 3 }}>
+                <Grid size={{ xs: 12 }} sx={{ mb: 3 }}>
                   <Button variant="outlined" fullWidth onClick={copyToClipboard}>
                     کپی کد مخفی
                   </Button>
                 </Grid>
 
-                <Grid size={{xs:12}} sx={{ mb: 0, textAlign: 'center' }}>
-                  <Typography variant="body1">
+                <Grid size={{ xs: 12 }} sx={{ mb: 0, textAlign: 'center' }}>
+                  <Typography variant="body1" color='text.primary'>
                     کد مخفی: <b>{secretCode || 'در دسترس نیست'}</b>
                   </Typography>
                 </Grid>
 
-                <Grid size={{xs:12}}>
+                <Grid size={{ xs: 12 }}>
                   <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
-                      <Grid size={{xs:12}}>
+                      <Grid size={{ xs: 12 }}>
                         <TextField
                           fullWidth
                           label="کد تأیید 6 رقمی"
@@ -317,7 +288,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                           inputProps={{ maxLength: 6 }}
                         />
                       </Grid>
-                      <Grid size={{xs:12}}>
+                      <Grid size={{ xs: 12 }}>
                         <Button type="submit" variant="contained" fullWidth disabled={loading} sx={{ height: 50, fontSize: '1rem' }}>
                           {loading ? 'در حال بررسی...' : 'تأیید'}
                         </Button>
@@ -329,32 +300,32 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
             ) : null}
           </Grid>
         </Grid>
-        <Grid size={{xs:6}}>
-          <Grid size={{xs:12}} sx={{ mb: 0.9 }}>
-              <Alert
-                severity="warning"
-                sx={{
-                  borderRadius: '12px',
-                  bgcolor: '#dc3545',
+        <Grid size={{ xs: 6 }}>
+          <Grid size={{ xs: 12 }} sx={{ mb: 0.9 }}>
+            <Alert
+              severity="warning"
+              sx={{
+                borderRadius: '12px',
+                bgcolor: '#dc3545',
+                color: '#fff',
+                border: '1px solid #ffcc80',
+                fontSize: '1rem',
+                p: 2,
+                '& .MuiAlert-icon': {
+                  p: 1,
                   color: '#fff',
-                  border: '1px solid #ffcc80',
-                  fontSize: '1rem',
-                  p: 2,
-                  '& .MuiAlert-icon': {
-                    p: 1,
-                    color: '#fff',
-                  },
-                }}
-              >
-                <Typography variant="body1" fontWeight={700} fontSize="1.1rem" textAlign="start">
-                  هشدار مهم
-                </Typography>
-                <Typography variant="body2" mt={1} fontSize="1rem" textAlign="start">
-                  این کد مخفی را در مکانی امن ذخیره کنید. بدون این کد و اپلیکیشن Google Authenticator، بازیابی حساب ممکن نخواهد بود.
-                </Typography>
-              </Alert>
+                },
+              }}
+            >
+              <Typography variant="body1" fontWeight={700} fontSize="1.1rem" textAlign="start">
+                هشدار مهم
+              </Typography>
+              <Typography variant="body2" mt={1} fontSize="1rem" textAlign="start">
+                این کد مخفی را در مکانی امن ذخیره کنید. بدون این کد و اپلیکیشن Google Authenticator، بازیابی حساب ممکن نخواهد بود.
+              </Typography>
+            </Alert>
           </Grid>
-          <Grid size={{xs:12}} sx={{ mb: 0 }}>
+          <Grid size={{ xs: 12 }} sx={{ mb: 0 }}>
             <Paper
               sx={{
                 p: { xs: 2, sm: 3 },
@@ -378,12 +349,13 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                 راهنمای ساده فعال‌سازی Google Authenticator
               </Typography>
 
-              <List sx={{ px: 1, }}>
+              <List sx={{ px: 1 }}>
                 <ListItem sx={{ py: 0.5 }}>
                   <ListItemIcon sx={{ minWidth: 32, color: '#4CAF50' }}>
                     <Circle sx={{ fontSize: 10 }} />
                   </ListItemIcon>
-                  <ListItemText sx={{textAlign: 'start'}}
+                  <ListItemText
+                    sx={{ textAlign: 'start' }}
                     primary={
                       <Typography variant="body2">
                         اپلیکیشن <b>Google Authenticator</b> را از{' '}
@@ -427,7 +399,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   <ListItemIcon sx={{ minWidth: 32, color: '#4CAF50' }}>
                     <Circle sx={{ fontSize: 10 }} />
                   </ListItemIcon>
-                  <ListItemText  sx={{textAlign: 'start'}}
+                  <ListItemText
+                    sx={{ textAlign: 'start' }}
                     primary={
                       <Typography variant="body2">
                         اپلیکیشن را باز کنید و گزینه <b>افزودن حساب</b> (Add Account) را انتخاب کنید.
@@ -439,7 +412,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   <ListItemIcon sx={{ minWidth: 32, color: '#4CAF50' }}>
                     <Circle sx={{ fontSize: 10 }} />
                   </ListItemIcon>
-                  <ListItemText  sx={{textAlign: 'start'}}
+                  <ListItemText
+                    sx={{ textAlign: 'start' }}
                     primary={
                       <Typography variant="body2">
                         گزینه <b>اسکن کد QR</b> را انتخاب کرده و کد QR بالای صفحه را اسکن کنید.
@@ -451,7 +425,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   <ListItemIcon sx={{ minWidth: 32, color: '#4CAF50' }}>
                     <Circle sx={{ fontSize: 10 }} />
                   </ListItemIcon>
-                  <ListItemText  sx={{textAlign: 'start'}}
+                  <ListItemText
+                    sx={{ textAlign: 'start' }}
                     primary={
                       <Typography variant="body2">
                         اگر نمی‌توانید کد QR را اسکن کنید، دکمه <b>کپی کد مخفی</b> را بزنید و کد را به صورت دستی وارد اپلیکیشن کنید.
@@ -463,7 +438,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   <ListItemIcon sx={{ minWidth: 32, color: '#4CAF50' }}>
                     <Circle sx={{ fontSize: 10 }} />
                   </ListItemIcon>
-                  <ListItemText  sx={{textAlign: 'start'}}
+                  <ListItemText
+                    sx={{ textAlign: 'start' }}
                     primary={
                       <Typography variant="body2">
                         پس از اضافه کردن حساب، کد 6 رقمی که اپلیکیشن به شما می‌دهد را در کادر کنار وارد کنید و تأیید را بزنید.
@@ -476,7 +452,6 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
           </Grid>
         </Grid>
       </Grid>
-      
     </>
   );
 };

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Stack, Button } from '@mui/material';
+import { Button, Stack } from "@mui/material";
 
 const WithdrawalTabs = ({ tab, setTab, setMethod }) => {
   const tabs = [
@@ -7,8 +6,18 @@ const WithdrawalTabs = ({ tab, setTab, setMethod }) => {
     { key: 'crypto', label: 'برداشت رمزارز' },
   ];
 
+  if (!tabs || tabs.length === 0) return null;
+
   return (
-    <Stack direction="row" spacing={0} sx={{ border: '1px solid #1a652a', borderRadius: 1, p: 0.4 }}>
+    <Stack
+      direction="row"
+      spacing={0}
+      sx={{
+        border: '1px solid #1a652a',
+        borderRadius: 1,
+        p: 0.4,
+      }}
+    >
       {tabs.map(({ key, label }) => (
         <Button
           key={key}
@@ -30,5 +39,4 @@ const WithdrawalTabs = ({ tab, setTab, setMethod }) => {
     </Stack>
   );
 };
-
 export default WithdrawalTabs;

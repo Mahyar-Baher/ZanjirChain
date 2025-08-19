@@ -13,14 +13,35 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <Box sx={{ backgroundColor: 'background.paper', pt: 6, pb: 4, borderTop: '0.1px solid #1a652a' }}>
+    <Box sx={{
+      background: "#1a652a",
+      position: "relative",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundImage: 'url("/media/images/Dollar.png")',
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center bottom",
+        backgroundSize: "cover",
+        opacity: 0.02,
+        zIndex: 0,
+      },
+      pt: 6,
+      pb: 4,
+      borderTop: "0.1px solid #1a652a",
+    }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="space-between">
           {/* Brand Info */}
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom color='text.secondary'>
-              تترکروز
-            </Typography>
+            <Box display='flex' alignItems='center' justifyContent='start' mb={2}>
+              <img src='/media/images/ZanjirxlogoOnlyZ.png' width={40} height={40} alt=''/>
+              <Typography variant='h6' fontWeight={600} >زنجیراکس</Typography>
+            </Box>
             <Typography variant="body2" color="text.secondary">
               پلتفرمی برای خرید و فروش سریع، امن و ساده ارزهای دیجیتال با پشتیبانی حرفه‌ای.
             </Typography>
@@ -60,7 +81,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <Typography variant="body2" color="text.secondary" align="center">
-          © {year} تترکروز. تمامی حقوق محفوظ است.
+          © {year}. تمامی حقوق محفوظ است.<img src='/media/images/ZanjirxlogoOnlyZ.png' width={20} height={20} alt='logoZ'/>
         </Typography>
       </Container>
     </Box>

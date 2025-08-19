@@ -18,7 +18,7 @@ const timeOptions = [
   { fa: '۱ هفته',  days: 7 },
   { fa: '۱ ماه',   days: 30 },
 ];
-const TOMAN_RATE = 82790;
+const TOMAN_RATE = 92790;
 
 const TetherChartDash = () => {
   const location     = useLocation();                            // ✅ داخل کامپوننت

@@ -1,51 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem, TextField, Button } from '@mui/material';
+import { Box, FormControl, InputLabel, Select, MenuItem, TextField, Button, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
+import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
 import RecentAmounts from './RecentAmounts';
 import TransactionSummary from './TransactionSummary';
 import SnackBarNotification from './SnackBarNotification';
 import { generateTrackingCode } from './utils';
 
 const recentAmounts = ['5,000,000', '10,000,000', '15,000,000', '20,000,000', '25,000,000'];
-const feePercent = 1;
+const profitFactor = 1.02; // این مقدار باید با بک‌اند هماهنگ شود
 
 const TomanForm = ({ balanceToman }) => {
+  const { user, fetchWalletBalance, token } = useAuthStore();
   const [amount, setAmount] = useState('');
   const [sheba, setSheba] = useState('');
   const [shabaList, setShabaList] = useState([]);
   const [snack, setSnack] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user')) || {};
-    const shebaListFromUser = Array.isArray(userData.sheba_number)
-      ? userData.sheba_number
-      : [];
-    setShabaList(shebaListFromUser);
-    if (shebaListFromUser.length > 0) {
-      setSheba(shebaListFromUser[0]);
-    }
-  }, []);
+    const loadUserData = async () => {
+      setLoading(true);
+      setError(null);
+
+      if (!user) {
+        try {
+          await fetchWalletBalance(); // فرض می‌کنیم fetchWalletBalance داده‌های کاربر را هم به‌روزرسانی می‌کند
+        } catch (err) {
+          console.error('خطا در بارگذاری داده‌های کاربر:', err);
+          setError('خطا در بارگذاری اطلاعات کاربر.');
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (user) {
+        try {
+          const shebaListFromUser = Array.isArray(user.sheba_number) ? user.sheba_number : [];
+          setShabaList(shebaListFromUser);
+          if (shebaListFromUser.length > 0) {
+            setSheba(shebaListFromUser[0]);
+          } else {
+            setError('شماره شبا برای کاربر ثبت نشده است.');
+          }
+        } catch (error) {
+          console.error('خطا در پردازش داده‌های کاربر:', error);
+          setError('خطا در پردازش اطلاعات کاربر.');
+          setShabaList([]);
+        }
+      } else {
+        setError('اطلاعات کاربر یافت نشد.');
+        setShabaList([]);
+      }
+      setLoading(false);
+    };
+
+    loadUserData();
+  }, [user, fetchWalletBalance]);
 
   const parsedToman = parseInt(amount.replace(/,/g, ''), 10) || 0;
-  const feeToman = Math.round((parsedToman * feePercent) / 100);
+  const profitCut = (profitFactor - 1) / (profitFactor + 1);
+  const feeToman = Math.round(parsedToman * profitCut);
   const netToman = parsedToman - feeToman;
   const isInsufficient = parsedToman > balanceToman;
 
+
   const handleSubmit = async () => {
-    if (!sheba || sheba.length > 100) {
-      alert('شماره شبا معتبر نیست یا بیش از ۱۰۰ کاراکتر است.');
-      return;
-    }
-    if (parsedToman < 200000 || parsedToman > 500000000) {
-      alert('مبلغ برداشت باید بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان باشد.');
-      return;
-    }
-    if (isInsufficient) {
-      alert('موجودی تومان کافی نیست.');
+    if (!token) {
+      setError('لطفاً ابتدا وارد شوید.');
+      setSnack(true);
       return;
     }
 
-    const token = localStorage.getItem('token');
+    if (!sheba || sheba.length > 100) {
+      setError('شماره شبا معتبر نیست یا بیش از ۱۰۰ کاراکتر است.');
+      setSnack(true);
+      return;
+    }
+    if (parsedToman < 200000 || parsedToman > 500000000) {
+      setError('مبلغ برداشت باید بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان باشد.');
+      setSnack(true);
+      return;
+    }
+    if (isInsufficient) {
+      setError('موجودی تومان کافی نیست.');
+      setSnack(true);
+      return;
+    }
+
     const data = {
       receipt_url: null,
       payment_method: 'sheba',
@@ -63,75 +106,93 @@ const TomanForm = ({ balanceToman }) => {
     };
 
     try {
-      await axios.post('https://amirrezaei2002x.shop/laravel/api/orders', data, {
+      setLoading(true);
+      const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/orders', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-      setSnack(true);
-      setAmount('');
-      setSheba(shabaList.length > 0 ? shabaList[0] : '');
+
+      if (response.data.status) {
+        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
+        setSnack(true);
+        setAmount('');
+        setSheba(shabaList.length > 0 ? shabaList[0] : '');
+      } else {
+        throw new Error(response.data.message || 'خطا در ثبت درخواست');
+      }
     } catch (err) {
       console.error('❌ Submit Error:', err.response?.data || err.message);
-      alert(err.response?.data?.message || 'خطا در ثبت درخواست');
+      setError(err.response?.data?.message || 'خطا در ثبت درخواست');
+      setSnack(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="select-sheba-label">شماره شبا مقصد</InputLabel>
-        <Select
-          labelId="select-sheba-label"
-          value={sheba}
-          label="شماره شبا مقصد"
-          onChange={(e) => setSheba(e.target.value)}
-        >
-          {shabaList.length === 0 && (
-            <MenuItem disabled value="">
-              شماره شبا موجود نیست
-            </MenuItem>
-          )}
-          {shabaList.map((item, idx) => (
-            <MenuItem key={idx} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <TextField
-        fullWidth
-        label="مبلغ برداشت (تومان)"
-        placeholder="بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان"
-        margin="normal"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        error={isInsufficient}
-        helperText={isInsufficient ? 'موجودی کافی نیست.' : ''}
-      />
-      <RecentAmounts amounts={recentAmounts} setAmount={setAmount} />
-      <TransactionSummary
-        items={[
-          ['کارمزد', feeToman, 'تومان'],
-          ['خالص دریافتی', netToman, 'تومان'],
-          ['مبلغ وارد شده', parsedToman, 'تومان'],
-        ]}
-      />
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ mt: 2 }}
-        onClick={handleSubmit}
-        disabled={isInsufficient || shabaList.length === 0}
-      >
-        ثبت درخواست برداشت
-      </Button>
-      <SnackBarNotification
-        open={snack}
-        onClose={() => setSnack(false)}
-        message="درخواست ثبت شد"
-      />
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="select-sheba-label">شماره شبا مقصد</InputLabel>
+            <Select
+              labelId="select-sheba-label"
+              value={sheba}
+              label="شماره شبا مقصد"
+              onChange={(e) => setSheba(e.target.value)}
+            >
+              {shabaList.length === 0 && (
+                <MenuItem disabled value="">
+                  شماره شبا موجود نیست
+                </MenuItem>
+              )}
+              {shabaList.map((item, idx) => (
+                <MenuItem key={idx} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            fullWidth
+            label="مبلغ برداشت (تومان)"
+            placeholder="بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان"
+            margin="normal"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            error={isInsufficient}
+            helperText={isInsufficient ? 'موجودی کافی نیست.' : ''}
+          />
+          <RecentAmounts amounts={recentAmounts} setAmount={setAmount} />
+          <TransactionSummary
+            items={[
+              ['کارمزد', feeToman, 'تومان'],
+              ['خالص دریافتی', netToman, 'تومان'],
+              ['مبلغ وارد شده', parsedToman, 'تومان'],
+            ]}
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2 }}
+            onClick={handleSubmit}
+            disabled={isInsufficient || shabaList.length === 0 || loading}
+          >
+            ثبت درخواست برداشت
+          </Button>
+          <SnackBarNotification
+            open={snack}
+            onClose={() => setSnack(false)}
+            message={error || 'درخواست ثبت شد'}
+          />
+        </>
+      )}
     </Box>
   );
 };

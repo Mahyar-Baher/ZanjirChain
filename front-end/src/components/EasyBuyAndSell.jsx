@@ -6,48 +6,93 @@ import {
   Typography,
   Stack,
   Snackbar,
-  IconButton
+  IconButton,
+  CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import { Icon } from '@iconify/react';
 
 const labelSx = {
   color: '#fff',
   backgroundColor: '#1a652a',
   p: 0.55,
+  width: 70,
+  textAlign: 'center',
+  marginTop: -0.45,
   borderRadius: '4px',
   '&.Mui-focused': { color: '#fff', backgroundColor: '#1a652a' }
 };
 
-const USDT_PRICE = 31667;
+const USDT_PRICE = 98000;
 const FEE_PERCENT = 2;
-
 
 const toEnglishNumber = (str) => {
   return str.replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
 };
 
 const QuickBuyAndSell = () => {
-  const { fetchUserFromToken } = useContext(AuthContext);
+  const { wallet, fetchWalletBalance, token } = useAuthStore();
   const [isReversed, setIsReversed] = useState(false);
   const [toman, setToman] = useState('');
   const [tether, setTether] = useState('');
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
-  const [wallet, setWallet] = useState({
+  const [walletBalance, setWalletBalance] = useState({
     balance_toman: 0,
     balance_tether: 0
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const walletData = JSON.parse(localStorage.getItem('wallet')) || {};
-    setWallet({
-      balance_toman: Number(walletData.balance_toman) || 0,
-      balance_tether: Number(walletData.balance_tether) || 0
-    });
-  }, []);
+    const loadWallet = async () => {
+      setLoading(true);
+      setError(null);
+
+      if (!wallet) {
+        try {
+          await fetchWalletBalance();
+        } catch (err) {
+          console.error('خطا در فراخوانی fetchWalletBalance:', err);
+          setError('خطا در بارگذاری اطلاعات ولت.');
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (wallet) {
+        try {
+          const tomanBalance = parseFloat(wallet.totalToman || 0);
+          const tetherBalance = parseFloat(wallet.with_creadit_total_balance_formatted || 0);
+          if (isNaN(tomanBalance) || isNaN(tetherBalance)) {
+            throw new Error('مقادیر wallet نامعتبر هستند');
+          }
+          setWalletBalance({
+            balance_toman: tomanBalance,
+            balance_tether: tetherBalance
+          });
+        } catch (error) {
+          console.error('خطا در پردازش داده‌های ولت:', error);
+          setError('خطا در پردازش اطلاعات ولت.');
+          setWalletBalance({
+            balance_toman: 0,
+            balance_tether: 0
+          });
+        }
+      } else {
+        setError('اطلاعات ولت یافت نشد.');
+        setWalletBalance({
+          balance_toman: 0,
+          balance_tether: 0
+        });
+      }
+      setLoading(false);
+    };
+
+    loadWallet();
+  }, [wallet, fetchWalletBalance]);
 
   const handleSwap = () => {
     setIsReversed(prev => !prev);
@@ -84,36 +129,40 @@ const QuickBuyAndSell = () => {
   };
 
   const handleSubmit = async () => {
-    const token = localStorage.getItem('token');
+    if (!token) {
+      setSnackMessage('لطفاً ابتدا وارد شوید.');
+      setSnackOpen(true);
+      return;
+    }
+
     const isBuy = !isReversed;
-  
     const ba_toman = parseFloat(toEnglishNumber(toman)) || 0;
     const ba_tether = parseFloat(toEnglishNumber(tether)) || 0;
-  
+
     // Validate inputs
-    if (isBuy && ba_toman <= 0) {
-      setSnackMessage('مقدار تومان نامعتبر است');
+    if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
+      setSnackMessage('مقدار تومان باید بین ۱۴۵,۰۰۰ و ۲۵,۰۰۰,۰۰۰ باشد');
       setSnackOpen(true);
       return;
     }
-    if (!isBuy && ba_tether <= 0) {
-      setSnackMessage('مقدار تتر نامعتبر است');
+    if (!isBuy && (ba_tether < 5 || ba_tether > 25000)) {
+      setSnackMessage('مقدار تتر باید بین ۵ و ۲۵,۰۰۰ باشد');
       setSnackOpen(true);
       return;
     }
-  
+
     // Check wallet balance
-    if (isBuy && ba_toman > wallet.balance_toman) {
+    if (isBuy && ba_toman > walletBalance.balance_toman) {
       setSnackMessage('موجودی تومان کافی نیست');
       setSnackOpen(true);
       return;
     }
-    if (!isBuy && ba_tether > wallet.balance_tether) {
+    if (!isBuy && ba_tether > walletBalance.balance_tether) {
       setSnackMessage('موجودی تتر کافی نیست');
       setSnackOpen(true);
       return;
     }
-  
+
     const data = {
       amount: isBuy ? ba_toman : ba_tether,
       currency: 'USDT',
@@ -122,10 +171,9 @@ const QuickBuyAndSell = () => {
       ExchangeRate: USDT_PRICE,
       automatic: true
     };
-  
-    console.log('Request payload:', data); // Log payload for debugging
-  
+
     try {
+      setLoading(true);
       const response = await axios.post(
         'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
         data,
@@ -137,9 +185,9 @@ const QuickBuyAndSell = () => {
           timeout: 30000
         }
       );
-  
+
       if (response.data.status) {
-        await fetchUserFromToken();
+        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
         setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
         setSnackOpen(true);
         setToman('');
@@ -156,16 +204,19 @@ const QuickBuyAndSell = () => {
         isBuy: isBuy
       });
       const errorMessage = error.response?.data?.message || 
-        (!isBuy ? 'خطا در فروش تتر' : 'خطا در خرید تتر');
+        (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
+        (isBuy ? 'خطا در خرید تتر' : 'خطا در فروش تتر'));
       setSnackMessage(errorMessage);
       setSnackOpen(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   const tomanField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 0 : 1} mb={isReversed ? 0 : 3}>
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {wallet.balance_toman.toLocaleString('en-US')} تومان
+        موجودی: {walletBalance.balance_toman.toLocaleString('en-US')} تومان
       </Typography>
       <TextField
         name="tomanQ"
@@ -187,7 +238,7 @@ const QuickBuyAndSell = () => {
   const tetherField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {wallet.balance_tether.toLocaleString('en-US')} تتر
+        موجودی: {walletBalance.balance_tether.toLocaleString('en-US')} تتر
       </Typography>
       <TextField
         name="tetherQ"
@@ -208,70 +259,82 @@ const QuickBuyAndSell = () => {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'column' },
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: 3,
-          gap: 1
-        }}
-      >
-        {isReversed ? tetherField : tomanField}
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Box sx={{ mb: 2 }}>
+          <Typography color="error">{error}</Typography>
+        </Box>
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'column' },
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: 3,
+              gap: 1
+            }}
+          >
+            {isReversed ? tetherField : tomanField}
 
-        <Button
-          onClick={handleSwap}
-          variant="outlined"
-          sx={{
-            fontSize: 10,
-            p: 0,
-            height: 'fit-content',
-            mt: { xl: 1 },
-            transform: 'rotate(90deg)'
-          }}
-        >
-          <iconify-icon icon="mdi:exchange" style={{ fontSize: '30px' }} />
-        </Button>
+            <Button
+              onClick={handleSwap}
+              variant="outlined"
+              sx={{
+                fontSize: 10,
+                p: 0,
+                height: 'fit-content',
+                mt: { xl: 1 },
+                transform: 'rotate(90deg)'
+              }}
+            >
+              <Icon icon="mdi:exchange" style={{ fontSize: '30px' }} />
+            </Button>
 
-        {isReversed ? tomanField : tetherField}
-      </Box>
+            {isReversed ? tomanField : tetherField}
+          </Box>
 
-      <Stack
-        direction="row"
-        spacing={0}
-        alignItems="center"
-        justifyContent="center"
-        sx={{ width: '100%', mt: 1 }}
-      >
-        <Typography
-          variant="caption"
-          textAlign="center"
-          color="text.secondary"
-        >
-          مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه میشود
-        </Typography>
-      </Stack>
+          <Stack
+            direction="row"
+            spacing={0}
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', mt: 1 }}
+          >
+            <Typography
+              variant="caption"
+              textAlign="center"
+              color="text.secondary"
+            >
+              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه میشود
+            </Typography>
+          </Stack>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          my: 1.5,
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-      >
-        <Button
-          fullWidth
-          variant="contained"
-          color={isReversed ? 'error' : 'success'}
-          onClick={handleSubmit}
-          disabled={!toman || !tether}
-        >
-          {isReversed ? 'فروش تتر' : 'خرید تتر'}
-        </Button>
-      </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              my: 1.5,
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}
+          >
+            <Button
+              fullWidth
+              variant="contained"
+              color={isReversed ? 'error' : 'success'}
+              onClick={handleSubmit}
+              disabled={!toman || !tether || loading}
+            >
+              {isReversed ? 'فروش تتر' : 'خرید تتر'}
+            </Button>
+          </Box>
+        </>
+      )}
 
       <Snackbar
         open={snackOpen}

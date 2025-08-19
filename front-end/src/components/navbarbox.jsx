@@ -11,20 +11,30 @@ import {
 import { ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { lightTheme, darkTheme } from '../theme';
-import React, { useState, useMemo, useEffect } from 'react';
-import navItems from '../data/navItems'; 
+import React, { useState, useMemo, useEffect, useContext } from 'react';
+import navItems from '../data/navItems';
+import { AuthContext } from '../context/AuthContext';
+import { Icon } from '@iconify/react'; 
 
 const Navbarbox = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useContext(AuthContext);
   const [, setHovered] = useState(null);
   const isMobile = useMediaQuery('(max-width:900px)');
   const [collapsed, setCollapsed] = useState(isMobile);
-  const [darkMode,] = useState(false);
+  const [darkMode] = useState(false);
 
   useEffect(() => {
     setCollapsed(isMobile);
   }, [isMobile]);
+
+  // چک کردن لاگین بودن کاربر
+  useEffect(() => {
+    if (!user && location.pathname !== '/') {
+      navigate('/');
+    }
+  }, [user, location.pathname, navigate]);
 
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
 
@@ -43,8 +53,7 @@ const Navbarbox = () => {
             height: '100vh',
             width: collapsed ? 72 : 250,
             borderRadius: '90px 0 0 90px',
-            background: "#1A652A", 
-            // 'linear-gradient(80deg, rgba(149,0,235,0.9) 0%, rgba(149,0,235,0.9) 21%, rgba(0,0,255,0.9) 100%)',
+            background: '#1A652A',
             color: '#fff',
             position: 'fixed',
             transition: 'width 0.3s ease',
@@ -81,19 +90,20 @@ const Navbarbox = () => {
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
                     variant="text"
-                    className={`custom-nav-button rounded-start-0 rounded-end-pill mt-2 ${isActive(item.path) || isChildVisible(item) ? 'active' : ''}`}
+                    className={`custom-nav-button rounded-start-0 rounded-end-pill mt-2 ${
+                      isActive(item.path) || isChildVisible(item) ? 'active' : ''
+                    }`}
                     sx={{
                       justifyContent: 'flex-start',
                       textTransform: 'none',
                       fontSize: '1rem',
                       color: '#fff',
-                      '& i': {
-                        marginLeft: '12px',
-                        fontSize: '18px',
-                      },
                     }}
                     startIcon={
-                      <iconify-icon icon={item.icon} style={{ fontSize: '30px', marginLeft: 7 }}></iconify-icon>
+                      <Icon
+                        icon={item.icon}
+                        style={{ fontSize: '30px', marginLeft: 7 }}
+                      />
                     }
                   >
                     {!collapsed && item.label}

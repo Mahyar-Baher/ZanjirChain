@@ -11,7 +11,9 @@ import {
   Modal,
   Typography,
   Divider,
+  CircularProgress,
 } from '@mui/material';
+import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
 
 const styleModal = {
   position: 'absolute',
@@ -34,22 +36,39 @@ const getRadiusStyle = (pos) => {
 };
 
 const MessageList = () => {
+  const { messages, token, fetchUserFromToken } = useAuthStore();
   const [messagesData, setMessagesData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalText, setModalText] = useState('');
   const [visibleCount, setVisibleCount] = useState(3);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('messages');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setMessagesData(Array.isArray(parsed) ? parsed : []);
-      } catch {
-        setMessagesData([]);
+    const loadMessages = async () => {
+      if (!token) {
+        setError('لطفاً ابتدا وارد شوید.');
+        setLoading(false);
+        return;
       }
-    }
-  }, []);
+
+      try {
+        setLoading(true);
+        await fetchUserFromToken(token);
+        setMessagesData(Array.isArray(messages) ? messages : []);
+      } catch (err) {
+        console.error('خطا در بارگذاری پیام‌ها:', err?.response?.data || err.message);
+        setError('خطا در بارگذاری پیام‌ها. لطفاً دوباره تلاش کنید.');
+        if (err.response?.status === 401) {
+          useAuthStore.getState().logout();
+          window.location.href = '/login';
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadMessages();
+  }, [token, fetchUserFromToken]);
 
   const visibleMessages = messagesData.slice(0, visibleCount);
 
@@ -64,146 +83,155 @@ const MessageList = () => {
   };
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 1, direction: 'rtl' }}>
       <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
         مدیریت پیام‌ها
       </Typography>
 
-      <TableContainer
-        sx={{
-          boxShadow: 'none',
-          borderRadius: 2,
-          borderTopLeftRadius: 12,
-          borderTopRightRadius: 12,
-        }}
-      >
-        <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
-          <TableHead>
-            <TableRow
-              sx={{
-                bgcolor: '#80808c3f',
-                ...getRadiusStyle('top'),
-              }}
-            >
-              <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomRightRadius: 12, borderTopRightRadius: 12 }}>
-                موضوع
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold' }}>
-                متن پیام
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold' }}>
-                زمان ارسال
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomLeftRadius: 12, borderTopLeftRadius: 12 }}>
-                عملیات
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {visibleMessages.map((msg, i) => {
-              const isLast = i === visibleMessages.length - 1;
-              return (
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Box sx={{ mb: 2, p: 2, bgcolor: 'error.light', borderRadius: 1 }}>
+          <Typography color="error.main">{error}</Typography>
+        </Box>
+      ) : !messagesData || messagesData.length === 0 ? (
+        <Box sx={{ textAlign: 'center', my: 4 }}>
+          <Typography color="text.secondary">پیامی یافت نشد</Typography>
+        </Box>
+      ) : (
+        <>
+          <TableContainer
+            sx={{
+              boxShadow: 'none',
+              borderRadius: 2,
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+            }}
+          >
+            <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
+              <TableHead>
                 <TableRow
-                  key={msg.id}
                   sx={{
                     bgcolor: '#80808c3f',
-                    borderRadius: 2,
-                    mb: 1,
-                    '&:hover': { bgcolor: '#e1e1ff' },
-                    '& td': { borderBottom: 'none' },
-                    ...(!isLast && { borderBottom: '8px solid transparent' }),
-                    ...(isLast && getRadiusStyle('bottom')),
+                    ...getRadiusStyle('top'),
                   }}
                 >
-                  <TableCell align="center" sx={{ fontSize: 14, px: 1 }}>
-                    {msg.subject}
+                  <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomRightRadius: 12, borderTopRightRadius: 12 }}>
+                    موضوع
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      maxWidth: 220,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      fontSize: 14,
-                      px: 1,
-                    }}
-                    title={msg.body}
-                  >
-                    {msg.body}
+                  <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                    متن پیام
                   </TableCell>
-                  <TableCell align="center" sx={{ fontSize: 14, fontFamily: 'Vazir, sans-serif' }}>
-                    {new Date(msg.created_at).toLocaleString('fa-IR', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
+                  <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                    زمان ارسال
                   </TableCell>
-                  <TableCell align="center" sx={{ px: 1 }}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleOpenModal(msg.body)}
-                      sx={{
-                        borderColor: '#1a652a',
-                        color: '#1a652a',
-                        textTransform: 'none',
-                        px: 2,
-                        borderRadius: 2,
-                        fontSize: 13,
-                        '&:hover': { bgcolor: '#1a652a', color: 'white' },
-                      }}
-                    >
-                      مشاهده
-                    </Button>
+                  <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomLeftRadius: 12, borderTopLeftRadius: 12 }}>
+                    عملیات
                   </TableCell>
                 </TableRow>
-              );
-            })}
-            {visibleMessages.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={4} align="center" sx={{ py: 4, color: '#999', fontSize: 14 }}>
-                  پیامی یافت نشد
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {visibleMessages.map((msg, i) => {
+                  const isLast = i === visibleMessages.length - 1;
+                  return (
+                    <TableRow
+                      key={msg.id}
+                      sx={{
+                        bgcolor: '#80808c3f',
+                        borderRadius: 2,
+                        mb: 1,
+                        '&:hover': { bgcolor: '#e1e1ff' },
+                        '& td': { borderBottom: 'none' },
+                        ...(!isLast && { borderBottom: '8px solid transparent' }),
+                        ...(isLast && getRadiusStyle('bottom')),
+                      }}
+                    >
+                      <TableCell align="center" sx={{ fontSize: 14, px: 1 }}>
+                        {msg.subject || 'بدون موضوع'}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          maxWidth: 220,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          fontSize: 14,
+                          px: 1,
+                        }}
+                        title={msg.body}
+                      >
+                        {msg.body || 'بدون متن'}
+                      </TableCell>
+                      <TableCell align="center" sx={{ fontSize: 14, fontFamily: 'Vazir, sans-serif' }}>
+                        {new Date(msg.created_at).toLocaleString('fa-IR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </TableCell>
+                      <TableCell align="center" sx={{ px: 1 }}>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={() => handleOpenModal(msg.body || 'بدون متن')}
+                          sx={{
+                            borderColor: '#1a652a',
+                            color: '#1a652a',
+                            textTransform: 'none',
+                            px: 2,
+                            borderRadius: 2,
+                            fontSize: 13,
+                            '&:hover': { bgcolor: '#1a652a', color: 'white' },
+                          }}
+                        >
+                          مشاهده
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-      {visibleCount < messagesData.length && (
-        <Box
-          sx={{
-            mt: 0,
-            pt: 0.8,
-            display: 'flex',
-            justifyContent: 'center',
-            bgcolor: 'Background.primary',
-            borderBottomLeftRadius: 12,
-            borderBottomRightRadius: 12,
-            boxShadow: '0px 2px 6px rgb(0 0 0 / 0.05)',
-            borderTop: '1px solid rgba(120,120,255,0.3)',
-          }}
-        >
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{
-              bgcolor: '#1a652a',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 3,
-              fontWeight: 'bold',
-              '&:hover': { bgcolor: '#5c5cff' },
-            }}
-            onClick={handleShowMore}
-          >
-            نمایش بیشتر
-          </Button>
-        </Box>
+          {visibleCount < messagesData.length && (
+            <Box
+              sx={{
+                mt: 0,
+                pt: 0.8,
+                display: 'flex',
+                justifyContent: 'center',
+                bgcolor: 'Background.primary',
+                borderBottomLeftRadius: 12,
+                borderBottomRightRadius: 12,
+                boxShadow: '0px 2px 6px rgb(0 0 0 / 0.05)',
+                borderTop: '1px solid rgba(120,120,255,0.3)',
+              }}
+            >
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{
+                  bgcolor: '#1a652a',
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 3,
+                  fontWeight: 'bold',
+                  '&:hover': { bgcolor: '#5c5cff' },
+                }}
+                onClick={handleShowMore}
+              >
+                نمایش بیشتر
+              </Button>
+            </Box>
+          )}
+        </>
       )}
 
       <Modal open={modalOpen} onClose={handleCloseModal} aria-labelledby="modal-title" closeAfterTransition>
@@ -234,7 +262,6 @@ const MessageList = () => {
           </Box>
         </Box>
       </Modal>
-
     </Box>
   );
 };

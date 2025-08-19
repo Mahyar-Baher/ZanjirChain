@@ -20,6 +20,7 @@ import {
   CheckCircle 
 } from '@mui/icons-material';
 import { Icon } from '@iconify/react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const Contact = () => {
@@ -68,7 +69,6 @@ const Contact = () => {
     
     // Simulate API call
     setTimeout(() => {
-      console.log('Form submitted:', formData);
       setIsSubmitted(true);
       setIsLoading(false);
       setFormData({ name: '', email: '', subject: '', message: '' });
@@ -109,7 +109,7 @@ const Contact = () => {
             gutterBottom
             sx={{ textAlign: 'center' }}
           >
-            تماس با <span style={{ color: '#1a652a' }}>تترکروز</span> 📞
+            تماس با <span style={{ color: '#1a652a' }}>زنجیراکس</span> 📞
           </Typography>
           <Typography 
             variant="body1" 

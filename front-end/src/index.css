@@ -5,4 +5,27 @@
 }
 body {
   margin: 0;
+  height: 5000;
+  position: relative;
+}
+body::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../public/media/images/Dollar.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.01;
+  z-index: -1;
+}
+.MuiInputLabel-root {
+  right:30px !important;       /* فاصله از سمت راست */
+  left: auto !important;        /* غیرفعال کردن left پیش‌فرض */
+  top: 0 !important;
+  transform-origin: top right !important; 
+  direction: rtl;
 }

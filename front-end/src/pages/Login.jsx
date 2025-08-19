@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -14,14 +14,24 @@ import {
   Fade,
 } from '@mui/material';
 import WarningsBox from '../components/warningbox';
+import { AuthContext } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useContext(AuthContext); // گرفتن user از AuthContext
   const isVerySmallScreen = useMediaQuery('(max-width:359px)');
 
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({ open: false, message: '' });
+
+  // چک کردن لاگین بودن کاربر
+  useEffect(() => {
+    if (user && location.pathname !== '/') {
+      navigate('/');
+    }
+  }, [user, location.pathname, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +66,7 @@ function Login() {
     } catch (error) {
       setErrorModal({
         open: true,
-        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.',
+        message: 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.' + error,
       });
     } finally {
       setLoading(false);

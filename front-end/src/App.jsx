@@ -30,6 +30,7 @@ const Blog = lazy(() => import('./pages/Blog'));
 const Invite = lazy(() => import('./pages/invite'));
 const Services = lazy(() => import('./pages/Services'));
 const GoogleAuthenticator = lazy(() => import('./pages/GoogleAuthenticator'));
+const IdentityVerification = lazy(() => import('./pages/IdentityVerification'));
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               <Route path="/ManageAddresses" element={<ManageAddresses />} />
               <Route path="/ManageMessage" element={<ManageMessage />} />
               <Route path="/alertPrice" element={<AlertPrice />} />
+              <Route path="/IdentityVerification" element={<IdentityVerification />} />
               <Route path="/Credits" element={<Credits />} />
               <Route path="/Income" element={<Income />} />
               <Route path="/Dashboard" element={<Dashboard />} />

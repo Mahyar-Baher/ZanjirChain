@@ -2,36 +2,58 @@ import { Box, Button, TextField, Typography, Chip, Avatar } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import NetworkSelect from './NetworkSelect';
-import TokenSelect from './TokenSelectModal'; // فرض می‌کنیم TokenSelect به نسخه کارتی تغییر کرده
+import TokenSelect from './TokenSelectModal';
 import { Icon } from '@iconify/react';
+import useAuthStore from '../context/authStore'; // فرضاً مسیر فایل useAuthStore.js
 
-export default function CryptoDepositForm() {
+export default function CryptoPaymentForm() {
+  const { token, wallet } = useAuthStore(); // توکن و ولت رو از useAuthStore بگیر
   const [tokens, setTokens] = useState([]);
   const [selectedToken, setSelectedToken] = useState(null);
   const [networks, setNetworks] = useState({});
   const [selectedNetwork, setSelectedNetwork] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTokens = async () => {
+      if (!token) {
+        setError('توکن احراز هویت یافت نشد. لطفاً دوباره وارد شوید.');
+        return;
+      }
+
+      // اگر اطلاعات ولت در useAuthStore موجوده، از همون استفاده کن
+      if (wallet && wallet.currency === 'usdt') {
+        const usdtNetworks = {};
+        Object.entries(wallet.networks || {}).forEach(([network, address]) => {
+          usdtNetworks[network.toLowerCase()] = address;
+        });
+
+        const tetherToken = {
+          name: 'Tether',
+          symbol: 'USDT',
+          networks: usdtNetworks,
+        };
+        setTokens([tetherToken]);
+        return;
+      }
+
+      // در غیر این صورت، درخواست به API
+      setLoading(true);
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.error('توکن پیدا نشد');
-          return;
-        }
         const res = await axios.post(
           'https://amirrezaei2002x.shop/laravel/api/getAllWallets',
           {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
           }
         );
+
         if (res.data && Array.isArray(res.data)) {
           const rawTokens = res.data;
-
-          // فقط تتر و آدرس های مختلف شبکه هاش
           const usdtNetworks = {};
           rawTokens.forEach(wallet => {
             usdtNetworks[wallet.network.toLowerCase()] = wallet.address;
@@ -42,18 +64,19 @@ export default function CryptoDepositForm() {
             symbol: 'USDT',
             networks: usdtNetworks,
           };
-
           setTokens([tetherToken]);
         } else {
-          console.error('پاسخ API نامعتبر است:', res.data);
+          setError('پاسخ API نامعتبر است.');
         }
       } catch (error) {
-        console.error('خطا در دریافت توکن‌ها:', error);
+        setError(error.response?.data?.message || 'خطا در دریافت اطلاعات ولت.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTokens();
-  }, []);
+  }, [token, wallet]);
 
   const handleTokenSelect = (token) => {
     setSelectedToken(token);
@@ -70,13 +93,24 @@ export default function CryptoDepositForm() {
         mt: 0
       }}
     >
+      {/* نمایش لودینگ یا خطا */}
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <Typography>در حال بارگذاری...</Typography>
+        </Box>
+      )}
+      {error && (
+        <Box sx={{ mb: 2 }}>
+          <Typography color="error">{error}</Typography>
+        </Box>
+      )}
 
       {/* بخش انتخاب رمز ارز */}
       <Box sx={{ mb: 1 }}>
         <Typography 
           variant="h6" 
           sx={{ 
-            mb: 2, 
+            mb: 1, 
             fontWeight: 700,
             color: '#1a652a',
             display: 'flex',
@@ -93,10 +127,10 @@ export default function CryptoDepositForm() {
             sx={{ 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent:"space-between",
+              justifyContent: "space-between",
               p: 1, 
               borderRadius: 3, 
-              bgColor: 'Background.paper',
+              bgColor: 'background.paper',
               position: 'relative'
             }}
           >
@@ -123,7 +157,7 @@ export default function CryptoDepositForm() {
                 label={selectedToken.symbol} 
                 sx={{ 
                   mt: 1, 
-                  p:0,
+                  p: 0,
                   bgcolor: '#28a745', 
                   color: 'white', 
                   fontWeight: 700,
@@ -155,11 +189,11 @@ export default function CryptoDepositForm() {
 
       {/* بخش انتخاب شبکه */}
       {selectedToken && (
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: 0 }}>
           <Typography 
             variant="h6" 
             sx={{ 
-              mb: 2, 
+              mb: 1, 
               fontWeight: 700,
               color: '#2e7d32',
               display: 'flex',

@@ -14,6 +14,7 @@ import {
   useTheme
 } from '@mui/material';
 import { Icon } from '@iconify/react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const Blog = () => {
@@ -26,7 +27,7 @@ const Blog = () => {
       excerpt: 'راهنمای جامع معاملات تتر با کمترین کارمزد و بالاترین امنیت',
       image: '../../public/media/images/bg_home.webp',
       date: '۱۴۰۲/۰۵/۱۵',
-      author: 'تیم تترکروز',
+      author: 'تیم زنجیراکس',
       category: 'آموزشی',
       readTime: '۵ دقیقه'
     },
@@ -108,7 +109,7 @@ const Blog = () => {
             mb={2}
             color="text.primary"
           >
-            وبلاگ تترکروز
+            وبلاگ زنجیراکس
           </Typography>
           <Typography 
             variant="h6" 

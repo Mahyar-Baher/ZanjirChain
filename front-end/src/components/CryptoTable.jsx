@@ -4,6 +4,7 @@ import {
   TableHead, TableRow, Paper, Button, TextField,
   Typography, Box, Checkbox, FormControlLabel
 } from '@mui/material';
+import { Icon } from '@iconify/react';
 
 const cryptoData = [
   { name: 'Bitcoin', icon: 'token-branded:btc', symbol: 'btc', total: '0', change: '0%', tetherPrice: '0' },
@@ -73,7 +74,7 @@ const CryptoTable = () => {
             {filteredData.map((crypto) => (
               <TableRow key={crypto.icon} sx={{ '& td': { borderBottom: 'none' } }}>
                 <TableCell align="center" sx={{ borderTopRightRadius: '22px', borderBottomRightRadius: '22px', borderBottom: 'none' }}>
-                  <iconify-icon icon={crypto.icon} width="28" height="28"></iconify-icon>
+                  <Icon icon={crypto.icon} width="28" height="28"></Icon>
                 </TableCell>
                 <TableCell align="center">{crypto.name}</TableCell>
                 <TableCell align="center">{crypto.symbol.toUpperCase()}</TableCell>

@@ -14,6 +14,8 @@ import Dashboard from './Dashboard';
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { AuthContext } from '../context/AuthContext'; // import AuthContext
+import BuySellHome from '../components/BuySellHome';
+import TetherPriceHome from '../components/TetherPriceHome';
 
 const features = [
   {
@@ -83,39 +85,28 @@ const Home = () => {
         py: 6,
         direction: 'rtl',
       }}
-      className="bg-home"
     >
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-      >
-        <Typography variant="h4" fontWeight="bold" color="text.secondary" gutterBottom>
-          به <span style={{ color: '#1a652a' }}>تترکروز</span> خوش آمدید 👋
-        </Typography>
-        <Typography variant="body1" color="text.secondary" mb={4}>
-          با کم‌ترین کارمزد، تتر را سریع، امن و بی‌دغدغه معامله کنید همراه با پشتیبانی لحظه‌ای
-        </Typography>
-      </motion.div>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={4} justifyContent='space-between'>
+          <BuySellHome/>
+          <TetherPriceHome/>
         {features.map((feature, index) => (
-          <Grid item size={{ xs: 12, md: 6, lg: 3 }} key={index}>
+          <Grid item size={{ xs: 12, md: 6, lg: 5 }} key={index}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
-              <Card elevation={2} sx={{ borderRadius: 4 }}>
+              <Card elevation={2} sx={{ borderRadius: 4, background: '#1a652a' }}>
                 <CardActionArea href={feature.link}>
                   <CardContent sx={{ textAlign: 'center', py: 4 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                      <Icon icon={feature.icon} width="48" height="48" color="#1a652a" />
+                      <Icon icon={feature.icon} width="48" height="48" color="#ffffff" />
                     </Box>
-                    <Typography variant="h6" fontWeight="bold">
+                    <Typography variant="h6" fontWeight="bold" color="#ffffff">
                       {feature.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" mt={1}>
+                    <Typography variant="body2" color="#ffffff" mt={1}>
                       {feature.description}
                     </Typography>
                   </CardContent>

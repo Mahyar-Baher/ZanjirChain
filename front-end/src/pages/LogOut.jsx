@@ -6,14 +6,13 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 
 const LogOut = () => {
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
+  const { logout, token } = useContext(AuthContext);
 
   useEffect(() => {
     const logoutUser = async () => {
       try {
-        const token = localStorage.getItem('token');
         if (!token) {
-          console.log('⚠️ توکن موجود نیست، نیازی به لاگ‌اوت از سرور نیست.');
+          console.warn('⚠️ توکن موجود نیست، لاگ‌اوت محلی انجام می‌شود');
           logout();
           navigate('/');
           return;
@@ -30,15 +29,13 @@ const LogOut = () => {
           }
         );
 
-        console.log('✅ Logout Response:', response.data);
-
-        if (response.data.success) {
-          console.log('توکن از لوکال استوریج حذف شد.');
+        if (response.data?.success) {
+          console.log('✅ لاگ‌اوت از سرور موفقیت‌آمیز بود');
         } else {
-          console.warn('❌ Logout موفق نبود:', response.data.message || response.data);
+          console.warn('⚠️ لاگ‌اوت از سرور موفقیت‌آمیز نبود:', response.data?.message || 'پاسخ نامعتبر');
         }
       } catch (error) {
-        console.error('❌ Logout Error:', error.response?.data || error.message);
+        console.error('🚨 خطای لاگ‌اوت:', error.response?.data?.message || error.message);
       } finally {
         logout();
         navigate('/');
@@ -46,7 +43,7 @@ const LogOut = () => {
     };
 
     logoutUser();
-  }, [logout, navigate]);
+  }, [logout, navigate, token]);
 
   return (
     <Box
@@ -64,7 +61,7 @@ const LogOut = () => {
     >
       <CircularProgress color="primary" size={48} />
       <Typography variant="h6" component="p" sx={{ fontWeight: 'medium' }}>
-        خروج از حساب لطفا منتظر بمانید...❤️
+        خروج از حساب، لطفاً منتظر بمانید... ❤️
       </Typography>
     </Box>
   );

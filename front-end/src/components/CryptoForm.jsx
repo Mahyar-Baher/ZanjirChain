@@ -1,103 +1,187 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, Button } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, TextField, Button, ButtonGroup, CircularProgress, Paper, Stack } from '@mui/material';
 import TransactionSummary from './TransactionSummary';
 import SnackBarNotification from './SnackBarNotification';
-import { generateTrackingCode } from './utils';
+import useAuthStore from '../context/authStore';
+import axios from 'axios';
 
 const feePercent = 1;
+const networks = ['Ethereum'];
+const currency = 'USDT';
 
-const CryptoForm = ({ activeMethod, balanceTether, methodKeys }) => {
+const CryptoForm = () => {
+  const { wallet, token, fetchWalletBalance } = useAuthStore();
   const [cryptoAddress, setCryptoAddress] = useState('');
   const [cryptoAmount, setCryptoAmount] = useState('');
+  const [network, setNetwork] = useState(networks[0]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [snack, setSnack] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [balanceTether, setBalanceTether] = useState(0);
+
+  // لود موجودی
+  useEffect(() => {
+    const loadWallet = async () => {
+      setLoading(true);
+      if (!wallet) {
+        await fetchWalletBalance();
+      }
+      if (wallet) {
+        const tetherBalance = parseFloat(wallet.with_creadit_total_balance_formatted || 0);
+        setBalanceTether(tetherBalance);
+      }
+      setLoading(false);
+    };
+    loadWallet();
+  }, [wallet, fetchWalletBalance]);
 
   const parsedTether = parseFloat(cryptoAmount) || 0;
-  const feeTether = +(parsedTether * (feePercent / 100)).toFixed(2);
-  const netTether = +(parsedTether - feeTether).toFixed(2);
+  const feeTether = +(parsedTether * (feePercent / 100)).toFixed(6);
+  const netTether = +(parsedTether - feeTether).toFixed(6);
+
+  const [apiMessage, setApiMessage] = useState(null);
 
   const handleSubmit = async () => {
-    if (!cryptoAddress || cryptoAddress.length > 11) {
-      alert('آدرس مقصد معتبر نیست یا بیش از ۱۱ کاراکتر است.');
+    setError(null);
+    setApiMessage(null);
+  
+    if (!token) {
+      setError('لطفاً ابتدا وارد شوید.');
+      setSnack(true);
+      return;
+    }
+    if (!cryptoAddress || cryptoAddress.length < 10) {
+      setError('آدرس مقصد معتبر نیست.');
+      setSnack(true);
       return;
     }
     if (parsedTether <= 0) {
-      alert('مقدار برداشت باید بزرگتر از صفر باشد.');
+      setError('مقدار برداشت باید بزرگتر از صفر باشد.');
+      setSnack(true);
       return;
     }
     if (parsedTether > balanceTether) {
-      alert('موجودی تتر کافی نیست.');
+      setError(`موجودی کافی نیست. موجودی: ${balanceTether.toFixed(6)} USDT`);
+      setSnack(true);
       return;
     }
-
-    const token = localStorage.getItem('token');
+  
     const data = {
-      receipt_url: null,
-      payment_method: methodKeys[activeMethod],
-      transaction_type: 3,
-      bank_tracking_code: cryptoAddress,
-      custom_tracking_code: generateTrackingCode(),
-      fee: feeTether,
-      is_paid: true,
-      financial_status: 0,
-      currency: 'tether',
-      fp_tether: netTether,
-      fp_toman: 0,
-      ba_tether: parsedTether,
-      ba_toman: 0,
+      toaddress: cryptoAddress,
+      network,
+      currency,
+      amount: parsedTether,
+      automatic: true,
     };
-
+  
     try {
-      await axios.post('https://amirrezaei2002x.shop/laravel/api/orders', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      setSnack(true);
-      setCryptoAddress('');
-      setCryptoAmount('');
+      setSubmitting(true);
+      const response = await axios.post(
+        'https://amirrezaei2002x.shop/laravel/api/sendcoinapi',
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      // پیام API رو ذخیره کن
+      setApiMessage(response.data.message || 'درخواست ثبت شد');
+  
+      if (response.data.status) {
+        await fetchWalletBalance();
+        setCryptoAddress('');
+        setCryptoAmount('');
+      } else {
+        setError(response.data.message || 'خطا در ثبت درخواست');
+      }
     } catch (err) {
       console.error('❌ Submit Error:', err.response?.data || err.message);
-      alert(err.response?.data?.message || 'خطا در ثبت درخواست');
+      setError(err.response?.data?.message || 'خطا در ثبت درخواست');
+    } finally {
+      setSubmitting(false);
+      setSnack(true);
     }
   };
+  
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <Box component="form" noValidate autoComplete="off">
-      <Typography mb={2}>
-        شبکه انتخابی: <strong>{['انتقال داخلی', 'شبکه TRC20', 'شبکه BEP20', 'شبکه ERC20'][activeMethod]}</strong>
+    <Paper sx={{ p: 3, maxWidth: 600, mx: 'auto', direction: 'rtl' }}>
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+        برداشت تتر (USDT)
       </Typography>
+
+      <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
+        انتخاب شبکه
+      </Typography>
+      <ButtonGroup fullWidth sx={{ mb: 2 }}>
+        {networks.map((net) => (
+          <Button
+            key={net}
+            variant={network === net ? 'contained' : 'outlined'}
+            onClick={() => setNetwork(net)}
+          >
+            {net}
+          </Button>
+        ))}
+      </ButtonGroup>
+
       <TextField
         fullWidth
         label="آدرس مقصد"
         margin="normal"
         value={cryptoAddress}
         onChange={(e) => setCryptoAddress(e.target.value)}
+        sx={{ mb: 2 }}
       />
       <TextField
         fullWidth
         label="مقدار برداشت (USDT)"
         margin="normal"
+        type="number"
         value={cryptoAmount}
         onChange={(e) => setCryptoAmount(e.target.value)}
+        sx={{ mb: 2 }}
       />
+
       <TransactionSummary
         items={[
           ['کارمزد', feeTether, 'USDT'],
           ['خالص دریافتی', netTether, 'USDT'],
           ['مقدار وارد شده', parsedTether, 'USDT'],
+          ['موجودی فعلی', balanceTether, 'USDT'],
         ]}
       />
-      <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
-        ثبت برداشت
-      </Button>
+
+      <Stack direction="row" spacing={1} mt={2}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={submitting}
+        >
+          {submitting ? 'در حال ارسال...' : 'ثبت برداشت'}
+        </Button>
+      </Stack>
+
       <SnackBarNotification
         open={snack}
         onClose={() => setSnack(false)}
-        message="درخواست ثبت شد"
+        message={error || apiMessage}
       />
-    </Box>
+    </Paper>
   );
 };
 

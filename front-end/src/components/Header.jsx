@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import { useContext, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,9 +13,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import avatarImg from '../assets/icons/avatar.png';
 import { AuthContext } from '../context/AuthContext';
 
-const pages = ['خانه', 'راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'ارتباط با ما'];
+const pages = ['راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'ارتباط با ما'];
 const pageRoutes = {
-  'خانه': '/',
   'راهنمای استفاده': '/guide',
   'بلاگ': '/blog',
   'دعوت دوستان': '/invite',
@@ -51,26 +51,26 @@ function Header() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-
-          {/* لوگو و عنوان سمت چپ */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-              '&:hover': {
-                color: '#d1e7dd',
-              }
-            }}
-          >
-            تترکروز
-          </Typography>
+          <Box display='flex' justifyContent='start' alignItems='center'>
+            <img src='/media/images/ZanjirxlogoOnlyZ.png' width={20} height={20} alt='logoZ'/>
+            <Typography
+              noWrap
+              component={Link}
+              to="/"
+              sx={{
+                mr: 0.3,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+                '&:hover': {
+                  color: '#d1e7dd',
+                }
+              }}
+            >
+              زنجیراکس
+            </Typography>
+          </Box>
 
           {/* دکمه‌های اصلی */}
           <Box sx={{ flexGrow: 1, mx: 4, display: { xs: 'none', md: 'flex' } }}>

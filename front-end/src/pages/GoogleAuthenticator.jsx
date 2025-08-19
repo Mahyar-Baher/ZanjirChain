@@ -16,7 +16,6 @@ const GoogleAuthenticator = () => {
     return;
   }
 
-  console.log('Passing to GoogleAuthenticatorFirst:', { phone, token });
 
   return (
     <Container

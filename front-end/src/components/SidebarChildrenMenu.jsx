@@ -2,6 +2,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 const SidebarChildrenMenu = ({ childrenItems = [] }) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const SidebarChildrenMenu = ({ childrenItems = [] }) => {
             '& i': { marginLeft: '0px' },
             textAlign: 'start'
           }}
-          startIcon={<iconify-icon icon={child.icon} style={{ fontSize: '20px', marginLeft: 12 }}></iconify-icon>}
+          startIcon={<Icon icon={child.icon} style={{ fontSize: '20px', marginLeft: 12 }}></Icon>}
         >
           {child.label}
         </Button>
