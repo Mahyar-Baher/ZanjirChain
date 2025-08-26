@@ -41,7 +41,7 @@ const Outcome = () => {
                 <OutcomeDepositSection/>
               </Item>
             </Grid>
-            <Grid item size={{xs: 12,sm:6,md:12 ,lg:4.3}} sx={{ height:{xs:'100%', md:'100%',lg: '100%'}}}>
+            <Grid item size={{xs: 12,sm:12,md:12 ,lg:4.3}} sx={{ height:{xs:'100%', md:'100%',lg: '100%'}}}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' ,p:0}} className='bg-img-hexed'>
                 <Box sx={{py:3, px:2}} >
                   <Box sx={{display: 'grid',gridTemplateColumns: 'auto 1fr auto',alignItems: 'center',gap: 1,width: '100%',}}>

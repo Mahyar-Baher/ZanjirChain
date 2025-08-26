@@ -220,9 +220,10 @@ const Sms_verification = () => {
       maxWidth={false}
       sx={{
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
         bgcolor: (theme) => theme.palette.background.default,
+        overflow: 'auto',
       }}
     >
       <Modal
@@ -259,8 +260,18 @@ const Sms_verification = () => {
         </Fade>
       </Modal>
 
-      <Grid container sx={{ flex: 1, m: 0, p: 0, flexDirection: { xs: 'column-reverse', md: 'row' } }}>
-        <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0 }}>
+      <Grid 
+        container 
+        sx={{ 
+          flex: 1, 
+          m: 0, 
+          p: 0, 
+          display: 'flex',
+          flexDirection: { xs: 'column-reverse', md: 'row' },
+          minHeight: '100%',
+        }}
+      >
+        <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0, m: 0 }}>
           <WarningsBox />
         </Grid>
 
@@ -269,13 +280,18 @@ const Sms_verification = () => {
           size={{ xs: 12, md: 7 }}
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: { xs: 'flex-start', md: 'center' },
             justifyContent: 'start',
             p: { xs: 2, md: 5 },
+            py: { xs: 4, md: 5 },
           }}
         >
-          <Box width="100%" maxWidth={500}>
-            <Typography variant="h5" fontWeight="bold" color="text.primary" gutterBottom>
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: { xs: '100%', md: 500 },
+            px: { xs: 0, sm: 2 }
+          }}>
+            <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
               تأیید شماره همراه
             </Typography>
 
@@ -288,8 +304,8 @@ const Sms_verification = () => {
             </Typography>
 
             <Button
-              href="/login"
-              startIcon={<i className="fas fa-chevron-left" />}
+              onClick={() => navigate("/login")}
+              startIcon={<Icon icon="mdi:chevron-left" />}
               sx={{
                 p: 0,
                 mb: 3,
@@ -312,6 +328,17 @@ const Sms_verification = () => {
                 onChange={(e) => setCode(e.target.value)}
                 sx={{
                   mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
                 }}
                 InputProps={{
                   startAdornment: (
@@ -329,7 +356,11 @@ const Sms_verification = () => {
                 variant="contained"
                 fullWidth
                 disabled={loading}
-                sx={{ height: 60, fontSize: '1.1rem', borderRadius: 0 }}
+                sx={{
+                  height: { xs: 48, sm: 60 },
+                  fontSize: { xs: '1rem', sm: '1.1rem' },
+                  borderRadius: 1,
+                }}
               >
                 {loading ? 'در حال بررسی...' : 'ثبت و ورود'}
               </Button>
@@ -340,9 +371,9 @@ const Sms_verification = () => {
                 onClick={sendCode}
                 disabled={sending}
                 sx={{
-                  height: 60,
-                  fontSize: '0.95rem',
-                  borderRadius: 0,
+                  height: { xs: 48, sm: 60 },
+                  fontSize: { xs: '0.9rem', sm: '0.95rem' },
+                  borderRadius: 1,
                   mt: 2,
                   opacity: sending ? 0.6 : 1,
                 }}

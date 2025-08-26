@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, MenuItem, Button, Typography, CircularProgress } from '@mui/material';
 import axios from 'axios';
-import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import useAuthStore from '../context/authStore';
 import PaymentSummary from './PaymentSummary';
 import RecentPayments from './RecentPayments';
 
 const bankList = ['درگاه پرداخت بانک ملت', 'درگاه پرداخت بانک ملی', 'درگاه پرداخت بانک صادرات'];
 const recentPays = ['100,000', '250,000', '500,000'];
-const profitFactor = 1.02; // این مقدار باید با بک‌اند هماهنگ شود
+const profitFactor = 1.04;
 
 const TomanPaymentForm = ({ activeMethod }) => {
   const { user, fetchWalletBalance, token } = useAuthStore();
@@ -29,7 +30,7 @@ const TomanPaymentForm = ({ activeMethod }) => {
 
       if (!user) {
         try {
-          await fetchWalletBalance(); // فرض می‌کنیم fetchWalletBalance داده‌های کاربر را هم به‌روزرسانی می‌کند
+          await fetchWalletBalance();
         } catch (err) {
           console.error('خطا در بارگذاری داده‌های کاربر:', err);
           setError('خطا در بارگذاری اطلاعات کاربر.');
@@ -67,6 +68,38 @@ const TomanPaymentForm = ({ activeMethod }) => {
   const fee = Math.round(parsedAmount * profitCut);
   const finalAmount = parsedAmount - fee;
 
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    // فقط اعداد صحیح مجاز هستند
+    if (/^\d*$/.test(value) && value.length <= 12) {
+      setAmount(value);
+    }
+  };
+
+  const handleOfflineAmountChange = (e) => {
+    const value = e.target.value;
+    // فقط اعداد صحیح مجاز هستند
+    if (/^\d*$/.test(value) && value.length <= 12) {
+      setOfflineData((prev) => ({ ...prev, amount: value }));
+    }
+  };
+
+  const handleTrackingCodeChange = (e) => {
+    const value = e.target.value;
+    // فقط اعداد صحیح مجاز هستند
+    if (/^\d*$/.test(value) && value.length <= 20) {
+      setOfflineData((prev) => ({ ...prev, trackingCode: value }));
+    }
+  };
+
+  const handleShebaChange = (e) => {
+    const value = e.target.value;
+    // فقط شبا معتبر (IR + 24 رقم) یا انتخاب از لیست
+    if (shebaList.includes(value) || /^IR\d{0,24}$/.test(value.toUpperCase())) {
+      setOfflineData((prev) => ({ ...prev, selectedSheba: value.toUpperCase() }));
+    }
+  };
+
   const handleOfflineSubmit = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -74,11 +107,11 @@ const TomanPaymentForm = ({ activeMethod }) => {
       return;
     }
 
-    if (!offlineData.selectedSheba || offlineData.selectedSheba.length > 100) {
-      setError('شماره شبا معتبر نیست یا بیش از ۱۰۰ کاراکتر است.');
+    if (!offlineData.selectedSheba || !/^IR\d{24}$/.test(offlineData.selectedSheba)) {
+      setError('شماره شبا معتبر نیست. باید با IR شروع شده و 24 رقم باشد.');
       return;
     }
-    const parsedOfflineAmount = parseInt(offlineData.amount.replace(/,/g, ''), 10) || 0;
+    const parsedOfflineAmount = parseInt(offlineData.amount, 10) || 0;
     if (parsedOfflineAmount <= 0) {
       setError('مبلغ واریز نامعتبر است.');
       return;
@@ -111,13 +144,13 @@ const TomanPaymentForm = ({ activeMethod }) => {
       });
 
       if (response.data.status) {
-        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
+        await fetchWalletBalance();
         let shebas = user?.sheba_number || [];
         if (typeof shebas === 'string') shebas = [shebas];
         if (!shebas.includes(offlineData.selectedSheba)) {
           const updatedShebas = [...shebas, offlineData.selectedSheba];
           const updatedUser = { ...user, sheba_number: updatedShebas };
-          useAuthStore.setState({ user: updatedUser }); // به‌روزرسانی user در useAuthStore
+          useAuthStore.setState({ user: updatedUser });
         }
         setOfflineData({
           selectedSheba: shebaList.length > 0 ? shebaList[0] : '',
@@ -141,7 +174,7 @@ const TomanPaymentForm = ({ activeMethod }) => {
 
   const tomanForms = [
     <Box key="gateway" component="form" noValidate autoComplete="on">
-      <TextField fullWidth select label="درگاه مورد نظر رو انتخاب کنید" margin="normal">
+      <TextField fullWidth select label="درگاه مورد نظر را انتخاب کنید" margin="normal">
         {bankList.map((bank) => (
           <MenuItem key={bank} value={bank}>
             {bank}
@@ -151,9 +184,12 @@ const TomanPaymentForm = ({ activeMethod }) => {
       <TextField
         fullWidth
         label="مبلغ (تومان)"
+        type="text"
+        inputMode="numeric"
         margin="normal"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={handleAmountChange}
+        placeholder="مثلاً 2500000"
       />
       <RecentPayments recentPays={recentPays} />
       <PaymentSummary parsedAmount={parsedAmount} fee={fee} finalAmount={finalAmount} />
@@ -195,27 +231,34 @@ const TomanPaymentForm = ({ activeMethod }) => {
               <TextField
                 fullWidth
                 label="شماره شبا"
+                type="text"
+                inputMode="text"
                 margin="normal"
                 value={offlineData.selectedSheba}
-                onChange={(e) => setOfflineData({ ...offlineData, selectedSheba: e.target.value })}
-                placeholder="مثلاً 123456789012345678901234"
+                onChange={handleShebaChange}
+                placeholder="مثلاً IR123456789012345678901234"
               />
             </>
           )}
           <TextField
             fullWidth
             label="مبلغ (تومان)"
-            type="number"
+            type="text"
+            inputMode="numeric"
             margin="normal"
             value={offlineData.amount}
-            onChange={(e) => setOfflineData({ ...offlineData, amount: e.target.value })}
+            onChange={handleOfflineAmountChange}
+            placeholder="مثلاً 2500000"
           />
           <TextField
             fullWidth
             label="شناسه واریز / شماره پیگیری"
+            type="text"
+            inputMode="numeric"
             margin="normal"
             value={offlineData.trackingCode}
-            onChange={(e) => setOfflineData({ ...offlineData, trackingCode: e.target.value })}
+            onChange={handleTrackingCodeChange}
+            placeholder="مثلاً 1234567890"
           />
           <TextField
             fullWidth
@@ -237,4 +280,4 @@ const TomanPaymentForm = ({ activeMethod }) => {
   return <Box>{tomanForms[activeMethod]}</Box>;
 };
 
-export default TomanPaymentForm;
+export default TomanPaymentForm;  

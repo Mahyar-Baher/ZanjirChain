@@ -52,7 +52,7 @@ const banks = {
 
 const formatCardNumber = (number) => {
   if (number.length !== 16) return 'شماره نامعتبر است';
-  return `${number.slice(0, 4)} **** **** ${number.slice(12, 16)}`;
+  return `${number.slice(0, 16)}`;
 };
 
 const detectBank = (number) => {

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Stepper, Step, StepLabel } from '@mui/material';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { Box, Typography, Stepper, Step, StepLabel, CircularProgress, Button } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { StepIcon, steps, GradientPaper, ColorConnector } from '../components/styles';
-import BasicLevel from '../components/BasicLevel';
-import IntermediateLevel from '../components/IntermediateLevel';
-import AdvancedLevel from '../components/AdvancedLevel';
-import CompletedLevel from '../components/CompletedLevel';
 import useAuthStore from '../context/authStore';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
-const IdentityVerification = () => {
+// ⬇️ Lazy load components
+const BasicLevel = lazy(() => import('../components/BasicLevel'));
+const IntermediateLevel = lazy(() => import('../components/IntermediateLevel'));
+const AdvancedLevel = lazy(() => import('../components/AdvancedLevel'));
+const CompletedLevel = lazy(() => import('../components/CompletedLevel'));
+
+const IdentityVerification = (authToken) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [activeStep, setActiveStep] = useState(0);
@@ -47,7 +50,7 @@ const IdentityVerification = () => {
     switch (activeStep) {
       case 0: return <BasicLevel onNext={handleStepComplete} />;
       case 1: return <IntermediateLevel onNext={handleStepComplete} />;
-      case 2: return <AdvancedLevel onComplete={handleStepComplete} />;
+      case 2: return <AdvancedLevel onComplete={handleStepComplete} token={authToken} uploadUrl="https://amirrezaei2002x.shop/laravel/api/kyc-level-Advanced"/>;
       case 3: return <CompletedLevel />;
       default: return null;
     }
@@ -60,10 +63,14 @@ const IdentityVerification = () => {
         display: 'flex',
         flexDirection: 'column',
         background: "linear-gradient(190.5deg, #1a652a 0.9%, rgba(220,244,241,1) 87.7%)",
-        py: 8,
-        px: 2
+        py: {xs: 2,sm:5},
+        px: {xs: 1,sm:2}
       }}
     >
+    <Button variant='outlined' onClick={() => {navigate ('/Dashboard')}}  sx={{position: 'absolute' , top: 15, left : 15,color: 'seashell', border: '2px green solid' }}>
+      بازگشت 
+      <Icon icon="line-md:arrow-left" width="15" height="15" style={{margin: 2}} />
+    </Button>
       <Box sx={{ maxWidth: 800, mx: 'auto', width: '100%', mb: 6 }}>
         <Typography
           variant="h4"
@@ -98,7 +105,7 @@ const IdentityVerification = () => {
           {steps.map((label, index) => (
             <Step key={label}>
               <StepLabel
-               sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}
+                sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}
                 StepIconComponent={() => (
                   <StepIcon active={index <= activeStep}>
                     {index < activeStep ? (
@@ -115,11 +122,14 @@ const IdentityVerification = () => {
           ))}
         </Stepper>
 
-        <Box sx={{ mt: 4 }}>{renderStepContent()}</Box>
+        {/* ⬇️ Suspense برای لود تنبل */}
+        <Suspense fallback={<Box textAlign="center"><CircularProgress /></Box>}>
+          <Box sx={{ mt: 4 }}>{renderStepContent()}</Box>
+        </Suspense>
       </Box>
 
       <Box sx={{ mt: 'auto', textAlign: 'center', pt: 4 }}>
-        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.4)' }}>
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
           تمامی اطلاعات شما با امنیت کامل ذخیره می‌شود
         </Typography>
       </Box>

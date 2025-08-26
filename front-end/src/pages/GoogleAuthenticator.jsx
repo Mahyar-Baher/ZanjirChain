@@ -8,45 +8,64 @@ const GoogleAuthenticatorFirst = lazy(() => import('../components/GoogleAuthenti
 
 const GoogleAuthenticator = () => {
   const navigate = useNavigate();
-  const phone = localStorage.getItem('phone'); // Retrieve phone from signup
-  const token = localStorage.getItem('token'); // Retrieve token from signup
+  const phone = localStorage.getItem('phone');
+  const token = localStorage.getItem('token');
+  
   if (!token || !phone) {
     console.error('Missing token or phone:', { token, phone });
     setTimeout(() => navigate('/Login'), 0);
     return;
   }
 
-
   return (
     <Container
       disableGutters
       maxWidth={false}
       sx={{
-        minHeight:'100vh',
+        width: '100vw',
+        minHeight: '100vh',
+        display: 'flex',
         bgcolor: (theme) => theme.palette.background.default,
       }}
     >
-      <Grid container sx={{ flex: 1, m: 0, flexDirection:'row',minHeight:'100vh', }}>
-        <Grid item size={{ xs: 12, md: 4 }} display={{xs:'none',md:'flex'}}>
+      <Grid
+        container
+        sx={{
+          flex: 1,
+          m: 0,
+          display: 'flex',
+          flexDirection: { xs: 'column-reverse', md: 'row' },
+          minHeight: '100%',
+        }}
+      >
+        <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0, m: 0 }}>
           <WarningsBox />
         </Grid>
 
         <Grid
           item
-          size={{ xs: 12, md: 8 }}
+          size={{ xs: 12, md: 7 }}
           sx={{
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'start',
-            p: { xs: 1, md: 6 },
+            alignItems: { xs: 'flex-start', md: 'center' },
+            justifyContent: 'space-between',
+            p: { xs: 2, md: 3 },
+            py: { xs: 4, md: 5 },
           }}
         >
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={
+            <div style={{ 
+              width: '100%', 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              minHeight: '200px'
+            }}>
+              <CircularProgress />
+            </div>
+          }>
             <GoogleAuthenticatorFirst phone={phone} token={token} />
           </Suspense>
-        </Grid>
-        <Grid item size={{ xs: 12, md: 5 }} display={{xs:'flex',md:'none'}}>
-          <WarningsBox />
         </Grid>
       </Grid>
     </Container>

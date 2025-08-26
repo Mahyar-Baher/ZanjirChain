@@ -97,12 +97,12 @@ const AlertPrice = () => {
         </Grid>
         <Grid item size="grow" sx={{ p: 2, pt: 4 }}>
           <Grid container spacing={1}>
-            <Grid item size={{ xs: 12, sm: 12, md: 4, lg: 3, xl: 2 }} sx={{ pr: { lg: 2 } }}>
+            <Grid item size={{ xs: 12, sm: 12, md: 12, lg: 3, xl: 2 }} sx={{ pr: { lg: 2 }}}>
               <SidebarChildrenMenu childrenItems={AlertPriceMenu?.children || []} />
             </Grid>
-            <Grid item size={{ xs: 12, sm: 12, md: 8, lg: 9, xl: 10 }}>
+            <Grid item size={{ xs: 12, sm: 12, md: 12, lg: 9, xl: 10 }}>
               <Grid container spacing={2} direction="column" sx={{ pt: 3 }}>
-                <Grid item>
+                <Grid item size={{xs:12}}>
                   <Item sx={{ px: 5, backgroundColor: 'rgba(0, 0, 0, 0.02)' }} className="bg-img-hexed">
                     <Typography variant="h6" fontWeight="800">
                       با استفاده از هشدار قیمت، در بهترین زمان خرید یا فروش انجام دهید.
@@ -112,9 +112,9 @@ const AlertPrice = () => {
                     </Typography>
                   </Item>
                 </Grid>
-                <Grid item>
+                <Grid item  size={{xs:12}}>
                   <Grid container spacing={2}>
-                    <Grid item size={{ xs: 12, md: 6 }}>
+                    <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
                       <Item className="bg-img-hexed">
                         <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                           افزودن هشدار جدید
@@ -164,7 +164,7 @@ const AlertPrice = () => {
                         </Stack>
                       </Item>
                     </Grid>
-                    <Grid item size={{ xs: 12, md: 6 }}>
+                    <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
                       <TetherChartDash />
                     </Grid>
                   </Grid>

@@ -167,7 +167,7 @@ const Services = () => {
           sx={{
             fontWeight: 800,
             mb: 4,
-            background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
+            background: "linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)",
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             fontSize: { xs: '2.5rem', md: '3.5rem' }
@@ -195,7 +195,7 @@ const Services = () => {
           <Grid item size={{xs:12, md:4}}>
             <Card sx={{ 
               background: theme.palette.mode === 'dark' 
-                ? 'rgba(21, 41, 75, 0.7)' 
+                ? "linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)" 
                 : 'rgba(240, 240, 245, 0.9)',
               borderRadius: 4,
               p: 3,
@@ -228,7 +228,7 @@ const Services = () => {
                       transition: 'all 0.3s ease',
                       background: activeService === service.id ? service.color : 
                         theme.palette.mode === 'dark' 
-                          ? 'rgba(55, 65, 100, 0.4)' 
+                          ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)' 
                           : 'rgba(230, 230, 245, 0.7)',
                       color: activeService === service.id ? 'white' : 'text.primary',
                       boxShadow: activeService === service.id ? 3 : 0,
@@ -269,7 +269,7 @@ const Services = () => {
             <Card sx={{ 
               mt: 4,
               background: theme.palette.mode === 'dark'
-                ? 'rgba(30, 64, 175, 0.3)'
+                ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)'
                 : 'rgba(230, 230, 245, 0.7)',
               borderRadius: 4,
               p: 3,
@@ -286,10 +286,10 @@ const Services = () => {
                       textAlign: 'center', 
                       p: 2, 
                       bgcolor: theme.palette.mode === 'dark'
-                        ? 'rgba(21, 41, 75, 0.3)'
+                        ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)'
                         : 'rgba(245, 245, 255, 0.5)'
                     }}>
-                      <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main' }}>
+                      <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary' }}>
                         {stat.value}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
@@ -307,7 +307,7 @@ const Services = () => {
             <Card sx={{ 
               height: '100%',
               background: theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #0f1e3c 0%, #0a1529 100%)'
+                ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)'
                 : 'linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%)',
               borderRadius: 4,
               p: isMobile ? 3 : 4,
@@ -352,7 +352,7 @@ const Services = () => {
                       variant="h6" 
                       sx={{ 
                         fontWeight: 600, 
-                        color: 'primary.main' 
+                        color: 'text.primary' 
                       }}
                     >
                       ویژگی‌های کلیدی
@@ -364,18 +364,17 @@ const Services = () => {
                         <Card sx={{ 
                           p: 2, 
                           bgcolor: theme.palette.mode === 'dark'
-                            ? 'rgba(55, 75, 120, 0.3)'
+                            ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)'
                             : 'rgba(245, 245, 255, 0.7)',
                           display: 'flex', 
-                          alignItems: 'flex-start',
+                          alignItems: 'center',
                         }}>
                           <Box sx={{
                             width: 8,
                             height: 8,
                             borderRadius: '50%',
                             bgcolor: 'primary.main',
-                            mt: 1.5,
-                            mr: 1.5
+                            ml: 1.5
                           }} />
                           <Typography variant="body1" color="text.primary">
                             {feature}
@@ -391,13 +390,13 @@ const Services = () => {
                     onClick={()=> {navigate("/login")}}
                     startIcon={<ArrowForward />}
                     sx={{
-                      background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
+                      background: 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)',
                       borderRadius: 50,
                       px: 4,
                       py: 1.5,
                       fontWeight: 700,
                       fontSize: '1.1rem',
-                      boxShadow: '0 4px 10px rgba(0, 201, 255, 0.3)',
+                      boxShadow: '0 4px 10px #0d3d1b',
                       transition: 'all 0.3s ease'
                     }}
                   >
@@ -426,7 +425,7 @@ const Services = () => {
             <Grid item size={{xs:12, md:4}} key={item}>
               <Card sx={{ 
                 bgcolor: theme.palette.mode === 'dark'
-                  ? 'rgba(21, 41, 75, 0.5)'
+                  ? 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)'
                   : 'rgba(240, 240, 245, 0.8)',
                 borderRadius: 4,
                 p: 3,
@@ -437,7 +436,7 @@ const Services = () => {
                     width: 48,
                     height: 48,
                     borderRadius: '50%',
-                    background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
+                    background: 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -474,7 +473,7 @@ const Services = () => {
       {/* CTA Section */}
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, py: 6 }}>
         <Card sx={{ 
-          background: 'linear-gradient(135deg, rgba(8, 80, 178, 0.5) 0%, rgba(30, 30, 175, 0.5) 100%)',
+          background: 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)',
           borderRadius: 4,
           p: isMobile ? 4 : 6,
           textAlign: 'center'
@@ -496,13 +495,13 @@ const Services = () => {
               size="large"
               onClick={()=> {navigate('/login')}}
               sx={{
-                background: 'linear-gradient(90deg, #00c9ff 0%, #3b82f6 100%)',
+                background: 'linear-gradient(45deg, #0d3d1b 30%, #1f5a3c 90%)',
                 borderRadius: 50,
                 px: 4,
                 py: 1.5,
                 fontWeight: 700,
                 fontSize: '1.1rem',
-                boxShadow: '0 4px 10px rgba(0, 201, 255, 0.3)',
+                boxShadow: '0 4px 10px #0d3d1b',
                 transition: 'all 0.3s ease'
               }}
             >

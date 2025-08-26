@@ -44,6 +44,7 @@ export default defineConfig({
       '@emotion/styled',
       'axios',
       'framer-motion',
+      'gsap',
       'ua-parser-js',
     ],
   },

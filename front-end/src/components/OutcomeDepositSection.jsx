@@ -61,7 +61,7 @@ const WithdrawalSection = () => {
   }, [wallet, fetchWalletBalance]);
 
   return (
-    <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ p: {xs:2,sm:3}, display: 'flex', flexDirection: 'column', gap: 2 }}>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
           <CircularProgress />
@@ -77,7 +77,7 @@ const WithdrawalSection = () => {
           {tab === 'crypto' && cryptoMethods.length > 0 && (
             <CryptoMethodTabs methods={cryptoMethods} method={method} setMethod={setMethod} />
           )}
-          <Box sx={{ border: '0px solid #ccc', borderRadius: 2, p: 2, minHeight: 300 }}>
+          <Box sx={{ border: '0px solid #ccc', borderRadius: 2, p: 0, minHeight: 300 }}>
             <WithdrawalForm
               activeMethod={method}
               isCrypto={tab === 'crypto'}

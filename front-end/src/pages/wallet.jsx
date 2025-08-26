@@ -94,12 +94,12 @@ const Wallet = () => {
           </Grid>
           <Grid item size="grow" sx={{ p: 2, pt: 4 }}>
             <Grid container spacing={{ xs: 1, md: 1 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }}>
-              <Grid item size={{ xs: 12, sm: 12, md: 3, lg: 2 }} sx={{ pr: { lg: 2 } }}>
+              <Grid item size={{ xs: 12, sm: 12, md: 12, lg: 2 }} sx={{ pr: { lg: 2 } }}>
                 <SidebarChildrenMenu childrenItems={walletMenu?.children || []} />
               </Grid>
 
               {/* بخش تومان */}
-              <Grid item size={{ xs: 12, sm: 6, md: 9, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}>
+              <Grid item size={{ xs: 12, sm: 6, md: 6, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}>
                 <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0 }} className='bg-img-hexed'>
                   <Box sx={{ p: 2, pb: 0 }}>
                     <Typography variant="h6" fontWeight={600} textAlign="right">
@@ -113,7 +113,7 @@ const Wallet = () => {
                     </Typography>
                   </Box>
 
-                  <Stack direction="row" spacing={0} mt={3}>
+                  <Box display='flex' justifyContent='center' flexDirection={{xs:'column', md: 'row'}} borderRadius='0px 0px 20px 20px' mt={3}>
                     <Button
                       onClick={() => navigate('/outcome')}
                       fullWidth
@@ -121,8 +121,9 @@ const Wallet = () => {
                       className="bg-btn-sky"
                       sx={{
                         fontSize: 12,
-                        borderRadius: '0px 0px 10px 0px',
-                        p: { xs: 1, md: 2 },
+                        borderRadius:{ xs: '0px 0px 0px 0px', md:'0px 0px 10px 0px'},
+                        p: { xs: 1, md: 1 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/outcome') ? '#015d02' : undefined,
                       }}
                     >
@@ -137,6 +138,7 @@ const Wallet = () => {
                         fontSize: 12,
                         borderRadius: '0px 0px 0px 0px',
                         p: { xs: 1, md: 2 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/income') ? '#015d02' : undefined,
                       }}
                     >
@@ -151,6 +153,7 @@ const Wallet = () => {
                         fontSize: 12,
                         borderRadius: '0px 0px 0px 0px',
                         p: { xs: 1, md: 2 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/history') ? '#015d02' : undefined,
                       }}
                     >
@@ -163,20 +166,22 @@ const Wallet = () => {
                       className="bg-btn-sky"
                       sx={{
                         fontSize: 12,
-                        borderRadius: '0px 0px 0px 10px',
-                        p: { xs: 1, md: 0 },
+                        borderRadius:{ xs: '0px 0px 0px 0px', md:'0px 0px 0px 10px'},
+                        p: { xs: 1, md: 1 },
+                        minHeight: { xs: 36, md: 54 },
+                        maxHeight: { xs: 50, md: 54 },
                         bgcolor: isActivePath('/trade') ? '#015d02' : undefined,
                       }}
                     >
                       تبدیل به تتر
                     </Button>
-                  </Stack>
+                  </Box>
                 </Item>
               </Grid>
 
               {/* بخش تتر */}
-              <Grid item size={{ xs: 12, sm: 6, md: 12, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}>
-                <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0 }} className='bg-img-hexed'>
+              <Grid item size={{ xs: 12, sm: 6, md: 6, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}>
+                <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0, borderRadius:'0px 0px 20px 20px' }} className='bg-img-hexed'>
                   <Box sx={{ p: 2, pb: 0 }}>
                     <Typography variant="h6" fontWeight={600} textAlign="right">
                       تتر
@@ -189,7 +194,7 @@ const Wallet = () => {
                     </Typography>
                   </Box>
 
-                  <Stack direction="row" spacing={0} mt={3}>
+                  <Box display='flex' justifyContent='center' flexDirection={{xs:'column', md: 'row'}} borderRadius='0px 0px 20px 20px' mt={3}>
                     <Button
                       onClick={() => navigate('/outcome')}
                       fullWidth
@@ -197,8 +202,9 @@ const Wallet = () => {
                       className="bg-btn-purple"
                       sx={{
                         fontSize: 12,
-                        borderRadius: '0px 0px 10px 0px',
+                        borderRadius:{ xs: '0px 0px 0px 0px', md:'0px 0px 10px 0px'},
                         p: { xs: 1, md: 2 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/outcome') ? '#4b007d' : undefined,
                       }}
                     >
@@ -213,6 +219,7 @@ const Wallet = () => {
                         fontSize: 12,
                         borderRadius: '0px 0px 0px 0px',
                         p: { xs: 1, md: 2 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/income') ? '#4b007d' : undefined,
                       }}
                     >
@@ -227,6 +234,7 @@ const Wallet = () => {
                         fontSize: 12,
                         borderRadius: '0px 0px 0px 0px',
                         p: { xs: 1, md: 2 },
+                        minHeight: { xs: 36, md: 44 },
                         bgcolor: isActivePath('/history') ? '#4b007d' : undefined,
                       }}
                     >
@@ -239,14 +247,16 @@ const Wallet = () => {
                       className="bg-btn-purple"
                       sx={{
                         fontSize: 12,
-                        borderRadius: '0px 0px 0px 10px',
-                        p: { xs: 1, md: 0 },
+                        borderRadius:{ xs: '0px 0px 0px 0px', md:'0px 0px 0px 10px'},
+                        p: { xs: 1, md: 1 },
+                        minHeight: { xs: 36, md: 54 },
+                        maxHeight: { xs: 50, md: 54 },
                         bgcolor: isActivePath('/trade') ? '#4b007d' : undefined,
                       }}
                     >
                       تبدیل به تومان
                     </Button>
-                  </Stack>
+                  </Box>
                 </Item>
               </Grid>
 

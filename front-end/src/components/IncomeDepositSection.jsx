@@ -15,9 +15,9 @@ const IncomeDepositSection = () => {
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 3 }}>
       <DepositTabs activeTab={activeTab} setActiveTab={setActiveTab} setActiveMethod={setActiveMethod} />
-      <Box sx={{ p: 2, pb: 0 }}>
+      <Box sx={{ p: {xs: 0 ,md: 2}, pb: 0 }}>
         <PaymentMethodTabs methods={methods} activeMethod={activeMethod} setActiveMethod={setActiveMethod} />
-        <Box sx={{ width: '100%', p: 2, border: '0px solid #ccc', borderRadius: 2, minHeight: 400, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Box sx={{ width: '100%', p: {xs: 0, md: 2}, border: '0px solid #ccc', borderRadius: 2, minHeight: 400, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <MethodContent activeMethod={activeMethod} isCrypto={activeTab === 'crypto'} />
         </Box>
       </Box>

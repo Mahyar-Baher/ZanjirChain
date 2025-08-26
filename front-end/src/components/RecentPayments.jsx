@@ -5,7 +5,7 @@ const RecentPayments = ({ recentPays }) => {
   return (
     <>
       <Typography sx={{ mt: 1 }}>تراکنش‌های اخیر</Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', mt: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between',alignItems: 'center',flexDirection:{xs:'column',sm:'row'}, mt: 1 }}>
         {recentPays.map((recentPay) => (
           <Typography
             key={recentPay}

@@ -8,7 +8,12 @@ import {
   Modal,
   Backdrop,
   Fade,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
+import { Icon } from '@iconify/react';
 
 const GoogleAuthForm = ({ phone, onSuccess }) => {
   const [code, setCode] = useState('');
@@ -44,7 +49,7 @@ const GoogleAuthForm = ({ phone, onSuccess }) => {
       );
 
       if (response.data?.success) {
-        onSuccess(); // Trigger the parent to show PasswordForm
+        onSuccess();
       } else {
         setErrorModal({
           open: true,
@@ -93,7 +98,7 @@ const GoogleAuthForm = ({ phone, onSuccess }) => {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 300,
+              width: { xs: 280, sm: 300 },
               bgcolor: 'background.paper',
               border: '2px solid #000',
               boxShadow: 24,
@@ -113,15 +118,61 @@ const GoogleAuthForm = ({ phone, onSuccess }) => {
         </Fade>
       </Modal>
 
-      <Box width="100%" maxWidth={500}>
+      <Box width="100%" maxWidth={500} sx={{ px: { xs: 2, sm: 0 } }}>
+        {/* Quick Guide Section */}
+
+
         <Typography variant="h5" fontWeight="bold" color="text.secondary" gutterBottom>
           تأیید هویت دو مرحله‌ای
         </Typography>
-
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          کد تأیید را از برنامه Google Authenticator وارد کنید.
-        </Typography>
-
+        
+        <Box
+          sx={{
+            mb: 3,
+            p: { xs: 1, sm: 1 },
+            borderRadius: 2,
+            background: 'linear-gradient(145deg, #1a652a 0%, #2e8b57 90%)',
+            color: '#fff',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            sx={{ mb: 1, textAlign: 'center' }}
+          >
+            راهنمای سریع
+          </Typography>
+          <List dense>
+            <ListItem>
+              <ListItemIcon>
+                <Icon icon="mdi:numeric-1-circle" color="#fff" width={24} />
+              </ListItemIcon>
+              <ListItemText
+                primary="برنامه Google Authenticator را باز کنید."
+                primaryTypographyProps={{ variant: 'body2', color: '#fff' }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Icon icon="mdi:numeric-2-circle" color="#fff" width={24} />
+              </ListItemIcon>
+              <ListItemText
+                primary="کد ۶ رقمی نمایش داده شده را وارد کنید."
+                primaryTypographyProps={{ variant: 'body2', color: '#fff' }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Icon icon="mdi:numeric-3-circle" color="#fff" width={24} />
+              </ListItemIcon>
+              <ListItemText
+                primary="کد را در کادر زیر وارد کرده و تأیید کنید."
+                primaryTypographyProps={{ variant: 'body2', color: '#fff' }}
+              />
+            </ListItem>
+          </List>
+        </Box>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -139,7 +190,15 @@ const GoogleAuthForm = ({ phone, onSuccess }) => {
             variant="contained"
             fullWidth
             disabled={loading}
-            sx={{ height: 50, fontSize: '1rem', mb: 3 }}
+            sx={{
+              height: 50,
+              fontSize: '1rem',
+              mb: 3,
+              background: 'linear-gradient(45deg, #1a652a 30%, #2e8b57 90%)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #2e8b57 30%, #1a652a 90%)',
+              },
+            }}
           >
             {loading ? 'در حال بررسی...' : 'تأیید'}
           </Button>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 
-const DualProgress = ({ tether = 0, toman = 0, rate = 92000, size = 150 }) => {
+const DualProgress = ({ tether = 0, toman = 0, rate = 100000, size = 150 }) => {
   // محاسبه تتر و تومان معادل تتر
   let tetherValue = tether;
   let tomanInTether = toman / rate;
@@ -48,15 +48,13 @@ const DualProgress = ({ tether = 0, toman = 0, rate = 92000, size = 150 }) => {
         }}
       >
         <Typography
-          variant="body2"
-          sx={{ fontWeight: 600, lineHeight: 1.4 }}
+          sx={{ fontWeight: 600, lineHeight: 1.4, textWrap: 'wrap',fontSize: 12 }}
           color="#1a652a"
         >
           {`${toman.toLocaleString()} تومان`}
         </Typography>
         <Typography
-          variant="body2"
-          sx={{ fontWeight: 600, lineHeight: 1.4 }}
+          sx={{ fontWeight: 600, lineHeight: 1.4, textWrap: 'wrap', fontSize: 12 }}
           color="#26A17B"
         >
           {`$${tether} تتر`}

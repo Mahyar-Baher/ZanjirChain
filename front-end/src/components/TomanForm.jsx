@@ -1,17 +1,18 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem, TextField, Button, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
-import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import useAuthStore from '../context/authStore';
 import RecentAmounts from './RecentAmounts';
 import TransactionSummary from './TransactionSummary';
 import SnackBarNotification from './SnackBarNotification';
 import { generateTrackingCode } from './utils';
 
-const recentAmounts = ['5,000,000', '10,000,000', '15,000,000', '20,000,000', '25,000,000'];
-const profitFactor = 1.02; // این مقدار باید با بک‌اند هماهنگ شود
+const recentAmounts = [5000000, 10000000, 15000000, 20000000, 25000000, 30000000]; // اعداد به‌صورت عدد
+const profitFactor = 1.04;
 
-const TomanForm = ({ balanceToman }) => {
-  const { user, fetchWalletBalance, token } = useAuthStore();
+const TomanForm = ({ balanceToman, exchangeRate = 1 }) => { // exchangeRate به عنوان prop یا از API
+  const { user, fetchWalletBalance, token, setUser } = useAuthStore();
   const [amount, setAmount] = useState('');
   const [sheba, setSheba] = useState('');
   const [shabaList, setShabaList] = useState([]);
@@ -26,7 +27,7 @@ const TomanForm = ({ balanceToman }) => {
 
       if (!user) {
         try {
-          await fetchWalletBalance(); // فرض می‌کنیم fetchWalletBalance داده‌های کاربر را هم به‌روزرسانی می‌کند
+          await fetchWalletBalance();
         } catch (err) {
           console.error('خطا در بارگذاری داده‌های کاربر:', err);
           setError('خطا در بارگذاری اطلاعات کاربر.');
@@ -59,12 +60,19 @@ const TomanForm = ({ balanceToman }) => {
     loadUserData();
   }, [user, fetchWalletBalance]);
 
-  const parsedToman = parseInt(amount.replace(/,/g, ''), 10) || 0;
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value) && (value === '' || parseInt(value, 10) <= 500000000)) {
+      setAmount(value);
+    }
+  };
+
+  const parsedToman = parseInt(amount, 10) || 0;
   const profitCut = (profitFactor - 1) / (profitFactor + 1);
   const feeToman = Math.round(parsedToman * profitCut);
   const netToman = parsedToman - feeToman;
+  const creditForUser = netToman / exchangeRate; // محاسبه اعتبار کاربر
   const isInsufficient = parsedToman > balanceToman;
-
 
   const handleSubmit = async () => {
     if (!token) {
@@ -73,8 +81,8 @@ const TomanForm = ({ balanceToman }) => {
       return;
     }
 
-    if (!sheba || sheba.length > 100) {
-      setError('شماره شبا معتبر نیست یا بیش از ۱۰۰ کاراکتر است.');
+    if (!sheba || !/^IR\d{24}$/.test(sheba)) { // بررسی دقیق‌تر شبا
+      setError('شماره شبا معتبر نیست. باید با IR شروع شده و 24 رقم باشد.');
       setSnack(true);
       return;
     }
@@ -101,7 +109,7 @@ const TomanForm = ({ balanceToman }) => {
       currency: 'toman',
       fp_tether: 0,
       fp_toman: netToman,
-      ba_tether: 0,
+      ba_tether: creditForUser, // اعتبار برای کیف پول
       ba_toman: parsedToman,
     };
 
@@ -115,7 +123,13 @@ const TomanForm = ({ balanceToman }) => {
       });
 
       if (response.data.status) {
-        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
+        await fetchWalletBalance();
+        // اضافه کردن شماره شبا به لیست کاربر اگر جدید باشه
+        if (!shabaList.includes(sheba)) {
+          const updatedShebas = [...shabaList, sheba];
+          setUser({ ...user, sheba_number: updatedShebas });
+          setShabaList(updatedShebas);
+        }
         setSnack(true);
         setAmount('');
         setSheba(shabaList.length > 0 ? shabaList[0] : '');
@@ -139,7 +153,7 @@ const TomanForm = ({ balanceToman }) => {
         </Box>
       ) : (
         <>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal" style={{ padding: 0, margin: 0 }}>
             <InputLabel id="select-sheba-label">شماره شبا مقصد</InputLabel>
             <Select
               labelId="select-sheba-label"
@@ -162,12 +176,20 @@ const TomanForm = ({ balanceToman }) => {
           <TextField
             fullWidth
             label="مبلغ برداشت (تومان)"
+            type="text"
+            inputMode="numeric"
             placeholder="بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان"
             margin="normal"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            error={isInsufficient}
-            helperText={isInsufficient ? 'موجودی کافی نیست.' : ''}
+            onChange={handleAmountChange}
+            error={isInsufficient || (parsedToman > 500000000 && amount !== '')}
+            helperText={
+              isInsufficient
+                ? 'موجودی کافی نیست.'
+                : parsedToman > 500000000 && amount !== ''
+                ? 'مبلغ نمی‌تواند بیشتر از ۵۰۰,۰۰۰,۰۰۰ تومان باشد.'
+                : ''
+            }
           />
           <RecentAmounts amounts={recentAmounts} setAmount={setAmount} />
           <TransactionSummary
@@ -182,7 +204,7 @@ const TomanForm = ({ balanceToman }) => {
             variant="contained"
             sx={{ mt: 2 }}
             onClick={handleSubmit}
-            disabled={isInsufficient || shabaList.length === 0 || loading}
+            disabled={isInsufficient || shabaList.length === 0 || loading || parsedToman > 500000000}
           >
             ثبت درخواست برداشت
           </Button>

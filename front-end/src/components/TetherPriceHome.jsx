@@ -10,7 +10,7 @@ const TetherPriceHome = () => {
 
   const navigate = useNavigate();
 
-  const USD_TO_IRT = 92000;
+  const USD_TO_IRT = 100000;
 
   useEffect(() => {
     let timer = null;
@@ -31,7 +31,7 @@ const TetherPriceHome = () => {
 
           const change = parseFloat(data.tether.usd_24h_change);
           if (!Number.isNaN(change)) {
-            setChangePercent(change.toFixed(2));
+            setChangePercent(change.toFixed(0));
           }
         } else {
           throw new Error("Invalid");
@@ -52,25 +52,32 @@ const TetherPriceHome = () => {
       aborter.abort();
     };
   }, []);
+  const showPrice = error
+  ? error
+  : price != null
+  ? price.toLocaleString("fa-IR", {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    })
+  : "در حال بارگذاری...";
 
-  const showPrice = error ? error : price != null ? price.toLocaleString("fa-IR") : "در حال بارگذاری...";
   const isUp = (changePercent ?? 0) >= 0;
 
   return (
     <Grid
-      size={{ xs: 12, sm: 12, md: 6, lg: 5 }}
+      size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 7 }}
       textAlign="end"
       display="flex"
       flexDirection="column"
       justifyContent={{ xs: "center", md: "center" }}
       alignItems={{ xs: "center", md: "end" }}
-      mb={10}
-      sx={{ p: 0, px: 8, borderRadius: "16px" }}
+      mb={{xs: 5, md: 7}}
+      sx={{ p: 0, px: {xs: 0 ,md: 8}, borderRadius: "16px" }}
     >
       <Typography
         variant="h4"
         fontWeight="bold"
-        sx={{ mb: 2, color: "#555", fontSize: { xs: 15, sm: 35 } }}
+        sx={{ mb: 2, color: (theme) => theme.palette.text.primary, fontSize: { xs: 30, sm: 35 } }}
       >
         نرخ لحظه ای دلار/تتر
       </Typography>
@@ -87,7 +94,7 @@ const TetherPriceHome = () => {
         <Typography
           variant="h2"
           fontWeight="bold"
-          sx={{ color: "#000", fontSize: { xs: 25, sm: 77 } }}
+          sx={{ color:(theme) => theme.palette.text.primary, fontSize: { xs: 45, sm: 77 } }}
         >
           {showPrice}
         </Typography>
@@ -118,11 +125,11 @@ const TetherPriceHome = () => {
         sx={{
           bgcolor: "#1b5e20",
           borderRadius: "12px",
-          px: 9,
+          px: {xs: 2 , md: 9},
           py: 1.5,
           fontWeight: "bold",
           fontSize: "1rem",
-          "&:hover": { bgcolor: "#145a1a" },
+          "&:hover": { bgcolor: "#145a3a" },
         }}
       >
         چطور سریعاً تتر بخریم؟

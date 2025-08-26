@@ -37,10 +37,10 @@ const Credits = () => {
         </Grid>
         <Grid item size="grow" sx={{ p: 2, pt:4}}>
           <Grid container spacing={{ xs: 1, md: 1 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >
-            <Grid item size={{xs: 12,sm: 12, md: 4, lg:3,xl:2}} sx={{pr:{lg:2}}}>
+            <Grid item size={{xs: 12,sm: 12, md: 12, lg:3,xl:2}} sx={{pr:{lg:2}}}>
               <SidebarChildrenMenu childrenItems={CreditsMenu?.children || []} />
             </Grid>
-            <Grid item size={{xs: 12,sm: 12, md: 8, lg:9,xl:10}}  sx={{ height: { xs: 'fit-content', lg: '100%' } }}>
+            <Grid item size={{xs: 12,sm: 12, md: 12, lg:9,xl:10}}  sx={{ height: { xs: 'fit-content', lg: '100%' } }}>
               <Grid container spacing={2} direction="column" sx={{ height: '100%', pt:3}}>
                 <Grid item>
                   <Item  sx={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',p: 1, px:5,backgroundColor:'rgba(0, 0, 0, 0.02)'}} className="bg-img-hexed">

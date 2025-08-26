@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Divider, Button, CircularProgress } from '@mui/material';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Divider, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
 import DualProgress from '../components/DualProgress';
-import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import useAuthStore from '../context/authStore';
 
 const AllPrice = () => {
-  const { wallet, fetchWalletBalance } = useAuthStore(); // گرفتن wallet و fetchWalletBalance
+  const { wallet, fetchWalletBalance } = useAuthStore();
   const [toman, setToman] = useState(0);
   const [tether, setTether] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const rate = 92000;
+  const rate = 100000;
   const size = 150;
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const loadWallet = async () => {
       setLoading(true);
       setError(null);
 
-      // اگر wallet خالیه، fetchWalletBalance رو فراخوانی کن
       if (!wallet) {
         try {
           await fetchWalletBalance();
@@ -55,12 +58,12 @@ const AllPrice = () => {
     loadWallet();
   }, [wallet, fetchWalletBalance]);
 
-  const roundedTether = parseFloat(Number(tether).toFixed(3));
-  const roundedToman = parseFloat(Number(toman).toFixed(2));
-
   return (
-    <Box sx={{ p: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: '900' }}>
+    <Box sx={{ p: { xs: 0, sm: 2 }, direction: 'rtl', mx: 'auto' }}>
+      <Typography
+        variant={isMobile ? 'h6' : 'h5'}
+        sx={{ fontWeight: '900', mb: 2, textAlign: 'right' }}
+      >
         ارزش کل دارایی شما
       </Typography>
 
@@ -69,58 +72,96 @@ const AllPrice = () => {
           <CircularProgress />
         </Box>
       ) : error ? (
-        <Box sx={{ mb: 2 }}>
-          <Typography color="error">{error}</Typography>
+        <Box sx={{ mb: 2, p: 2, bgcolor: 'error.light', borderRadius: 1 }}>
+          <Typography color="error.main" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+            {error}
+          </Typography>
         </Box>
       ) : (
         <Box
           sx={{
+            width: '100%',
             display: 'flex',
-            flexWrap: 'wrap',
-            gap: 2,
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: { xs: 1, sm: 1 },
             mt: 0,
-            justifyContent: { xs: 'center', md: 'space-between' },
-            alignItems: 'center',
+            justifyContent: 'space-between',
+            alignItems: { xs: 'center', md: 'center' },
           }}
         >
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr auto',
-              alignItems: 'center',
+              minWidth: {xs:"100%",md:250},
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
               gap: 1,
-              flexGrow: 1,
             }}
           >
-            <Typography fontSize={{xs: 15, md: 23}} noWrap>تومان</Typography>
-            <Divider sx={{ borderStyle: 'dashed', borderColor: '#000', height: 2 }} />
-            <Typography noWrap fontSize={{xs: 15, md: 23}} sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {roundedToman.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Typography>
-
-            <Typography fontSize={{xs: 15, md: 23}} noWrap>تتر</Typography>
-            <Divider sx={{ borderStyle: 'dashed', borderColor: '#000', height: 2 }} />
-            <Typography fontSize={{xs: 15, md: 23}} noWrap sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {roundedTether.toLocaleString('en-US', {
-                minimumFractionDigits: 1,
-                maximumFractionDigits: 3,
-              })}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }} noWrap>
+                موجودی تومانی
+              </Typography>
+              <Divider sx={{ flexGrow: 1, borderStyle: 'dashed', borderColor: '#000', height: 2 }} />
+              <Typography
+                sx={{
+                  fontSize: { xs: '0.85rem', sm: '1rem' },
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                noWrap
+              >
+                {isNaN(toman) ? '۰' : toman.toLocaleString('en-US')} تومان
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }} noWrap>
+                موجودی تتری
+              </Typography>
+              <Divider sx={{ flexGrow: 1, borderStyle: 'dashed', borderColor: '#000', height: 2 }} />
+              <Typography
+                sx={{
+                  fontSize: { xs: '0.85rem', sm: '1rem' },
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                noWrap
+              >
+                {isNaN(tether)
+                  ? '۰'
+                  : tether.toLocaleString('en-US', {
+                      minimumFractionDigits: 1,
+                      maximumFractionDigits: 6,
+                    })}{' '}
+                تتر
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }} noWrap>
+                ارزش تتر به تومان
+              </Typography>
+              <Divider sx={{ flexGrow: 1, borderStyle: 'dashed', borderColor: '#000', height: 2 }} />
+              <Typography
+                sx={{
+                  fontSize: { xs: '0.85rem', sm: '1rem' },
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                noWrap
+              >
+                {isNaN(tether * rate)
+                  ? '۰'
+                  : (tether * rate).toLocaleString('en-US')} تومان
+              </Typography>
+            </Box>
           </Box>
 
           <Box
             sx={{
-              flexGrow: 1,
-              width: 'fit-content',
-              display: 'flex',
-              p: 1,
-              justifyContent: { xs: 'center', md: 'center', xl: 'flex-end' },
+              p: { xs: 0, sm: 1 },
             }}
           >
-            <DualProgress size={size} tether={roundedTether} toman={roundedToman} rate={rate} />
+            <DualProgress size={isMobile ? 120 : size} tether={tether} toman={toman} rate={rate} />
           </Box>
         </Box>
       )}

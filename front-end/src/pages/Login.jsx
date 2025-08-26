@@ -19,14 +19,13 @@ import { AuthContext } from '../context/AuthContext';
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(AuthContext); // گرفتن user از AuthContext
-  const isVerySmallScreen = useMediaQuery('(max-width:359px)');
+  const { user } = useContext(AuthContext);
+  const isVerySmallScreen = useMediaQuery('(max-width:319px)');
 
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({ open: false, message: '' });
 
-  // چک کردن لاگین بودن کاربر
   useEffect(() => {
     if (user && location.pathname !== '/') {
       navigate('/');
@@ -83,9 +82,10 @@ function Login() {
       maxWidth={false}
       sx={{
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh', // تغییر از height به minHeight
         display: 'flex',
         bgcolor: (theme) => theme.palette.background.default,
+        overflow: 'auto', // اضافه کردن overflow برای اسکرول اگر محتوا بیشتر شد
       }}
     >
       <Modal
@@ -159,6 +159,7 @@ function Login() {
           m: 0,
           display: 'flex',
           flexDirection: { xs: 'column-reverse', md: 'row' },
+          minHeight: '100%', // اضافه کردن minHeight برای گرید
         }}
       >
         <Grid item size={{ xs: 12, md: 5 }} sx={{ p: 0, m: 0 }}>
@@ -170,12 +171,18 @@ function Login() {
           size={{ xs: 12, md: 7 }}
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: { xs: 'flex-start', md: 'center' }, // تغییر align-items برای حالت موبایل
             justifyContent: 'start',
             p: { xs: 2, md: 5 },
+            py: { xs: 4, md: 5 }, // اضافه کردن padding عمودی برای موبایل
           }}
         >
-          <Box width="100%" maxWidth={500}>
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: { xs: '100%', md: 500 },
+            px: { xs: 0, sm: 2 },
+            mt: { xs: 2, md: 0 } // اضافه کردن margin-top برای موبایل
+          }}>
             <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
               ورود / ثبت‌نام
             </Typography>
@@ -195,6 +202,17 @@ function Login() {
                 fullWidth
                 sx={{
                   mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
                 }}
               />
 
@@ -204,9 +222,9 @@ function Login() {
                 fullWidth
                 disabled={loading}
                 sx={{
-                  height: 60,
-                  fontSize: '1.1rem',
-                  borderRadius: 0,
+                  height: { xs: 48, sm: 60 },
+                  fontSize: { xs: '1rem', sm: '1.1rem' },
+                  borderRadius: 1,
                 }}
               >
                 {loading ? 'در حال بررسی...' : 'ورود / ثبت‌نام'}

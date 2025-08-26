@@ -1,4 +1,5 @@
-import { useNavigate, useLocation } from 'react-router-dom';import { useState, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -19,7 +20,7 @@ function Signup() {
   const location = useLocation();
   const mobileNumber = location.state?.phone;
   const navigate = useNavigate();
-  const isVerySmallScreen = useMediaQuery('(max-width:359px)');
+  const isVerySmallScreen = useMediaQuery('(max-width:319px)');
   const { fetchUserFromToken } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ function Signup() {
     password_approve: '',
   });
 
+  const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({
     open: false,
     message: ''
@@ -80,24 +82,30 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (formData.name.trim().length < 2) {
+      setLoading(false);
       return setErrorModal({ open: true, message: 'نام باید حداقل ۲ حرف باشد.' });
     }
 
     if (formData.fname.trim().length < 2) {
+      setLoading(false);
       return setErrorModal({ open: true, message: 'نام خانوادگی باید حداقل ۲ حرف باشد.' });
     }
 
     if (!/^\d{10}$/.test(formData.identity_code)) {
+      setLoading(false);
       return setErrorModal({ open: true, message: 'کد ملی باید ۱۰ رقم باشد.' });
     }
 
     if (formData.password.length < 6) {
+      setLoading(false);
       return setErrorModal({ open: true, message: 'رمز عبور باید حداقل ۶ کاراکتر باشد.' });
     }
 
     if (formData.password !== formData.password_approve) {
+      setLoading(false);
       return setErrorModal({ open: true, message: 'رمز عبور و تکرار آن مطابقت ندارند.' });
     }
 
@@ -162,6 +170,8 @@ function Signup() {
         Object.values(error.response?.data?.errors || {})[0]?.[0] ||
         'خطایی در ثبت‌نام رخ داده است.';
       setErrorModal({ open: true, message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -182,9 +192,10 @@ function Signup() {
       maxWidth={false}
       sx={{
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
         bgcolor: (theme) => theme.palette.background.default,
+        overflow: 'auto',
       }}
     >
       <Modal
@@ -261,16 +272,14 @@ function Signup() {
       <Grid
         container
         sx={{
-          width: '100%',
-          height: '100%',
+          flex: 1,
+          m: 0,
+          display: 'flex',
           flexDirection: { xs: 'column-reverse', md: 'row' },
+          minHeight: '100%',
         }}
       >
-        <Grid
-          item
-          size={{xs:12,md:5}}
-          sx={{ height: { xs: 'auto', md: '100%' } }}
-        >
+        <Grid item size={{xs:12,md:5}} sx={{ p: 0, m: 0 }}>
           <WarningsBox />
         </Grid>
         <Grid
@@ -278,16 +287,22 @@ function Signup() {
           size={{xs:12,md:7}}
           sx={{
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: { xs: 'flex-start', md: 'center' },
+            justifyContent: 'start',
+            p: { xs: 2, md: 5 },
+            py: { xs: 4, md: 5 },
           }}
         >
-          <Box sx={{px:2, my:{xs:2}}}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom sx={{color: 'text.primary'}}>
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: { xs: '100%', md: 500 },
+            px: { xs: 0, sm: 2 }
+          }}>
+            <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
               ورود اطلاعات فردی
             </Typography>
 
-            <form onSubmit={handleSubmit} mt={3}>
+            <form onSubmit={handleSubmit}>
               <TextField
                 fullWidth
                 label="نام"
@@ -297,7 +312,20 @@ function Signup() {
                 placeholder="مثال: مهیار"
                 variant="outlined"
                 margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
+                }}
               />
               <TextField
                 fullWidth
@@ -308,7 +336,20 @@ function Signup() {
                 placeholder="مثال: رضایی"
                 variant="outlined"
                 margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
+                }}
               />
               <TextField
                 fullWidth
@@ -319,7 +360,20 @@ function Signup() {
                 placeholder="مثال: 1234567890"
                 variant="outlined"
                 margin="normal"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
+                }}
               />
               <TextField
                 fullWidth
@@ -330,7 +384,20 @@ function Signup() {
                 variant="outlined"
                 margin="normal"
                 type="password"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
+                }}
               />
               <TextField
                 fullWidth
@@ -341,17 +408,34 @@ function Signup() {
                 variant="outlined"
                 margin="normal"
                 type="password"
-                sx={{ bgcolor: 'rgba(0,0,0,0.05)' }}
+                sx={{
+                  mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    backgroundColor: 'background.paper',
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    fontSize: { xs: '14px', sm: '16px' },
+                    py: { xs: '12px', sm: '16px' },
+                  },
+                }}
               />
 
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                size="large"
-                sx={{ height: 60, borderRadius: 0, fontSize: '1.1rem', mt: 2 }}
+                disabled={loading}
+                sx={{
+                  height: { xs: 48, sm: 60 },
+                  fontSize: { xs: '1rem', sm: '1.1rem' },
+                  borderRadius: 1,
+                }}
               >
-                ثبت و ورود
+                {loading ? 'در حال ثبت‌نام...' : 'ثبت و ورود'}
               </Button>
             </form>
           </Box>

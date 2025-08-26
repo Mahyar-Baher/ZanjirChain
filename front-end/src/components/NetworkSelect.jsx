@@ -167,14 +167,14 @@ export default function NetworkSelect({ networks, selectedNetwork, onChange, tok
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 40,
-                  height: 40,
+                  width: 25,
+                  height: 25,
                 }}
               >
                 <Icon 
                   icon={`cryptocurrency-color:${tokenIcon.toLowerCase()}`} 
-                  width={36} 
-                  height={36} 
+                  width={26} 
+                  height={26} 
                 />
               </Box>
             )}

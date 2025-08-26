@@ -4,13 +4,14 @@ import {
   TextField,
   Button,
   Typography,
+  Stack,
   Snackbar,
   IconButton,
   CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import useAuthStore from '../context/authStore';
 import { Icon } from '@iconify/react';
 
 const labelSx = {
@@ -21,17 +22,22 @@ const labelSx = {
   textAlign: 'center',
   marginTop: -0.45,
   borderRadius: '4px',
-  '&.Mui-focused': {
-    color: '#fff',
-    backgroundColor: '#1a652a'
-  }
+  '&.Mui-focused': { color: '#fff', backgroundColor: '#1a652a' }
 };
 
-const USDT_PRICE = 98000;
-const FEE_PERCENT = 2;
+const USDT_PRICE = 100000;
+const PROFIT_FACTOR = 1.04;
 
 const toEnglishNumber = (str) => {
   return str.replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+};
+
+const formatNumber = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+const parseFormattedNumber = (str) => {
+  return parseFloat(str.replace(/,/g, '')) || 0;
 };
 
 const QuickBuyAndSell = () => {
@@ -101,56 +107,36 @@ const QuickBuyAndSell = () => {
     setToman('');
     setTether('');
   };
-  const formatNumber = (num) => {
-    if (!num) return '';
-    return Number(num).toLocaleString('en-US'); // 12,345,678
-  };
-  
-  const parseNumber = (str) => {
-    if (!str) return 0;
-    return parseFloat(toEnglishNumber(str.replace(/,/g, ''))); // حذف , برای محاسبه
-  };
-  
+
   const handleTomanChange = (e) => {
-    let raw = e.target.value.replace(/,/g, ''); // حذف جداکننده
-    raw = toEnglishNumber(raw);
-  
-    // فقط عدد صحیح و حداکثر 12 رقم
-    if (!/^\d*$/.test(raw) || raw.length > 12) return;
-  
-    const enValue = parseNumber(raw);
-    setToman(formatNumber(raw));
-  
+    let value = e.target.value.replace(/,/g, '');
+    value = toEnglishNumber(value);
+    const enValue = parseFloat(value);
+    setToman(formatNumber(value));
     if (!isNaN(enValue)) {
-      const fee = (enValue * FEE_PERCENT) / 100;
-      const amount = enValue - fee;
-      const tetherAmount = amount / USDT_PRICE;
-      setTether(formatNumber(tetherAmount.toFixed(4)));
+      const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
+      const finalValue = enValue - (enValue * profitCut);
+      const tetherAmount = finalValue / USDT_PRICE;
+      setTether(tetherAmount.toFixed(6));
     } else {
       setTether('');
     }
   };
-  
+
   const handleTetherChange = (e) => {
-    let raw = e.target.value.replace(/,/g, ''); 
-    raw = toEnglishNumber(raw);
-  
-    // فقط عدد اعشاری با نهایت 6 رقم بعد از ممیز
-    if (!/^\d*$/.test(raw) || raw.length > 7) return;
-  
-    const enValue = parseNumber(raw);
-    setTether(formatNumber(raw)); // اینجا فرمت‌گذاری نمی‌کنیم تا اعشار خراب نشه
-  
+    let value = e.target.value.replace(/,/g, '');
+    value = toEnglishNumber(value);
+    const enValue = parseFloat(value);
+    setTether(formatNumber(value));
     if (!isNaN(enValue)) {
-      const fee = (enValue * FEE_PERCENT) / 100;
-      const amount = enValue - fee;
-      const tomanAmount = amount * USDT_PRICE;
-      setToman(formatNumber(Math.round(tomanAmount)));
+      const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
+      const finalValue = enValue - (enValue * profitCut);
+      const tomanAmount = finalValue * USDT_PRICE;
+      setToman(formatNumber(Math.round(tomanAmount).toString()));
     } else {
       setToman('');
     }
   };
-  
 
   const handleSubmit = async () => {
     if (!token) {
@@ -160,18 +146,17 @@ const QuickBuyAndSell = () => {
     }
 
     const isBuy = !isReversed;
-    const ba_toman = parseNumber(toman) || 0;
-    const ba_tether = parseNumber(tether) || 0;
-
+    const ba_toman = parseFormattedNumber(toman);
+    const ba_tether = parseFormattedNumber(tether);
 
     // Validate inputs
-    if (isBuy && ba_toman <= 0) {
-      setSnackMessage('مقدار تومان نامعتبر است');
+    if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
+      setSnackMessage('مقدار تومان باید بین ۱۴۵,۰۰۰ و ۲۵,۰۰۰,۰۰۰ باشد');
       setSnackOpen(true);
       return;
     }
-    if (!isBuy && ba_tether <= 0) {
-      setSnackMessage('مقدار تتر نامعتبر است');
+    if (!isBuy && (ba_tether < 5 || ba_tether > 25000)) {
+      setSnackMessage('مقدار تتر باید بین ۵ و ۲۵,۰۰۰ باشد');
       setSnackOpen(true);
       return;
     }
@@ -212,7 +197,7 @@ const QuickBuyAndSell = () => {
       );
 
       if (response.data.status) {
-        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
+        await fetchWalletBalance();
         setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
         setSnackOpen(true);
         setToman('');
@@ -238,6 +223,50 @@ const QuickBuyAndSell = () => {
     }
   };
 
+  const tomanField = (
+    <Box width="100%" textAlign="end" mt={isReversed ? 0 : 1} mb={isReversed ? 0 : 3}>
+      <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
+        موجودی: {formatNumber(walletBalance.balance_toman)} تومان
+      </Typography>
+      <TextField
+        name="tomanQ"
+        type="text"
+        inputMode="numeric"
+        label="تومان"
+        value={toman}
+        onChange={handleTomanChange}
+        placeholder="مقدار بین 145,000 تا 25,000,000"
+        fullWidth
+        sx={{
+          '& .MuiInputLabel-root': labelSx,
+          '& .MuiInputLabel-shrink': { px: 0.75 }
+        }}
+      />
+    </Box>
+  );
+
+  const tetherField = (
+    <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
+      <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
+        موجودی: {formatNumber(walletBalance.balance_tether)} تتر
+      </Typography>
+      <TextField
+        name="tetherQ"
+        type="text"
+        inputMode="numeric"
+        label="تتر"
+        value={tether}
+        onChange={handleTetherChange}
+        placeholder="مقدار بین 5 تا 25,000"
+        fullWidth
+        sx={{
+          '& .MuiInputLabel-root': labelSx,
+          '& .MuiInputLabel-shrink': { px: 0.75 }
+        }}
+      />
+    </Box>
+  );
+
   return (
     <Box>
       {loading ? (
@@ -250,85 +279,64 @@ const QuickBuyAndSell = () => {
         </Box>
       ) : (
         <>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: 'center', gap: 1 }}>
-            <Box sx={{ flex: 1 }}>
-              {isReversed ? (
-                <TextField
-                  name="tetherQ"
-                  type="text"
-                  inputMode="numeric"
-                  label="تتر"
-                  value={tether}
-                  onChange={handleTetherChange}
-                  placeholder="مقدار بین ۵ تا ۲۵,۰۰۰"
-                  fullWidth
-                  sx={{
-                    '& .MuiInputLabel-root': labelSx,
-                    '& .MuiInputLabel-shrink': { px: 0.75 }
-                  }}
-                />
-              ) : (
-                <TextField
-                  name="tomanQ"
-                  type="text"
-                  inputMode="numeric"
-                  label="تومان"
-                  value={toman}
-                  onChange={handleTomanChange}
-                  placeholder="مقدار بین ۱۴۵,۰۰۰ تا ۲۵,۰۰۰,۰۰۰"
-                  fullWidth
-                  sx={{
-                    '& .MuiInputLabel-root': labelSx,
-                    '& .MuiInputLabel-shrink': { px: 0.75 }
-                  }}
-                />
-              )}
-            </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'column' },
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: { xs: 0, md: 3 },
+              gap: 1
+            }}
+          >
+            {isReversed ? tetherField : tomanField}
 
             <Button
               onClick={handleSwap}
               variant="outlined"
-              sx={{ fontSize: 10, p: 0, height: 'fit-content', mt: { xl: 1 } }}
+              sx={{
+                fontSize: 10,
+                p: 0,
+                height: 'fit-content',
+                '& .icon': {
+                  fontSize: 30,
+                  transform: {
+                    xs: 'rotate(120deg)',
+                    md: 'rotate(90deg)',
+                  },
+                },
+              }}
             >
-              <Icon icon="mdi:exchange" style={{ fontSize: '30px' }} />
+              <Icon icon="mdi:exchange" className="icon" />
             </Button>
-
-            <Box sx={{ flex: 1 }}>
-              {isReversed ? (
-                <TextField
-                  name="tomanQ"
-                  type="text"
-                  inputMode="numeric"
-                  label="تومان"
-                  value={toman}
-                  onChange={handleTomanChange}
-                  placeholder="مقدار بین ۱۴۵,۰۰۰ تا ۲۵,۰۰۰,۰۰۰"
-                  fullWidth
-                  sx={{
-                    '& .MuiInputLabel-root': labelSx,
-                    '& .MuiInputLabel-shrink': { px: 0.75 }
-                  }}
-                />
-              ) : (
-                <TextField
-                  name="tetherQ"
-                  type="text"
-                  inputMode="numeric"
-                  label="تتر"
-                  value={tether}
-                  onChange={handleTetherChange}
-                  placeholder="مقدار بین ۵ تا ۲۵,۰۰۰"
-                  fullWidth
-                  sx={{
-                    '& .MuiInputLabel-root': labelSx,
-                    '& .MuiInputLabel-shrink': { px: 0.75 }
-                  }}
-                />
-              )}
-            </Box>
+            {isReversed ? tomanField : tetherField}
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, flexDirection: 'column', alignItems: 'center' }}>
+          <Stack
+            direction="row"
+            spacing={0}
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', mt: 1 }}
+          >
+            <Typography
+              variant="caption"
+              textAlign="center"
+              color="text.secondary"
+            >
+              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه می‌شود
+            </Typography>
+          </Stack>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              my: 1.5,
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}
+          >
             <Button
               fullWidth
               variant="contained"

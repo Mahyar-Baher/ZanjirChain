@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import Navbarbox from '../components/Navbarbox';
+import Navbarbox from '../components/navbarbox';
 import navItems from '../data/navItems';
 import CompleteIdenity from '../components/CompleteIdenity';
 import QuickBuyAndSell from '../components/QuickBuyAndSell';

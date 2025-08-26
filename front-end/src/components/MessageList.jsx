@@ -14,6 +14,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import NoDataImage from '/media/images/empty_box.webp';
 
 const styleModal = {
   position: 'absolute',
@@ -97,9 +98,48 @@ const MessageList = () => {
           <Typography color="error.main">{error}</Typography>
         </Box>
       ) : !messagesData || messagesData.length === 0 ? (
-        <Box sx={{ textAlign: 'center', my: 4 }}>
-          <Typography color="text.secondary">پیامی یافت نشد</Typography>
-        </Box>
+        <TableContainer
+            sx={{
+              boxShadow: 'none',
+              borderRadius: 2,
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+            }}
+          >
+            <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 8px' }}>
+              <TableHead>
+                <TableRow
+                  sx={{
+                    bgcolor: '#80808c3f',
+                    ...getRadiusStyle('top'),
+                  }}
+                >
+                  <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomRightRadius: 12, borderTopRightRadius: 12 }}>
+                    موضوع
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                    متن پیام
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                    زمان ارسال
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold', borderBottomLeftRadius: 12, borderTopLeftRadius: 12 }}>
+                    عملیات
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody sx={{ background:"#80808c3f"}}>
+                <TableRow>
+                  <TableCell colSpan={4} align="center" sx={{ borderBottom: 'none', py: 5 }}>
+                    <img src={NoDataImage} alt="No data" width={120} />
+                    <Typography sx={{ mt: 2, color: 'text.secondary' }}>
+                      هیچ آدرسی برای نمایش وجود ندارد
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+              </Table>
+          </TableContainer>
       ) : (
         <>
           <TableContainer

@@ -55,7 +55,6 @@ const MarketSettings = () => {
             'Content-Type': 'application/json',
           },
         });
-        console.log('داده‌های تنظیمات:', response.data); // لاگ برای دیباگ
         const loadedSettings = {};
         settingItems.forEach(({ key }) => {
           loadedSettings[key] = !!response.data[key];

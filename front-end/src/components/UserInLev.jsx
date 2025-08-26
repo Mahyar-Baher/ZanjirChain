@@ -17,7 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[2],
 }));
 const level= 0;
-const allTether = 230;
+const allTether = 0;
 const levelLabel = (level) => {
   switch (level) {
     case 1:

@@ -210,11 +210,11 @@ const PasswordForm = ({ phone }) => {
       </Modal>
 
       <Box width="100%" maxWidth={500}>
-        <Typography variant="h5" fontWeight="bold" color="text.secondary" gutterBottom>
+        <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
           وارد کردن رمز عبور
         </Typography>
 
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
           رمز عبور خود را وارد کنید یا درصورت فراموشی از رمز یکبار مصرف استفاده کنید
         </Typography>
 
@@ -241,7 +241,20 @@ const PasswordForm = ({ phone }) => {
             placeholder="مثال: Tether01@#"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            sx={{ mb: 3 }}
+            sx={{
+              mb: 3,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 1,
+                backgroundColor: 'background.paper',
+              },
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '14px', sm: '16px' },
+              },
+              '& .MuiOutlinedInput-input': {
+                fontSize: { xs: '14px', sm: '16px' },
+                py: { xs: '12px', sm: '16px' },
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -258,14 +271,19 @@ const PasswordForm = ({ phone }) => {
             variant="contained"
             fullWidth
             disabled={loading}
-            sx={{ height: 50, fontSize: "1rem", mb: 3 }}
+            sx={{
+              height: { xs: 48, sm: 60 },
+              fontSize: { xs: '1rem', sm: '1.1rem' },
+              borderRadius: 1,
+              mb: 3,
+            }}
           >
             {loading ? "در حال بررسی..." : "ورود"}
           </Button>
         </form>
 
         <Box sx={{ p: 2, borderRadius: 2 }}>
-          <Typography color="text.primary" variant="body2" fontWeight="bold" gutterBottom>
+          <Typography color="textSecondary" variant="body2" fontWeight="bold" gutterBottom>
             شرایط رمز عبور:
           </Typography>
           <Box component="ul" sx={{ pl: 2, mb: 2 }}>
@@ -275,7 +293,7 @@ const PasswordForm = ({ phone }) => {
               ) : (
                 <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
               )}
-              <Typography color="text.primary" variant="body2">حداقل ۸ کاراکتر</Typography>
+              <Typography color="textSecondary" variant="body2">حداقل ۸ کاراکتر</Typography>
             </Box>
             <Box component="li" display="flex" alignItems="center">
               {passwordRequirements.hasUpperLower ? (
@@ -283,7 +301,7 @@ const PasswordForm = ({ phone }) => {
               ) : (
                 <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
               )}
-              <Typography color="text.primary" variant="body2">حروف کوچک و بزرگ</Typography>
+              <Typography color="textSecondary" variant="body2">حروف کوچک و بزرگ</Typography>
             </Box>
             <Box component="li" display="flex" alignItems="center">
               {passwordRequirements.hasNumber ? (
@@ -291,7 +309,7 @@ const PasswordForm = ({ phone }) => {
               ) : (
                 <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
               )}
-              <Typography color="text.primary" variant="body2">حداقل یک عدد</Typography>
+              <Typography color="textSecondary" variant="body2">حداقل یک عدد</Typography>
             </Box>
             <Box component="li" display="flex" alignItems="center">
               {passwordRequirements.hasSpecialChar ? (
@@ -299,7 +317,7 @@ const PasswordForm = ({ phone }) => {
               ) : (
                 <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
               )}
-              <Typography color="text.primary" variant="body2">کاراکتر خاص (!@#...)</Typography>
+              <Typography color="textSecondary" variant="body2">کاراکتر خاص (!@#...)</Typography>
             </Box>
           </Box>
         </Box>

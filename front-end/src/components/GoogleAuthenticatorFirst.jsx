@@ -234,8 +234,32 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
         </Fade>
       </Modal>
       <Grid container>
-        <Grid size={{ xs: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Grid container justifyContent="center" sx={{ maxWidth: 500, mx: 'auto', px: { xs: 2, sm: 3 }, py: 1 }}>
+          <Grid size={{ xs: 12 }} sx={{ mb: 0.9 , display:{xs: 'flex', sm:'none'} }}>
+            <Alert
+              severity="warning"
+              sx={{
+                borderRadius: '12px',
+                bgcolor: '#dc3545',
+                color: '#fff',
+                border: '1px solid #ffcc80',
+                fontSize: '1rem',
+                p: 2,
+                '& .MuiAlert-icon': {
+                  p: 1,
+                  color: '#fff',
+                },
+              }}
+            >
+              <Typography variant="body1" fontWeight={700} fontSize="1.1rem" textAlign="start">
+                هشدار مهم
+              </Typography>
+              <Typography variant="body2" mt={1} fontSize="1rem" textAlign="start">
+                این کد مخفی را در مکانی امن ذخیره کنید. بدون این کد و اپلیکیشن Google Authenticator، بازیابی حساب ممکن نخواهد بود.
+              </Typography>
+            </Alert>
+          </Grid>
             <Grid size={{ xs: 12 }}>
               <Typography variant="h5" fontWeight="bold" color="text.secondary" textAlign="center" gutterBottom>
                 فعال‌سازی تأیید هویت دو مرحله‌ای
@@ -271,6 +295,9 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
                   <Typography variant="body1" color='text.primary'>
                     کد مخفی: <b>{secretCode || 'در دسترس نیست'}</b>
                   </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    اگر QR Code نمایش داده نشد، این کد را به‌صورت دستی در Google Authenticator وارد کنید.
+                  </Typography>
                 </Grid>
 
                 <Grid size={{ xs: 12 }}>
@@ -300,8 +327,8 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
             ) : null}
           </Grid>
         </Grid>
-        <Grid size={{ xs: 6 }}>
-          <Grid size={{ xs: 12 }} sx={{ mb: 0.9 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, sm: 12 }} sx={{ mb: 0.9, display: {xs: 'none', sm: 'flex'} }}>
             <Alert
               severity="warning"
               sx={{

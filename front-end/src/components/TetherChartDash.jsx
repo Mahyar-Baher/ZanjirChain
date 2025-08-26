@@ -18,7 +18,7 @@ const timeOptions = [
   { fa: '۱ هفته',  days: 7 },
   { fa: '۱ ماه',   days: 30 },
 ];
-const TOMAN_RATE = 92790;
+const TOMAN_RATE = 100000;
 
 const TetherChartDash = () => {
   const location     = useLocation();                            // ✅ داخل کامپوننت
@@ -71,7 +71,7 @@ const TetherChartDash = () => {
   }), [dataPoints]);
 
   return (
-    <Paper sx={{ p: 2, borderRadius: 3 }}>
+    <Paper sx={{ p: 1, borderRadius: 3 }}>
       <Stack spacing={2}>
       <Tabs
         value={tab}

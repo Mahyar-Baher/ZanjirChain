@@ -32,7 +32,7 @@ const style = {
 
 const formatShabaNumber = (number) => {
   if (!/^IR\d{22}$/.test(number)) return 'شبا نامعتبر است';
-  return `${number.slice(0, 4)} **** **** **** **** ****`;
+  return `${number.slice(0,22)}`;
 };
 
 const ShabaNumbers = () => {

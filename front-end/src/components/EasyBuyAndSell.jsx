@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import useAuthStore from '../context/authStore'; // مسیر فایل useAuthStore.js
+import useAuthStore from '../context/authStore';
 import { Icon } from '@iconify/react';
 
 const labelSx = {
@@ -25,11 +25,19 @@ const labelSx = {
   '&.Mui-focused': { color: '#fff', backgroundColor: '#1a652a' }
 };
 
-const USDT_PRICE = 98000;
-const FEE_PERCENT = 2;
+const USDT_PRICE = 100000;
+const PROFIT_FACTOR = 1.04;
 
 const toEnglishNumber = (str) => {
   return str.replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+};
+
+const formatNumber = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+const parseFormattedNumber = (str) => {
+  return parseFloat(str.replace(/,/g, '')) || 0;
 };
 
 const QuickBuyAndSell = () => {
@@ -101,28 +109,30 @@ const QuickBuyAndSell = () => {
   };
 
   const handleTomanChange = (e) => {
-    const value = e.target.value;
-    const enValue = parseFloat(toEnglishNumber(value));
-    setToman(value);
+    let value = e.target.value.replace(/,/g, '');
+    value = toEnglishNumber(value);
+    const enValue = parseFloat(value);
+    setToman(formatNumber(value));
     if (!isNaN(enValue)) {
-      const fee = (enValue * FEE_PERCENT) / 100;
-      const amount = enValue - fee;
-      const tetherAmount = amount / USDT_PRICE;
-      setTether(tetherAmount.toFixed(4));
+      const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
+      const finalValue = enValue - (enValue * profitCut);
+      const tetherAmount = finalValue / USDT_PRICE;
+      setTether(tetherAmount.toFixed(6));
     } else {
       setTether('');
     }
   };
 
   const handleTetherChange = (e) => {
-    const value = e.target.value;
-    const enValue = parseFloat(toEnglishNumber(value));
-    setTether(value);
+    let value = e.target.value.replace(/,/g, '');
+    value = toEnglishNumber(value);
+    const enValue = parseFloat(value);
+    setTether(formatNumber(value));
     if (!isNaN(enValue)) {
-      const fee = (enValue * FEE_PERCENT) / 100;
-      const amount = enValue - fee;
-      const tomanAmount = amount * USDT_PRICE;
-      setToman(Math.round(tomanAmount).toString());
+      const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
+      const finalValue = enValue - (enValue * profitCut);
+      const tomanAmount = finalValue * USDT_PRICE;
+      setToman(formatNumber(Math.round(tomanAmount).toString()));
     } else {
       setToman('');
     }
@@ -136,8 +146,8 @@ const QuickBuyAndSell = () => {
     }
 
     const isBuy = !isReversed;
-    const ba_toman = parseFloat(toEnglishNumber(toman)) || 0;
-    const ba_tether = parseFloat(toEnglishNumber(tether)) || 0;
+    const ba_toman = parseFormattedNumber(toman);
+    const ba_tether = parseFormattedNumber(tether);
 
     // Validate inputs
     if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
@@ -187,7 +197,7 @@ const QuickBuyAndSell = () => {
       );
 
       if (response.data.status) {
-        await fetchWalletBalance(); // به‌روزرسانی موجودی ولت
+        await fetchWalletBalance();
         setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
         setSnackOpen(true);
         setToman('');
@@ -216,7 +226,7 @@ const QuickBuyAndSell = () => {
   const tomanField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 0 : 1} mb={isReversed ? 0 : 3}>
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {walletBalance.balance_toman.toLocaleString('en-US')} تومان
+        موجودی: {formatNumber(walletBalance.balance_toman)} تومان
       </Typography>
       <TextField
         name="tomanQ"
@@ -238,7 +248,7 @@ const QuickBuyAndSell = () => {
   const tetherField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {walletBalance.balance_tether.toLocaleString('en-US')} تتر
+        موجودی: {formatNumber(walletBalance.balance_tether)} تتر
       </Typography>
       <TextField
         name="tetherQ"
@@ -275,7 +285,7 @@ const QuickBuyAndSell = () => {
               flexDirection: { xs: 'column', md: 'column' },
               justifyContent: 'center',
               alignItems: 'center',
-              p: 3,
+              p: { xs: 0, md: 3 },
               gap: 1
             }}
           >
@@ -288,13 +298,17 @@ const QuickBuyAndSell = () => {
                 fontSize: 10,
                 p: 0,
                 height: 'fit-content',
-                mt: { xl: 1 },
-                transform: 'rotate(90deg)'
+                '& .icon': {
+                  fontSize: 30,
+                  transform: {
+                    xs: 'rotate(120deg)',
+                    md: 'rotate(90deg)',
+                  },
+                },
               }}
             >
-              <Icon icon="mdi:exchange" style={{ fontSize: '30px' }} />
+              <Icon icon="mdi:exchange" className="icon" />
             </Button>
-
             {isReversed ? tomanField : tetherField}
           </Box>
 
@@ -310,7 +324,7 @@ const QuickBuyAndSell = () => {
               textAlign="center"
               color="text.secondary"
             >
-              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه میشود
+              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه می‌شود
             </Typography>
           </Stack>
 
@@ -351,4 +365,4 @@ const QuickBuyAndSell = () => {
   );
 };
 
-export default QuickBuyAndSell;
+export default QuickBuyAndSell; 
