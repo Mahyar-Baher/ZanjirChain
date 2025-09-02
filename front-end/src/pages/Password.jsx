@@ -1,24 +1,14 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container, Grid, CircularProgress, Box } from '@mui/material';
 import WarningsBox from '../components/warningbox';
+import { Suspense, lazy } from 'react';
 
-// Lazy load components
+// Lazy load PasswordForm
 const PasswordForm = lazy(() => import('../components/PasswordForm'));
-const GoogleAuthForm = lazy(() => import('../components/GoogleAuthForm'));
 
 const Password = () => {
   const location = useLocation();
   const phone = location.state?.phone;
-  const [isGoogleAuthVerified, setIsGoogleAuthVerified] = useState(false);
-
-  useEffect(() => {
-    setIsGoogleAuthVerified(false);
-  }, []);
-
-  const handleGoogleAuthSuccess = () => {
-    setIsGoogleAuthVerified(true);
-  };
 
   return (
     <Container
@@ -57,27 +47,29 @@ const Password = () => {
             py: { xs: 4, md: 5 },
           }}
         >
-          <Box sx={{ 
-            width: '100%', 
-            maxWidth: { xs: '100%', md: 500 },
-            px: { xs: 0, sm: 2 }
-          }}>
-            <Suspense fallback={
-              <div style={{ 
-                width: '100%', 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center',
-                minHeight: '200px'
-              }}>
-                <CircularProgress />
-              </div>
-            }>
-              {isGoogleAuthVerified ? (
-                <PasswordForm phone={phone} />
-              ) : (
-                <GoogleAuthForm phone={phone} onSuccess={handleGoogleAuthSuccess} />
-              )}
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: { xs: '100%', md: 500 },
+              px: { xs: 0, sm: 2 },
+            }}
+          >
+            <Suspense
+              fallback={
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: '200px',
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              }
+            >
+              <PasswordForm phone={phone} />
             </Suspense>
           </Box>
         </Grid>
