@@ -31,7 +31,7 @@ const Invite = lazy(() => import('./pages/invite'));
 const Services = lazy(() => import('./pages/Services'));
 const GoogleAuthenticator = lazy(() => import('./pages/GoogleAuthenticator'));
 const IdentityVerification = lazy(() => import('./pages/IdentityVerification'));
-
+const Mainpage = lazy(() => import('./pages/mainpage'));
 function App() {
   return (
     <CustomThemeProvider>
@@ -45,6 +45,7 @@ function App() {
               <Route path="/Blog" element={<Blog />} />
               <Route path="/Invite" element={<Invite />} />
               <Route path="/Services" element={<Services />} />
+              <Route path="/mainpage" element={<Mainpage />} />
             </Route>
             <Route element={<EmptyLayout />}>
               <Route path="/wallet" element={<Wallet />} />

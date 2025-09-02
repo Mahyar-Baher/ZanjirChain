@@ -1,4 +1,5 @@
 const navItems = [
+  { label: 'صفحه اصلی', icon: 'mdi:compass', path: '/mainpage' },
   { label: 'پیشخوان', icon: 'mdi:home', path: '/dashboard' },
   {
     label: 'کیف پول', icon: 'mdi:wallet', path: '/wallet',
