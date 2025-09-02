@@ -1,13 +1,21 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, ButtonGroup, CircularProgress, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, TextField, Button, ButtonGroup, CircularProgress, Stack, useMediaQuery, useTheme , Grid} from '@mui/material';
 import TransactionSummary from './TransactionSummary';
 import SnackBarNotification from './SnackBarNotification';
 import useAuthStore from '../context/authStore';
 import axios from 'axios';
 
 const profitFactor = 1.04; // تغییر نام از feePercent به profitFactor برای هماهنگی
-const networks = ['Ethereum']; // می‌تونی شبکه‌های دیگه رو اضافه کنی
+const networks = [
+  "Ethereum",
+  "Tron",
+  "BNB Smart Chain",
+  "Polygon",
+  "Arbitrum",
+  "Optimism",
+  "Avalanche"
+]; // می‌تونی شبکه‌های دیگه رو اضافه کنی
 const currency = 'USDT';
 
 const CryptoForm = () => {
@@ -158,19 +166,24 @@ const CryptoForm = () => {
         sx={{
           mb: 2,
           flexDirection: isMobile ? 'column' : 'row',
-          '& .MuiButton-root': { fontSize: isMobile ? '0.8rem' : '1rem' },
+          '& .MuiButton-root': { fontSize: isMobile ? '0.8rem' : '0.8rem' },
         }}
       >
-        {networks.map((net) => (
-          <Button
-            key={net}
-            variant={network === net ? 'contained' : 'outlined'}
-            onClick={() => setNetwork(net)}
-            sx={{ py: isMobile ? 1 : 1.5 }}
-          >
-            {net}
-          </Button>
-        ))}
+        <Grid container spacing={0.5}>
+          {networks.map((net) => (
+            <Grid item xs={12} sm={6} md={6} key={net}>
+              <Button
+                fullWidth
+                size="small"
+                variant={network === net ? "contained" : "outlined"}
+                onClick={() => setNetwork(net)}
+                sx={{ py: isMobile ? 1 : 1.5 }}
+              >
+                {net}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
       </ButtonGroup>
 
       <TextField

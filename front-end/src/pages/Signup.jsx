@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -13,6 +13,7 @@ import {
   Backdrop,
   Fade,
 } from '@mui/material';
+import { CheckCircle as CheckCircleIcon, Circle as CircleIcon } from '@mui/icons-material';
 import WarningsBox from '../components/warningbox';
 import { AuthContext } from '../context/AuthContext';
 
@@ -31,11 +32,31 @@ function Signup() {
     password_approve: '',
   });
 
+  // اضافه کردن state برای معیارهای پسورد
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    minLength: false,
+    hasUpperLower: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  });
+
   const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState({
     open: false,
     message: ''
   });
+
+  // useEffect برای چک کردن پسورد هر وقت تغییر کرد
+  useEffect(() => {
+    const password = formData.password;
+    
+    setPasswordRequirements({
+      minLength: password.length >= 8,
+      hasUpperLower: /[a-z]/.test(password) && /[A-Z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+    });
+  }, [formData.password]);
 
   const getUserIP = async () => {
     try {
@@ -99,9 +120,11 @@ function Signup() {
       return setErrorModal({ open: true, message: 'کد ملی باید ۱۰ رقم باشد.' });
     }
 
-    if (formData.password.length < 6) {
+    // چک کردن معیارهای پسورد
+    if (!passwordRequirements.minLength || !passwordRequirements.hasUpperLower || 
+        !passwordRequirements.hasNumber || !passwordRequirements.hasSpecialChar) {
       setLoading(false);
-      return setErrorModal({ open: true, message: 'رمز عبور باید حداقل ۶ کاراکتر باشد.' });
+      return setErrorModal({ open: true, message: 'رمز عبور باید تمام شرایط را برآورده کند.' });
     }
 
     if (formData.password !== formData.password_approve) {
@@ -187,17 +210,7 @@ function Signup() {
   };
 
   return (
-    <Container
-      disableGutters
-      maxWidth={false}
-      sx={{
-        width: '100vw',
-        minHeight: '100vh',
-        display: 'flex',
-        bgcolor: (theme) => theme.palette.background.default,
-        overflow: 'auto',
-      }}
-    >
+    <>
       <Modal
         open={isVerySmallScreen}
         closeAfterTransition
@@ -229,6 +242,7 @@ function Signup() {
           </Box>
         </Fade>
       </Modal>
+      
       <Modal
         open={errorModal.open}
         onClose={closeErrorModal}
@@ -269,179 +283,235 @@ function Signup() {
         </Fade>
       </Modal>
 
-      <Grid
-        container
+      <Container
+        disableGutters
+        maxWidth={false}
         sx={{
-          flex: 1,
-          m: 0,
+          width: '100vw',
+          minHeight: '100vh',
           display: 'flex',
-          flexDirection: { xs: 'column-reverse', md: 'row' },
-          minHeight: '100%',
+          bgcolor: (theme) => theme.palette.background.default,
+          overflow: 'auto',
         }}
       >
-        <Grid item size={{xs:12,md:5}} sx={{ p: 0, m: 0 }}>
-          <WarningsBox />
-        </Grid>
         <Grid
-          item
-          size={{xs:12,md:7}}
+          container
           sx={{
+            flex: 1,
+            m: 0,
             display: 'flex',
-            alignItems: { xs: 'flex-start', md: 'center' },
-            justifyContent: 'start',
-            p: { xs: 2, md: 5 },
-            py: { xs: 4, md: 5 },
+            flexDirection: { xs: 'column-reverse', md: 'row' },
+            minHeight: '100%',
           }}
         >
-          <Box sx={{ 
-            width: '100%', 
-            maxWidth: { xs: '100%', md: 500 },
-            px: { xs: 0, sm: 2 }
-          }}>
-            <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
-              ورود اطلاعات فردی
-            </Typography>
+          <Grid item size={{xs:12,md:5}} sx={{ p: 0, m: 0 }}>
+            <WarningsBox />
+          </Grid>
+          <Grid
+            item
+            size={{xs:12,md:7}}
+            sx={{
+              display: 'flex',
+              alignItems: { xs: 'flex-start', md: 'center' },
+              justifyContent: 'start',
+              p: { xs: 2, md: 5 },
+              py: { xs: 4, md: 5 },
+            }}
+          >
+            <Box sx={{ 
+              width: '100%', 
+              maxWidth: { xs: '100%', md: 500 },
+              px: { xs: 0, sm: 2 }
+            }}>
+              <Typography variant="h5" fontWeight="bold" color="textSecondary" gutterBottom>
+                ورود اطلاعات فردی
+              </Typography>
 
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="نام"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="مثال: مهیار"
-                variant="outlined"
-                margin="normal"
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiInputLabel-root': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                    py: { xs: '12px', sm: '16px' },
-                  },
-                }}
-              />
-              <TextField
-                fullWidth
-                label="نام خانوادگی"
-                name="fname"
-                value={formData.fname}
-                onChange={handleChange}
-                placeholder="مثال: رضایی"
-                variant="outlined"
-                margin="normal"
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiInputLabel-root': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                    py: { xs: '12px', sm: '16px' },
-                  },
-                }}
-              />
-              <TextField
-                fullWidth
-                label="کد ملی"
-                name="identity_code"
-                value={formData.identity_code}
-                onChange={handleChange}
-                placeholder="مثال: 1234567890"
-                variant="outlined"
-                margin="normal"
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiInputLabel-root': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                    py: { xs: '12px', sm: '16px' },
-                  },
-                }}
-              />
-              <TextField
-                fullWidth
-                label="رمز عبور"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                variant="outlined"
-                margin="normal"
-                type="password"
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiInputLabel-root': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                    py: { xs: '12px', sm: '16px' },
-                  },
-                }}
-              />
-              <TextField
-                fullWidth
-                label="تکرار رمز عبور"
-                name="password_approve"
-                value={formData.password_approve}
-                onChange={handleChange}
-                variant="outlined"
-                margin="normal"
-                type="password"
-                sx={{
-                  mb: 3,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                    backgroundColor: 'background.paper',
-                  },
-                  '& .MuiInputLabel-root': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: { xs: '14px', sm: '16px' },
-                    py: { xs: '12px', sm: '16px' },
-                  },
-                }}
-              />
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  label="نام"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="مثال: مهیار"
+                  variant="outlined"
+                  margin="normal"
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiInputLabel-root': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                      py: { xs: '12px', sm: '16px' },
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="نام خانوادگی"
+                  name="fname"
+                  value={formData.fname}
+                  onChange={handleChange}
+                  placeholder="مثال: رضایی"
+                  variant="outlined"
+                  margin="normal"
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiInputLabel-root': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                      py: { xs: '12px', sm: '16px' },
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="کد ملی"
+                  name="identity_code"
+                  value={formData.identity_code}
+                  onChange={handleChange}
+                  placeholder="مثال: 1234567890"
+                  variant="outlined"
+                  margin="normal"
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiInputLabel-root': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                      py: { xs: '12px', sm: '16px' },
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="رمز عبور"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  variant="outlined"
+                  margin="normal"
+                  type="password"
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiInputLabel-root': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                      py: { xs: '12px', sm: '16px' },
+                    },
+                  }}
+                />
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={loading}
-                sx={{
-                  height: { xs: 48, sm: 60 },
-                  fontSize: { xs: '1rem', sm: '1.1rem' },
-                  borderRadius: 1,
-                }}
-              >
-                {loading ? 'در حال ثبت‌نام...' : 'ثبت و ورود'}
-              </Button>
-            </form>
-          </Box>
+                {/* نمایش معیارهای پسورد - فقط وقتی کاربر شروع به تایپ کرده */}
+                {formData.password.length > 0 && (
+                  <Box sx={{ p: 2, borderRadius: 2, mb: 2, bgcolor: 'background.paper' }}>
+                    <Typography color="textSecondary" variant="body2" fontWeight="bold" gutterBottom>
+                      شرایط رمز عبور:
+                    </Typography>
+                    <Box component="ul" sx={{ pl: 2, mb: 0, listStyle: 'none' }}>
+                      <Box component="li" display="flex" alignItems="center" sx={{ mb: 0.5 }}>
+                        {passwordRequirements.minLength ? (
+                          <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                        ) : (
+                          <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                        )}
+                        <Typography color="textSecondary" variant="body2">حداقل ۸ کاراکتر</Typography>
+                      </Box>
+                      <Box component="li" display="flex" alignItems="center" sx={{ mb: 0.5 }}>
+                        {passwordRequirements.hasUpperLower ? (
+                          <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                        ) : (
+                          <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                        )}
+                        <Typography color="textSecondary" variant="body2">حروف کوچک و بزرگ</Typography>
+                      </Box>
+                      <Box component="li" display="flex" alignItems="center" sx={{ mb: 0.5 }}>
+                        {passwordRequirements.hasNumber ? (
+                          <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                        ) : (
+                          <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                        )}
+                        <Typography color="textSecondary" variant="body2">حداقل یک عدد</Typography>
+                      </Box>
+                      <Box component="li" display="flex" alignItems="center">
+                        {passwordRequirements.hasSpecialChar ? (
+                          <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
+                        ) : (
+                          <CircleIcon fontSize="small" color="disabled" sx={{ mr: 1 }} />
+                        )}
+                        <Typography color="textSecondary" variant="body2">کاراکتر خاص (!@#...)</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+
+                <TextField
+                  fullWidth
+                  label="تکرار رمز عبور"
+                  name="password_approve"
+                  value={formData.password_approve}
+                  onChange={handleChange}
+                  variant="outlined"
+                  margin="normal"
+                  type="password"
+                  sx={{
+                    mb: 3,
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      backgroundColor: 'background.paper',
+                    },
+                    '& .MuiInputLabel-root': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: { xs: '14px', sm: '16px' },
+                      py: { xs: '12px', sm: '16px' },
+                    },
+                  }}
+                />
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  disabled={loading}
+                  sx={{
+                    height: { xs: 48, sm: 60 },
+                    fontSize: { xs: '1rem', sm: '1.1rem' },
+                    borderRadius: 1,
+                  }}
+                >
+                  {loading ? 'در حال ثبت‌نام...' : 'ثبت و ورود'}
+                </Button>
+              </form>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 }
 
