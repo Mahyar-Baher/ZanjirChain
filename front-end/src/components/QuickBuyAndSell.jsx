@@ -108,8 +108,9 @@ const QuickBuyAndSell = () => {
     setTether('');
   };
 
+  // فقط اعداد برای تومان
   const handleTomanChange = (e) => {
-    let value = e.target.value.replace(/,/g, '');
+    let value = e.target.value.replace(/[^0-9۰-۹]/g, '');
     value = toEnglishNumber(value);
     const enValue = parseFloat(value);
     setToman(formatNumber(value));
@@ -123,11 +124,16 @@ const QuickBuyAndSell = () => {
     }
   };
 
+  // فقط اعداد و یک نقطه برای تتر
   const handleTetherChange = (e) => {
-    let value = e.target.value.replace(/,/g, '');
+    let value = e.target.value.replace(/[^0-9۰-۹.]/g, '');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts[1]; // فقط اولین نقطه را نگه دار
+    }
     value = toEnglishNumber(value);
     const enValue = parseFloat(value);
-    setTether(formatNumber(value));
+    setTether(value);
     if (!isNaN(enValue)) {
       const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
       const finalValue = enValue - (enValue * profitCut);
@@ -149,7 +155,6 @@ const QuickBuyAndSell = () => {
     const ba_toman = parseFormattedNumber(toman);
     const ba_tether = parseFormattedNumber(tether);
 
-    // Validate inputs
     if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
       setSnackMessage('مقدار تومان باید بین ۱۴۵,۰۰۰ و ۲۵,۰۰۰,۰۰۰ باشد');
       setSnackOpen(true);
@@ -161,7 +166,6 @@ const QuickBuyAndSell = () => {
       return;
     }
 
-    // Check wallet balance
     if (isBuy && ba_toman > walletBalance.balance_toman) {
       setSnackMessage('موجودی تومان کافی نیست');
       setSnackOpen(true);
@@ -206,13 +210,7 @@ const QuickBuyAndSell = () => {
         throw new Error(response.data.message || 'خطا در انجام عملیات');
       }
     } catch (error) {
-      console.error('Error submitting order:', {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data,
-        status: error.response?.status,
-        isBuy: isBuy
-      });
+      console.error('Error submitting order:', error);
       const errorMessage = error.response?.data?.message || 
         (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
         (isBuy ? 'خطا در خرید تتر' : 'خطا در فروش تتر'));

@@ -109,7 +109,8 @@ const QuickBuyAndSell = () => {
   };
 
   const handleTomanChange = (e) => {
-    let value = e.target.value.replace(/,/g, '');
+    // فقط اعداد اجازه دارن
+    let value = e.target.value.replace(/[^0-9۰-۹]/g, '');
     value = toEnglishNumber(value);
     const enValue = parseFloat(value);
     setToman(formatNumber(value));
@@ -124,19 +125,27 @@ const QuickBuyAndSell = () => {
   };
 
   const handleTetherChange = (e) => {
-    let value = e.target.value.replace(/,/g, '');
+    // اعداد و فقط یک نقطه مجاز
+    let value = e.target.value.replace(/[^0-9۰-۹.]/g, '');
+    // اجازه نده چند تا نقطه باشه
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts[1]; // فقط اولین نقطه را نگه دار
+    }
+  
     value = toEnglishNumber(value);
     const enValue = parseFloat(value);
-    setTether(formatNumber(value));
+    setTether(value); // بدون فرمت کردن با کاما، چون اعشاریه
+  
     if (!isNaN(enValue)) {
       const profitCut = (PROFIT_FACTOR - 1) / (PROFIT_FACTOR + 1);
-      const finalValue = enValue - (enValue * profitCut);
-      const tomanAmount = finalValue * USDT_PRICE;
+      const tomanAmount = enValue * USDT_PRICE;
       setToman(formatNumber(Math.round(tomanAmount).toString()));
     } else {
       setToman('');
     }
   };
+  
 
   const handleSubmit = async () => {
     if (!token) {
