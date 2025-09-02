@@ -142,47 +142,7 @@ const Mainpage = () => {
         <BuySellHome />
         <TetherPriceHome />
         {/* هدر با عنوان جذاب + شعار متغیر */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <Box textAlign="center" mb={2} width='100vw'>
-            <Typography
-              component="h2"
-              variant="h4"
-              fontWeight="bold"
-              gutterBottom
-              sx={{
-                background: "linear-gradient(45deg, #1a652a 30%, #2e8b57 90%)",
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                display: {xs: 'none', md:"none", lg: 'inline-flex'},
-                gap: 1,
-              }}
-            >
-              تجربه هوشمند در معامله با{" "}
-              <Box
-                component="span"
-                sx={{
-                  background: "linear-gradient(45deg, #1a652a 30%, #2e8b57 90%)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                <TextType
-                  text={texthead}
-                  typingSpeed={75}
-                  pauseDuration={1500}
-                  showCursor={true}
-                  cursorCharacter="|"
-                />
-              </Box>
-            </Typography>
-          </Box>
-        </motion.div>
+
         {/* امکانات پلتفرم */}
         <Grid size={{sx:12, lg:10}}>
           <Typography variant="h4" textAlign="center" mb={4} fontWeight="bold" color="success">
