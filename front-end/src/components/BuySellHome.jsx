@@ -19,7 +19,7 @@ const BuySellHome = () => {
   const [equivalentAmount, setEquivalentAmount] = useState(0);
   const profitFactor = 1.04; // فرضاً 2٪ سود، می‌توانید از API بگیرید
 
-  // قیمت تتر از نوبیتکس
+  // قیمت ارز از نوبیتکس
   useEffect(() => {
     const fetchTetherPrice = async () => {
       try {
@@ -48,10 +48,10 @@ const BuySellHome = () => {
 
       // محاسبه مقدار نهایی برای کاربر
       if (unitType === "tether") {
-        // ورودی: تتر -> خروجی: تومان
+        // ورودی: ارز -> خروجی: تومان
         setEquivalentAmount(finalValue * tetherPrice);
       } else {
-        // ورودی: تومان -> خروجی: تتر
+        // ورودی: تومان -> خروجی: ارز
         setEquivalentAmount(finalValue / tetherPrice);
       }
     } else {
@@ -126,7 +126,7 @@ const BuySellHome = () => {
             }}
             onClick={() => setMode("buy")}
           >
-            خرید تتر
+            خرید ارز
           </Button>
         </Grid>
         <Grid size={{ xs: 5.5 }}>
@@ -144,7 +144,7 @@ const BuySellHome = () => {
             }}
             onClick={() => setMode("sell")}
           >
-            فروش تتر
+            فروش ارز
           </Button>
         </Grid>
       </Grid>
@@ -182,7 +182,7 @@ const BuySellHome = () => {
               "&.Mui-selected": { bgcolor: "#2C9F45", color: "#fff" },
             }}
           >
-            بر حسب تتر
+            بر حسب ارز
           </ToggleButton>
           <ToggleButton
             value="toman"
@@ -213,7 +213,7 @@ const BuySellHome = () => {
               InputProps={{
                 endAdornment: (
                   <Typography sx={{ color: "#fff", ml: 3 }}>
-                    {unitType === "tether" ? "تتر" : "تومان"}
+                    {unitType === "tether" ? "ارز" : "تومان"}
                   </Typography>
                 ),
               }}
@@ -237,7 +237,7 @@ const BuySellHome = () => {
               {formatEquivalentAmount(equivalentAmount, unitType === "tether" ? "toman" : "tether")}
             </Typography>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 900, color: "seashell" }}>
-              {unitType === "tether" ? "تومان" : "تتر"}
+              {unitType === "tether" ? "تومان" : "ارز"}
             </Typography>
           </Box>
 

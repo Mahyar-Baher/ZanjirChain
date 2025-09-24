@@ -19,7 +19,7 @@ const CryptoMethodTabs = ({ methods, method, setMethod }) => {
           bottom: 'unset',
         },
         '& .Mui-selected': { color: '#1a652a !important' },
-        '& .MuiTab-root': { fontSize: '12px', p: 0 },
+        '& .MuiTab-root': { fontSize: '22px', p: 0 },
         mb: 1,
       }}
     >

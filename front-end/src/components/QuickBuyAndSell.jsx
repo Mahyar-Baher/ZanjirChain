@@ -7,18 +7,25 @@ import {
   Stack,
   Snackbar,
   IconButton,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Grid,
+  Autocomplete
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import useAuthStore from '../context/authStore';
 import { Icon } from '@iconify/react';
+import  {SolanaIcon , EthereumIcon, TronIcon , UsdtIcon , UsdcIcon, EthIcon, WethIcon, DaiIcon, LinkIcon, UniIcon, SolIcon, RayIcon, SrmIcon, OrcaIcon, TrxIcon, BttIcon, SunIcon}  from '../IconsComp/iconscomp';
 
 const labelSx = {
   color: '#fff',
   backgroundColor: '#1a652a',
   p: 0.55,
-  width: 70,
+  width: 90,
   textAlign: 'center',
   marginTop: -0.45,
   borderRadius: '4px',
@@ -42,17 +49,92 @@ const parseFormattedNumber = (str) => {
 
 const QuickBuyAndSell = () => {
   const { wallet, fetchWalletBalance, token } = useAuthStore();
+
+   // لیست شبکه‌ها
+   const networksToselect = [
+    { label: "Ethereum", icon: <EthereumIcon /> },
+    { label: "Solana", icon: <SolanaIcon /> },
+    { label: "Tron", icon: <TronIcon /> },
+  ];
+
+  // لیست ارزها برای هر شبکه
+  const currencyByNetwork = {
+    "Ethereum": [
+      { label: "USDT", icon: <UsdtIcon /> },
+      { label: "USDC", icon: <UsdcIcon /> },
+      { label: "ETH", icon: <EthIcon /> },
+      { label: "WETH", icon: <WethIcon /> },
+      { label: "DAI", icon: <DaiIcon /> },
+      { label: "LINK", icon: <LinkIcon /> },
+      { label: "UNI", icon: <UniIcon /> },
+    ],
+    "Solana": [
+      { label: "USDT", icon: <UsdtIcon /> },
+      { label: "USDC", icon: <UsdcIcon /> },
+      { label: "SOL", icon: <SolIcon /> },
+      { label: "RAY", icon: <RayIcon /> },
+      { label: "SRM", icon: <SrmIcon /> },
+      { label: "ORCA", icon: <OrcaIcon /> },
+    ],
+    "Tron": [
+      { label: "USDT", icon: <UsdtIcon /> },
+      { label: "USDC", icon: <UsdcIcon /> },
+      { label: "TRX", icon: <TrxIcon /> },
+      { label: "BTT", icon: <BttIcon /> },
+      { label: "SUN", icon: <SunIcon /> },
+    ]
+  };
+
+  // State ها
   const [isReversed, setIsReversed] = useState(false);
   const [toman, setToman] = useState('');
   const [tether, setTether] = useState('');
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState("ETH");
+  const [selectedCurrencyIcon, setSelectedCurrencyIcon] = useState("ETH");
   const [walletBalance, setWalletBalance] = useState({
     balance_toman: 0,
-    balance_tether: 0
+    balance_tether: {}
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // State های جدید برای network و currency
+  const [selectednetwork, setSelectednetwork] = useState(networksToselect[0]);
+  const [selectedcurrency, setSelectedcurrency] = useState(null);
+  const [currencyToselect, setCurrencyToselect] = useState([]);
+  const [isCurrencySelected, setisCurrencySelected] = useState(false);
+  const [isDisable , setIsDisable] = useState(false)
+
+  // useEffect برای تغییر لیست ارزها وقتی شبکه عوض میشه
+  useEffect(() => {
+    if (selectednetwork) {
+      const newCurrencies = currencyByNetwork[selectednetwork.label] || [];
+      setCurrencyToselect(newCurrencies);
+      
+      // اگر ارز انتخاب شده در شبکه جدید وجود نداشته باشد، reset کن
+      if (selectedcurrency) {
+        const currencyExists = newCurrencies.find(currency => 
+          currency.label === selectedcurrency.label
+        );
+        if (!currencyExists) {
+          setSelectedcurrency(null);
+          setisCurrencySelected(false);
+        }
+      }
+    }
+  }, [selectednetwork]);
+
+  // تابع انتخاب ارز
+  const selectCurrencyHandler = (newValue) => {
+    setSelectedcurrency(newValue);
+    setisCurrencySelected(!!newValue);
+    if (newValue) {
+      setSelectedCurrency(newValue.label);
+      setSelectedCurrencyIcon(newValue.label);
+    }
+  };
 
   useEffect(() => {
     const loadWallet = async () => {
@@ -72,11 +154,15 @@ const QuickBuyAndSell = () => {
 
       if (wallet) {
         try {
-          const tomanBalance = parseFloat(wallet.totalToman || 0);
-          const tetherBalance = parseFloat(wallet.with_creadit_total_balance_formatted || 0);
-          if (isNaN(tomanBalance) || isNaN(tetherBalance)) {
-            throw new Error('مقادیر wallet نامعتبر هستند');
-          }
+          const tomanBalance = parseFloat(wallet.finalltotalintoman || 0);
+          const UserHaveThisAsset = Object.keys(wallet)
+          .filter(key => typeof wallet[key] === "object")
+          .reduce((acc, key) => {
+            acc[key] = wallet[key];
+            return acc;
+          }, {});
+          
+          const tetherBalance = (UserHaveThisAsset || 0);
           setWalletBalance({
             balance_toman: tomanBalance,
             balance_tether: tetherBalance
@@ -102,6 +188,16 @@ const QuickBuyAndSell = () => {
     loadWallet();
   }, [wallet, fetchWalletBalance]);
 
+  // تنظیم ارز پیش‌فرض وقتی شبکه بارگذاری شد
+  useEffect(() => {
+    if (currencyToselect.length > 0 && !selectedcurrency) {
+      setSelectedcurrency(currencyToselect[0]);
+      setisCurrencySelected(true);
+      setSelectedCurrency(currencyToselect[0].label);
+      setSelectedCurrencyIcon(currencyToselect[0].label);
+    }
+  }, [currencyToselect]);
+
   const handleSwap = () => {
     setIsReversed(prev => !prev);
     setToman('');
@@ -124,7 +220,7 @@ const QuickBuyAndSell = () => {
     }
   };
 
-  // فقط اعداد و یک نقطه برای تتر
+  // فقط اعداد و یک نقطه برای ارز
   const handleTetherChange = (e) => {
     let value = e.target.value.replace(/[^0-9۰-۹.]/g, '');
     const parts = value.split('.');
@@ -151,75 +247,92 @@ const QuickBuyAndSell = () => {
       return;
     }
 
+    if (!selectednetwork || !selectedcurrency) {
+      setSnackMessage('لطفاً شبکه و ارز را انتخاب کنید.');
+      setSnackOpen(true);
+      return;
+    }
+
     const isBuy = !isReversed;
     const ba_toman = parseFormattedNumber(toman);
     const ba_tether = parseFormattedNumber(tether);
 
-    if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
-      setSnackMessage('مقدار تومان باید بین ۱۴۵,۰۰۰ و ۲۵,۰۰۰,۰۰۰ باشد');
-      setSnackOpen(true);
-      return;
-    }
-    if (!isBuy && (ba_tether < 5 || ba_tether > 25000)) {
-      setSnackMessage('مقدار تتر باید بین ۵ و ۲۵,۰۰۰ باشد');
+    // if (isBuy && (ba_toman < 145000 || ba_toman > 25000000)) {
+    //   setSnackMessage('مقدار تومان باید بین ۱۴۵,۰۰۰ و ۲۵,۰۰۰,۰۰۰ باشد');
+    //   setSnackOpen(true);
+    //   return;
+    // }
+    // if (!isBuy && (ba_tether < 5 || ba_tether > 25000)) {
+    //   setSnackMessage('مقدار ارز باید بین ۵ و ۲۵,۰۰۰ باشد');
+    //   setSnackOpen(true);
+    //   return;
+    // }
+
+    // if (isBuy && ba_toman > walletBalance.balance_toman) {
+    //   setSnackMessage('موجودی تومان کافی نیست');
+    //   setSnackOpen(true);
+    //   return;
+    // }
+    
+    let relativeassetvalue = null
+    const totaluserhave = walletBalance.balance_tether?.[selectednetwork.label]?.[selectedCurrency]?.total;
+    if(tether > totaluserhave && totaluserhave !== undefined){
+      setSnackMessage('موجودی ارز کافی نیست');
       setSnackOpen(true);
       return;
     }
 
-    if (isBuy && ba_toman > walletBalance.balance_toman) {
-      setSnackMessage('موجودی تومان کافی نیست');
-      setSnackOpen(true);
-      return;
-    }
-    if (!isBuy && ba_tether > walletBalance.balance_tether) {
-      setSnackMessage('موجودی تتر کافی نیست');
-      setSnackOpen(true);
-      return;
-    }
 
     const data = {
       amount: isBuy ? ba_toman : ba_tether,
-      currency: 'USDT',
-      network: 'Ethereum',
+      currency: selectedcurrency.label,
+      network: selectednetwork.label,
       whatTOwhat: isBuy ? 0 : 1,
       ExchangeRate: USDT_PRICE,
-      automatic: true
+      automatic: true,
+      tether : tether,
+      toman : toman,
+      totaluserhave : totaluserhave,
     };
 
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          timeout: 30000
-        }
-      );
+    console.log(data , relativeassetvalue)
+    // try {
+    //   setLoading(true);
+    //   const response = await axios.post(
+    //     'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
+    //     data,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         'Content-Type': 'application/json'
+    //       },
+    //       timeout: 30000
+    //     }
+    //   );
 
-      if (response.data.status) {
-        await fetchWalletBalance();
-        setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
-        setSnackOpen(true);
-        setToman('');
-        setTether('');
-      } else {
-        throw new Error(response.data.message || 'خطا در انجام عملیات');
-      }
-    } catch (error) {
-      console.error('Error submitting order:', error);
-      const errorMessage = error.response?.data?.message || 
-        (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
-        (isBuy ? 'خطا در خرید تتر' : 'خطا در فروش تتر'));
-      setSnackMessage(errorMessage);
-      setSnackOpen(true);
-    } finally {
-      setLoading(false);
-    }
+    //   if (response.data.status) {
+    //     await fetchWalletBalance();
+    //     setSnackMessage(response.data.message || (isBuy ? 'خرید ارز با موفقیت انجام شد' : 'فروش ارز با موفقیت انجام شد'));
+    //     setSnackOpen(true);
+    //     setToman('');
+    //     setTether('');
+    //   } else {
+    //     throw new Error(response.data.message || 'خطا در انجام عملیات');
+    //   }
+    // } catch (error) {
+    //   console.error('Error submitting order:', error);
+    //   const errorMessage = error.response?.data?.message || 
+    //     (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
+    //     (isBuy ? 'خطا در خرید ارز' : 'خطا در فروش ارز'));
+    //   setSnackMessage(errorMessage);
+    //   setSnackOpen(true);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
+
+
+  
 
   const tomanField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 0 : 1} mb={isReversed ? 0 : 3}>
@@ -243,26 +356,126 @@ const QuickBuyAndSell = () => {
     </Box>
   );
 
+  const lablecu = (
+    <>
+      <Box display={"flex"} justifyContent={"space-around"} alignItems={"center"} mb={-1} color={"white"}>
+        <Box fontSize={"small"} >{selectednetwork ? selectednetwork.icon : ""}</Box>
+        <Box mb={0.4}>|</Box>
+        <Box fontSize={"small"} >{selectedcurrency ? selectedcurrency.icon : ""}</Box>
+      </Box>
+    </>
+  );
+
+  const lableselectnetwork = (<Box sx={{paddingX:"10px", backgroundColor:"white"}}>انتخاب شبکه</Box>);
+  const lableselectcurrency = (<Box sx={{paddingX:"10px", backgroundColor:"white"}}>انتخاب ارز</Box>);
+
   const tetherField = (
-    <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
-      <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {formatNumber(walletBalance.balance_tether)} تتر
-      </Typography>
-      <TextField
-        name="tetherQ"
-        type="text"
-        inputMode="numeric"
-        label="تتر"
-        value={tether}
-        onChange={handleTetherChange}
-        placeholder="مقدار بین 5 تا 25,000"
-        fullWidth
-        sx={{
-          '& .MuiInputLabel-root': labelSx,
-          '& .MuiInputLabel-shrink': { px: 0.75 }
-        }}
-      />
-    </Box>
+    <>
+      <Grid container spacing={1} sx={{width:"100%"}} mt={3}>
+        <Grid size={6}>
+          <Autocomplete
+            options={networksToselect}
+            getOptionLabel={(option) => option.label}
+            value={selectednetwork}
+            onChange={(event, newValue) => {
+              setSelectednetwork(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={lableselectnetwork}
+                fullWidth
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: selectednetwork ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 1 }}>
+                      {selectednetwork.icon}
+                    </Box>
+                  ) : null
+                }}
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box
+                component="li"
+                {...props}
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                {option.icon}
+                {option.label}
+              </Box>
+            )}
+            ListboxProps={{
+              sx: {
+                maxHeight: 200,
+                overflow: "auto",
+              }
+            }}
+          />
+        </Grid>
+        <Grid size={6}>
+          <Autocomplete
+            options={currencyToselect}
+            getOptionLabel={(option) => option.label}
+            value={selectedcurrency}
+            onChange={(event, newValue) => {
+              selectCurrencyHandler(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={lableselectcurrency}
+                fullWidth
+                disabled={!selectednetwork}
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: selectedcurrency ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 1 }}>
+                      {selectedcurrency.icon}
+                    </Box>
+                  ) : null
+                }}
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box
+                component="li"
+                {...props}
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                {option.icon}
+                {option.label}
+              </Box>
+            )}
+            ListboxProps={{
+              sx: {
+                maxHeight: 200,
+                overflow: "auto",
+              }
+            }}
+            noOptionsText="ابتدا شبکه را انتخاب کنید"
+          />
+        </Grid>
+      </Grid>
+      <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
+        <TextField
+          name="tetherQ"
+          type="text"
+          inputMode="numeric"
+          label={lablecu}
+          value={tether}
+          onChange={handleTetherChange}
+          placeholder="مقدار بین 5 تا 25,000"
+          fullWidth
+          disabled={isDisable}
+          
+          sx={{
+            '& .MuiInputLabel-root': labelSx,
+            '& .MuiInputLabel-shrink': { px: 0.75 }
+          }}
+        />
+      </Box>
+    </>
   );
 
   return (
@@ -287,6 +500,7 @@ const QuickBuyAndSell = () => {
               gap: 1
             }}
           >
+            
             {isReversed ? tetherField : tomanField}
 
             <Button
@@ -307,6 +521,7 @@ const QuickBuyAndSell = () => {
             >
               <Icon icon="mdi:exchange" className="icon" />
             </Button>
+
             {isReversed ? tomanField : tetherField}
           </Box>
 
@@ -322,7 +537,7 @@ const QuickBuyAndSell = () => {
               textAlign="center"
               color="text.secondary"
             >
-              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه می‌شود
+              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای ارز محاسبه می‌شود
             </Typography>
           </Stack>
 
@@ -340,9 +555,9 @@ const QuickBuyAndSell = () => {
               variant="contained"
               color={isReversed ? 'error' : 'success'}
               onClick={handleSubmit}
-              disabled={!toman || !tether || loading}
+              disabled={!toman || !tether || loading || !selectednetwork || !selectedcurrency}
             >
-              {isReversed ? 'فروش تتر' : 'خرید تتر'}
+              {isReversed ? 'فروش ارز' : 'خرید ارز'}
             </Button>
           </Box>
         </>

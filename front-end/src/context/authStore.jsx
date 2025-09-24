@@ -65,10 +65,9 @@ const useAuthStore = create(
 
         try {
           const response = await axios.post(
-            "https://amirrezaei2002x.shop/laravel/api/getCoinBalanceOnChains",
+            "https://amirrezaei2002x.shop/laravel/api/v2",
             {
-              currency: "USDT",
-              network: "Ethereum",
+
             },
             {
               headers: {
@@ -89,6 +88,41 @@ const useAuthStore = create(
           set({ wallet: null });
         }
       },
+
+
+      // fetchWalletBalance: async () => {
+      //   const token = get().token;
+      //   if (!token) {
+      //     console.warn("⚠️ توکن موجود نیست برای گرفتن موجودی ولت");
+      //     return;
+      //   }
+
+      //   try {
+      //     const response = await axios.post(
+      //       "https://amirrezaei2002x.shop/laravel/api/getCoinBalanceOnChains",
+      //       {
+      //         currency: "USDT",
+      //         network: "Ethereum",
+      //       },
+      //       {
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //           Authorization: `Bearer ${token}`,
+      //         },
+      //       }
+      //     );
+
+      //     if (response.data.success) {
+      //       set({ wallet: response.data });
+      //     } else {
+      //       console.warn("⚠️ پاسخ API موجودی ولت موفقیت‌آمیز نبود:", response.data.message);
+      //       set({ wallet: null });
+      //     }
+      //   } catch (err) {
+      //     console.error("🚨 خطای API موجودی ولت:", err?.response?.data || err.message);
+      //     set({ wallet: null });
+      //   }
+      // },
 
       login: async (phone, password, session) => {
         try {
@@ -154,3 +188,4 @@ const useAuthStore = create(
 );
 
 export default useAuthStore;
+

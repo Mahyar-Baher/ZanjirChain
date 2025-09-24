@@ -45,7 +45,7 @@ const TableBuyAndSell = () => {
       try {
         const orders = JSON.parse(localStorage.getItem('orders')) || [];
         
-        // فیلتر سفارشات خرید (تبدیل تومان به تتر)
+        // فیلتر سفارشات خرید (تبدیل تومان به ارز)
         const buyOrders = orders.filter(order => 
           order.transaction_type === 4 && order.currency === 'toman'
         ).map(order => ({
@@ -53,14 +53,14 @@ const TableBuyAndSell = () => {
           qty: order.ba_tether ? order.ba_tether.toLocaleString('fa-IR') : '0',
           rate: order.rate ? order.rate.toLocaleString('fa-IR') : '0',
           total: order.ba_toman ? order.ba_toman.toLocaleString('fa-IR') : '0',
-          type: 'تتر',
+          type: 'ارز',
           track: order.bank_tracking_code || 'ندارد',
           time: new Date(order.created_at).toLocaleDateString('fa-IR'),
           receipt: order.receipt_url || 'https://via.placeholder.com/300x200.png?text=No+Receipt',
           success: order.financial_status === 1,
         }));
         
-        // فیلتر سفارشات فروش (تبدیل تتر به تومان)
+        // فیلتر سفارشات فروش (تبدیل ارز به تومان)
         const sellOrders = orders.filter(order => 
           order.transaction_type === 5 && order.currency === 'tether'
         ).map(order => ({
@@ -68,7 +68,7 @@ const TableBuyAndSell = () => {
           qty: order.ba_toman ? order.ba_toman.toLocaleString('fa-IR') : '0',
           rate: order.rate ? order.rate.toLocaleString('fa-IR') : '0',
           total: order.ba_tether ? order.ba_tether.toLocaleString('fa-IR') : '0',
-          type: 'تتر',
+          type: 'ارز',
           track: order.bank_tracking_code || 'ندارد',
           time: new Date(order.created_at).toLocaleDateString('fa-IR'),
           receipt: order.receipt_url || 'https://via.placeholder.com/300x200.png?text=No+Receipt',
@@ -102,8 +102,8 @@ const TableBuyAndSell = () => {
 
   const isEmpty = rows.length === 0;
 
-  const rateHeader  = active === 'buy' ? 'نرخ (تومان)' : 'نرخ (تتر)';
-  const totalHeader = active === 'buy' ? 'مبلغ کل (تومان)' : 'مبلغ کل (تتر)';
+  const rateHeader  = active === 'buy' ? 'نرخ (تومان)' : 'نرخ (ارز)';
+  const totalHeader = active === 'buy' ? 'مبلغ کل (تومان)' : 'مبلغ کل (ارز)';
 
   return (
     <Box sx={{ mt: 2, width: '100%' }}>

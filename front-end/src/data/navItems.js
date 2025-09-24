@@ -9,12 +9,12 @@ const navItems = [
       { label: 'برداشت وجه', icon: 'fa6-solid:upload', path: '/outcome' },
     ]
   },
-  { label: 'معامله آسان تتر', icon: 'mdi:currency-usd', path: '/trade' },
+  { label: 'معامله آسان ارز', icon: 'mdi:currency-usd', path: '/trade' },
   {
     label: 'تاریخچه', icon: 'mdi:history', path: '/history',
     children: [
       { label: 'تاریخچه واریز و برداشت', icon: 'mdi:history', path: '/history' },
-      { label: 'تاریخچه معاملات تتر', icon: 'mdi:history', path: '/history_tether' },
+      { label: 'تاریخچه معاملات ارز', icon: 'mdi:history', path: '/history_tether' },
       { label: 'تاریخچه معاملات تومان', icon: 'mdi:history', path: '/history_toman' }
     ]
   },

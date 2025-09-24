@@ -6,19 +6,27 @@ import {
 } from '@mui/material';
 import { Icon } from '@iconify/react';
 
-const cryptoData = [
-  { name: 'Bitcoin', icon: 'token-branded:btc', symbol: 'btc', total: '0', change: '0%', tetherPrice: '0' },
-  { name: 'Ethereum', icon: 'token-branded:eth', symbol: 'eth', total: '1.5', change: '0%', tetherPrice: '0' },
-  { name: 'Toman', icon: 'tabler:currency-iranian-rial', symbol: 'rial', total: '0', change: '0%', tetherPrice: '0' },
-  { name: 'BNB', icon: 'token-branded:bnb', symbol: 'bnb', total: '0.8', change: '0%', tetherPrice: '0' },
-  { name: 'Solana', icon: 'token-branded:sol', symbol: 'sol', total: '0', change: '0%', tetherPrice: '0' },
-];
 
-const CryptoTable = () => {
+
+const CryptoTable = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [hideEmptyBalances, setHideEmptyBalances] = useState(false);
+  const [hideEmptyBalances, setHideEmptyBalances] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md')); // تشخیص موبایل
+
+  const assetuserhave = props.walletBalenc;
+
+  const cryptoData = Object.keys(assetuserhave).map(network => {
+    const tokenKeys = Object.keys(assetuserhave[network]);
+    return tokenKeys.map(token => ({
+      name: `${token} on ${network}`, 
+      icon: `token-branded:usdt`,  
+      symbol: token.toLowerCase(),
+      total: assetuserhave[network][token].total,
+      change: '0%',                // اگه داری، می‌تونی اینو هم از API بگیری
+      tetherPrice: 100
+    }));
+  }).flat(); 
 
   const filteredData = cryptoData.filter((crypto) => {
     const matchesSearch =
@@ -27,6 +35,9 @@ const CryptoTable = () => {
     const hasBalance = !hideEmptyBalances || parseFloat(crypto.total) > 0;
     return matchesSearch && hasBalance;
   });
+
+
+
 
   return (
     <Box sx={{ p: 0, width: '100%', backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}>
@@ -45,27 +56,16 @@ const CryptoTable = () => {
           لیست ارزها
         </Typography>
         <TextField
-          label="جستجو: نام رمزارز موردنظر را وارد کنید"
-          variant="standard"
+          variant='standard'
+          placeholder='جستجو'
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{
             borderRadius: '24px',
-            ml: { sm: 'auto' },
+            ml: "10px",
             width: { xs: '100%', md: 'fit-content' },
             '& .MuiInputBase-input': { fontSize: { xs: '14px', sm: '16px' } },
           }}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hideEmptyBalances}
-              onChange={(e) => setHideEmptyBalances(e.target.checked)}
-              sx={{ '& .MuiSvgIcon-root': { fontSize: { xs: '20px', sm: '24px' } } }}
-            />
-          }
-          label="مخفی کردن ارزهای بدون موجودی"
-          sx={{ mt: { xs: 2, sm: 0 }, fontSize: { xs: '14px', sm: '16px' } }}
         />
       </Box>
 

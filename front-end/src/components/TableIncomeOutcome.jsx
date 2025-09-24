@@ -46,7 +46,7 @@ const styleModal = {
 
 const columns = [
   { key: 'ba_toman', label: 'مبلغ (تومان)' },
-  { key: 'ba_tether', label: 'مقدار تتر' },
+  { key: 'ba_tether', label: 'مقدار ارز' },
   { key: 'created_at', label: 'تاریخ' },
   { key: 'payment_method', label: 'شیوه' },
   { key: 'custom_tracking_code', label: 'کد پیگیری' },
@@ -61,11 +61,11 @@ const toEnDigits = (s) => s.replace(/[۰-۹٠-٩]/g, (d) => numMap[d] || d);
 const toNumber = (s) => +toEnDigits(String(s)).replace(/[^0-9.-]/g, '');
 const transactionTypeMap = {
   0: 'واریز مستقیم تومان',
-  1: 'واریز مستقیم تتر',
+  1: 'واریز مستقیم ارز',
   2: 'برداشت مستقیم تومان',
-  3: 'برداشت مستقیم تتر',
-  4: 'تبدیل تومان به تتر',
-  5: 'تبدیل تتر به تومان',
+  3: 'برداشت مستقیم ارز',
+  4: 'تبدیل تومان به ارز',
+  5: 'تبدیل ارز به تومان',
 };
 
 const TableIncomeOutcome = () => {

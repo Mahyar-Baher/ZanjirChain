@@ -79,7 +79,7 @@ const TetherPriceHome = () => {
         fontWeight="bold"
         sx={{ mb: 2, color: (theme) => theme.palette.text.primary, fontSize: { xs: 30, sm: 35 } }}
       >
-        نرخ لحظه ای دلار/تتر
+        نرخ لحظه ای دلار/ارز
       </Typography>
 
       <Box
@@ -132,7 +132,7 @@ const TetherPriceHome = () => {
           "&:hover": { bgcolor: "#145a3a" },
         }}
       >
-        چطور سریعاً تتر بخریم؟
+        چطور سریعاً ارز بخریم؟
       </Button>
     </Grid>
   );

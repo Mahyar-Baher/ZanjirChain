@@ -42,9 +42,9 @@ const UserInLev = () => {
             <Typography noWrap display='flex' alignItems='center'>{labelLevel}<UserLevel level={level} size={28} /></Typography>
         </Box>
         <Box sx={{display: 'grid',gridTemplateColumns: 'auto 1fr auto',alignItems: 'center',gap: 1,width: '100%',}}>
-            <Typography noWrap sx={{fontWeight:'900',fontSize: '14px'}}>حجم معاملات (تتر ۳۰ روز گذشته)</Typography>
+            <Typography noWrap sx={{fontWeight:'900',fontSize: '14px'}}>حجم معاملات (ارز ۳۰ روز گذشته)</Typography>
             <Divider  sx={{    borderStyle: 'dashed',   borderColor: 'rgba(0,0,0,0.5)',   height: 2 }}/>
-            <Typography noWrap display='flex' alignItems='center'>{allTether} تتر</Typography>
+            <Typography noWrap display='flex' alignItems='center'>{allTether} ارز</Typography>
         </Box>
     </Box>
     )

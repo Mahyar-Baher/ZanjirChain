@@ -24,7 +24,7 @@ const Wallet = () => {
   const location = useLocation();
   const { wallet, fetchWalletBalance } = useAuthStore();
   const [toman, setToman] = useState(0);
-  const [tether, setTether] = useState(0);
+  const [tether, setTether] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const rate = 85000;
@@ -49,13 +49,10 @@ const Wallet = () => {
 
       if (wallet) {
         try {
-          const tomanBalance = parseFloat(wallet.totalToman || 0);
-          const tetherBalance = parseFloat(wallet.with_creadit_total_balance_formatted || 0);
-          if (isNaN(tomanBalance) || isNaN(tetherBalance)) {
-            throw new Error('مقادیر wallet نامعتبر هستند');
-          }
+          const tomanBalance = parseFloat(wallet.finalltotalintoman || 0);
+          
           setToman(tomanBalance);
-          setTether(tetherBalance);
+          setTether(wallet.finalltotalindollar);
         } catch (error) {
           console.error('خطا در پردازش داده‌های ولت:', error);
           setToman(0);
@@ -288,7 +285,7 @@ const Wallet = () => {
               {/* جدول کریپتو */}
               <Grid item size={{ xs: 12, sm: 12, md: 12, lg: 12 }} sx={{ pl: 0, mt: 3 }}>
                 <Item sx={{ height: '100%', backgroundColor: 'transparent', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
-                  <CryptoTable />
+                  <CryptoTable walletBalenc={wallet}/>
                 </Item>
               </Grid>
             </Grid>

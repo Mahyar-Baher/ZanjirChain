@@ -55,6 +55,7 @@ const QuickBuyAndSell = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    
     const loadWallet = async () => {
       setLoading(true);
       setError(null);
@@ -165,7 +166,7 @@ const QuickBuyAndSell = () => {
       return;
     }
     if (!isBuy && (ba_tether < 5 || ba_tether > 25000)) {
-      setSnackMessage('مقدار تتر باید بین ۵ و ۲۵,۰۰۰ باشد');
+      setSnackMessage('مقدار ارز باید بین ۵ و ۲۵,۰۰۰ باشد');
       setSnackOpen(true);
       return;
     }
@@ -177,7 +178,7 @@ const QuickBuyAndSell = () => {
       return;
     }
     if (!isBuy && ba_tether > walletBalance.balance_tether) {
-      setSnackMessage('موجودی تتر کافی نیست');
+      setSnackMessage('موجودی ارز کافی نیست');
       setSnackOpen(true);
       return;
     }
@@ -207,7 +208,7 @@ const QuickBuyAndSell = () => {
 
       if (response.data.status) {
         await fetchWalletBalance();
-        setSnackMessage(response.data.message || (isBuy ? 'خرید تتر با موفقیت انجام شد' : 'فروش تتر با موفقیت انجام شد'));
+        setSnackMessage(response.data.message || (isBuy ? 'خرید ارز با موفقیت انجام شد' : 'فروش ارز با موفقیت انجام شد'));
         setSnackOpen(true);
         setToman('');
         setTether('');
@@ -224,7 +225,7 @@ const QuickBuyAndSell = () => {
       });
       const errorMessage = error.response?.data?.message || 
         (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
-        (isBuy ? 'خطا در خرید تتر' : 'خطا در فروش تتر'));
+        (isBuy ? 'خطا در خرید ارز' : 'خطا در فروش ارز'));
       setSnackMessage(errorMessage);
       setSnackOpen(true);
     } finally {
@@ -257,13 +258,13 @@ const QuickBuyAndSell = () => {
   const tetherField = (
     <Box width="100%" textAlign="end" mt={isReversed ? 1 : 0} mb={isReversed ? 3 : 0}>
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
-        موجودی: {formatNumber(walletBalance.balance_tether)} تتر
+        موجودی: {formatNumber(walletBalance.balance_tether)} ارز
       </Typography>
       <TextField
         name="tetherQ"
         type="text"
         inputMode="numeric"
-        label="تتر"
+        label="ارز"
         value={tether}
         onChange={handleTetherChange}
         placeholder="مقدار بین 5 تا 25,000"
@@ -333,7 +334,7 @@ const QuickBuyAndSell = () => {
               textAlign="center"
               color="text.secondary"
             >
-              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای تتر محاسبه می‌شود
+              مقدار دقیق دریافتی با توجه به نرخ لحظه‌ای ارز محاسبه می‌شود
             </Typography>
           </Stack>
 
@@ -353,7 +354,7 @@ const QuickBuyAndSell = () => {
               onClick={handleSubmit}
               disabled={!toman || !tether || loading}
             >
-              {isReversed ? 'فروش تتر' : 'خرید تتر'}
+              {isReversed ? 'فروش ارز' : 'خرید ارز'}
             </Button>
           </Box>
         </>

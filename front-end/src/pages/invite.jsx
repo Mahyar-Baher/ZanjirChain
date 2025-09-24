@@ -40,8 +40,8 @@ const Invite = () => {
   };
 
   const benefits = [
-    { icon: 'mdi:gift', title: '۱۰ تتر جایزه', description: 'برای هر دوستی که ثبت‌نام کند' },
-    { icon: 'mdi:currency-usd', title: '۵ تتر هدیه', description: 'برای دوست شما هنگام اولین معامله' },
+    { icon: 'mdi:gift', title: '۱۰ ارز جایزه', description: 'برای هر دوستی که ثبت‌نام کند' },
+    { icon: 'mdi:currency-usd', title: '۵ ارز هدیه', description: 'برای دوست شما هنگام اولین معامله' },
     { icon: 'mdi:rocket', title: 'دسترسی ویژه', description: 'به امکانات پریمیوم پلتفرم' },
   ];
 
@@ -75,14 +75,14 @@ const Invite = () => {
                 color="text.primary"
                 sx={{ mb: 3 }}
               >
-                <Box component="span" color="#1a652a">دعوت دوستان</Box> و کسب تتر رایگان!
+                <Box component="span" color="#1a652a">دعوت دوستان</Box> و کسب ارز رایگان!
               </Typography>
               <Typography
                 variant={isMobile ? "body1" : "h6"}
                 color="text.secondary"
                 sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}
               >
-                با ورود به حساب کاربری خود، می‌توانید دوستانتان را دعوت کنید و به ازای هر دعوت موفق ۱۰ تتر پاداش دریافت کنید. دوست شما نیز ۵ تتر هدیه می‌گیرد!
+                با ورود به حساب کاربری خود، می‌توانید دوستانتان را دعوت کنید و به ازای هر دعوت موفق ۱۰ ارز پاداش دریافت کنید. دوست شما نیز ۵ ارز هدیه می‌گیرد!
               </Typography>
               <Box sx={{
                 display: 'flex',
@@ -149,14 +149,14 @@ const Invite = () => {
                 color="text.primary"
                 sx={{ mb: 3, textAlign: { xs: 'center', md: 'left' } }}
               >
-                <Box component="span" color="#1a652a">دوستان خود را دعوت کنید</Box> و تتر پاداش بگیرید!
+                <Box component="span" color="#1a652a">دوستان خود را دعوت کنید</Box> و ارز پاداش بگیرید!
               </Typography>
               <Typography 
                 variant={isMobile ? "body1" : "h6"} 
                 color="text.secondary" 
                 sx={{ mb: 4, textAlign: { xs: 'center', md: 'left' } }}
               >
-                با دعوت هر دوست و اولین معامله او، ۱۰ تتر پاداش دریافت کنید و دوست شما نیز ۵ تتر هدیه بگیرد
+                با دعوت هر دوست و اولین معامله او، ۱۰ ارز پاداش دریافت کنید و دوست شما نیز ۵ ارز هدیه بگیرد
               </Typography>
               
               <Box sx={{ 
@@ -239,7 +239,7 @@ const Invite = () => {
                   fontWeight: 'bold',
                   boxShadow: theme.shadows[5],
                 }}>
-                  پاداش شما: ۱۵ تتر
+                  پاداش شما: ۱۵ ارز
                 </Box>
                 
                 <Box sx={{ 
@@ -317,7 +317,7 @@ const Invite = () => {
                       variant="body1" 
                       color="text.secondary"
                     >
-                      تتر جایزه
+                      ارز جایزه
                     </Typography>
                   </Box>
                   <Box>
@@ -631,7 +631,7 @@ const Invite = () => {
                             fontWeight="bold" 
                             sx={{ ml: 1, color: 'white' }}
                           >
-                            {friend.reward} تتر جایزه
+                            {friend.reward} ارز جایزه
                           </Typography>
                         </Box>
                       </Box>
@@ -686,7 +686,7 @@ const Invite = () => {
             mb={6} 
             sx={{ maxWidth: { xs: '100%', md: 700 }, mx: 'auto' }}
           >
-            با هر دعوت موفق، ۱۰ تتر پاداش نقدی دریافت کنید و دوست شما نیز ۵ تتر هدیه بگیرد
+            با هر دعوت موفق، ۱۰ ارز پاداش نقدی دریافت کنید و دوست شما نیز ۵ ارز هدیه بگیرد
           </Typography>
           
           <motion.div whileHover={{ scale: 1.05 }}>

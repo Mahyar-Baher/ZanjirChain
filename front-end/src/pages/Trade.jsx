@@ -10,6 +10,7 @@ import navItems from '../data/navItems';
 import EasyBuyAndSell from '../components/EasyBuyAndSell';
 import TetherChartDash from '../components/TetherChartDash';
 import TableBuyAndSell from '../components/TableBuyAndSell';
+import QuickBuyAndSell from '../components/QuickBuyAndSell';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -36,13 +37,13 @@ const Trade = () => {
           <Grid container spacing={{ xs: 1, md: 2 }} sx={{ justifyContent: { xs: 'flex-end', md: 'flex-start' }, alignItems: { xs: 'flex-center', md: 'flex-start' } }} >
             <Grid item size={{xs: 12,sm: 12, md: 12, lg:12}} sx={{pr:{lg:2}}}>
               <Box sx={{display: 'grid',gridTemplateColumns: 'auto 1fr auto',alignItems: 'center',gap: 1,width: '100%',py:2}}>
-                <Typography wrap sx={{fontWeight: '900'}}>معامله آسان تتر</Typography>
+                <Typography wrap sx={{fontWeight: '900'}}>معامله آسان ارز</Typography>
               </Box>
             </Grid>
             <Grid item size={{xs: 12,sm:12,md:12 ,lg:8}} sx={{ height:{xs:'fit-content', md:'fit-content',lg: '100%'}}}>
               <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' ,p:0}}>
                 <Box sx={{py:1,px:3 }} >
-                  <EasyBuyAndSell/>
+                  <QuickBuyAndSell/>
                 </Box>
               </Item>
             </Grid>

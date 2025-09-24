@@ -19,22 +19,22 @@ const BalanceDisplay = ({ balanceToman, balanceTether }) => {
     >
       <Typography
         variant={isMobile ? 'body2' : 'body1'}
-        sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}
+        sx={{ fontSize: { xs: '0.85rem', sm: '0.85rem' } }}
       >
-        موجودی تومانی: {isNaN(balanceToman) ? '۰' : balanceToman.toLocaleString('en-US')} تومان
+        موجودی تومانی: {isNaN(balanceToman) ? '۰' : balanceToman.toLocaleString("fa-IR")} تومان
       </Typography>
       <Typography
         variant={isMobile ? 'body2' : 'body1'}
-        sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}
+        sx={{ fontSize: { xs: '0.85rem', sm: '0.85rem' } }}
       >
-        موجودی تتری:{' '}
+        موجودی ارزی:{' '}
         {isNaN(balanceTether)
           ? '۰'
           : balanceTether.toLocaleString('en-US', {
               minimumFractionDigits: 0,
               maximumFractionDigits: 6,
             })}{' '}
-        تتر
+        دلار
       </Typography>
     </Box>
   );

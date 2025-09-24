@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 
 const DualProgress = ({ tether = 0, toman = 0, rate = 100000, size = 150 }) => {
-  // محاسبه تتر و تومان معادل تتر
+  // محاسبه ارز و تومان معادل ارز
   let tetherValue = tether;
   let tomanInTether = toman / rate;
 
@@ -57,7 +57,7 @@ const DualProgress = ({ tether = 0, toman = 0, rate = 100000, size = 150 }) => {
           sx={{ fontWeight: 600, lineHeight: 1.4, textWrap: 'wrap', fontSize: 12 }}
           color="#26A17B"
         >
-          {`$${tether} تتر`}
+          {`$${tether} ارز`}
         </Typography>
       </Box>
     </Box>

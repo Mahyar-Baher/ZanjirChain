@@ -234,7 +234,7 @@ function Header() {
       style={{
         position: 'absolute',
         top: 'calc(100% + 8px)',
-        right: 0,
+        right: "-32px",
         backgroundColor: '#1a652a',
         borderRadius: 8,
         minWidth: 150,
@@ -246,7 +246,7 @@ function Header() {
         <Link
           key={label}
           to={to}
-          style={{ textDecoration: 'none', color: 'inherit' }}
+          style={{ textDecoration: 'none', color: 'inherit'}}
           onClick={handleClose}
         >
           <Box
@@ -255,6 +255,7 @@ function Header() {
               px: 2,
               py: 1.5,
               cursor: 'pointer',
+              
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
               },

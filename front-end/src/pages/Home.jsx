@@ -30,7 +30,7 @@ const features = [
   },
   {
     title: 'خدمات ما',
-    description: 'مشاهده سرویس‌های ویژه مانند تتر سریع، واریز آنی و کیف پول اختصاصی.',
+    description: 'مشاهده سرویس‌های ویژه مانند ارز سریع، واریز آنی و کیف پول اختصاصی.',
     icon: 'solar:wallet-2-bold-duotone',
     link: '/services',
     color: '#1a652a'
@@ -44,7 +44,7 @@ const features = [
   },
   {
     title: 'دعوت دوستان',
-    description: 'با معرفی دوستان، تتر جایزه بگیرید و درآمدتان را افزایش دهید.',
+    description: 'با معرفی دوستان، ارز جایزه بگیرید و درآمدتان را افزایش دهید.',
     icon: 'ic:round-share',
     link: '/invite',
     color: '#1a652a'

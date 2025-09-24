@@ -49,7 +49,7 @@ const HistoryLastOutcome = () => {
     ? orders.map((order) => ({
         id: order.id || order.transaction_id || Math.random(), // Fallback for ID
         amount: typeof order.amount === 'number' ? `${order.amount.toLocaleString('fa-IR')} تومان` : order.amount || '0 تومان',
-        type: order.type || order.currency || 'تتر',
+        type: order.type || order.currency || 'ارز',
         method: order.method || order.payment_method || 'نامشخص',
         trackingCode: order.tracking_code || order.trackingCode || 'نامشخص',
         date: order.date || order.created_at || 'نامشخص',
