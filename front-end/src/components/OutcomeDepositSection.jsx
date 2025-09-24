@@ -36,8 +36,8 @@ const WithdrawalSection = () => {
 
       if (wallet) {
         try {
-          const tomanBalance = parseFloat(wallet.totalToman || 0);
-          const tetherBalance = parseFloat(wallet.with_creadit_total_balance_formatted || 0);
+          const tomanBalance = parseFloat(wallet.finalltotalintoman || 0);
+          const tetherBalance = parseFloat(wallet.finalltotalindollar|| 0);
           if (isNaN(tomanBalance) || isNaN(tetherBalance)) {
             throw new Error('مقادیر wallet نامعتبر هستند');
           }
