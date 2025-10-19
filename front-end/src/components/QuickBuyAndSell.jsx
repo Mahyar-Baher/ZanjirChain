@@ -276,11 +276,11 @@ const QuickBuyAndSell = () => {
     
     let relativeassetvalue = null
     const totaluserhave = walletBalance.balance_tether?.[selectednetwork.label]?.[selectedCurrency]?.total;
-    if(tether > totaluserhave && totaluserhave !== undefined){
-      setSnackMessage('موجودی ارز کافی نیست');
-      setSnackOpen(true);
-      return;
-    }
+    // if(tether > totaluserhave && totaluserhave !== undefined){
+    //   setSnackMessage('موجودی ارز کافی نیست');
+    //   setSnackOpen(true);
+    //   return;
+    // }
 
 
     const data = {
@@ -296,39 +296,39 @@ const QuickBuyAndSell = () => {
     };
 
     console.log(data , relativeassetvalue)
-    // try {
-    //   setLoading(true);
-    //   const response = await axios.post(
-    //     'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
-    //     data,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'application/json'
-    //       },
-    //       timeout: 30000
-    //     }
-    //   );
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        'https://pump-ex.com/laravel/api/TomanToCoin',
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 30000
+        }
+      );
 
-    //   if (response.data.status) {
-    //     await fetchWalletBalance();
-    //     setSnackMessage(response.data.message || (isBuy ? 'خرید ارز با موفقیت انجام شد' : 'فروش ارز با موفقیت انجام شد'));
-    //     setSnackOpen(true);
-    //     setToman('');
-    //     setTether('');
-    //   } else {
-    //     throw new Error(response.data.message || 'خطا در انجام عملیات');
-    //   }
-    // } catch (error) {
-    //   console.error('Error submitting order:', error);
-    //   const errorMessage = error.response?.data?.message || 
-    //     (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
-    //     (isBuy ? 'خطا در خرید ارز' : 'خطا در فروش ارز'));
-    //   setSnackMessage(errorMessage);
-    //   setSnackOpen(true);
-    // } finally {
-    //   setLoading(false);
-    // }
+      if (response.data.status) {
+        await fetchWalletBalance();
+        setSnackMessage(response.data.message || (isBuy ? 'خرید ارز با موفقیت انجام شد' : 'فروش ارز با موفقیت انجام شد'));
+        setSnackOpen(true);
+        setToman('');
+        setTether('');
+      } else {
+        throw new Error(response.data.message || 'خطا در انجام عملیات');
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      const errorMessage = error.response?.data?.message || 
+        (error.code === 'ECONNABORTED' ? 'اتصال به سرور برقرار نشد' : 
+        (isBuy ? 'خطا در خرید ارز' : 'خطا در فروش ارز'));
+      setSnackMessage(errorMessage);
+      setSnackOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
 

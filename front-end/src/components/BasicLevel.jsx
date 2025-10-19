@@ -178,7 +178,7 @@ const BasicLevel = ({ onNext }) => {
 
     try {
       const response = await axios.put(
-        'https://amirrezaei2002x.shop/laravel/api/kyc-level-One',
+        'https://pump-ex.com/laravel/api/kyc-level-One',
         payload,
         {
           headers: {
@@ -209,7 +209,7 @@ const BasicLevel = ({ onNext }) => {
       const confirmPayload = { status: true };
 
       const response = await axios.put(
-        'https://amirrezaei2002x.shop/laravel/api/kyc-level-One-Confirm',
+        'https://pump-ex.com/laravel/api/kyc-level-One-Confirm',
         confirmPayload,
         {
           headers: {

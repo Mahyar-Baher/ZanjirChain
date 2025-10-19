@@ -49,7 +49,7 @@ const MarketSettings = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`https://amirrezaei2002x.shop/laravel/api/users/${userId}`, {
+        const response = await axios.get(`https://pump-ex.com/laravel/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const MarketSettings = () => {
     setSaving(true);
     try {
       const response = await axios.post(
-        `https://amirrezaei2002x.shop/laravel/api/users/${userId}/settings`,
+        `https://pump-ex.com/laravel/api/users/${userId}/settings`,
         settings,
         {
           headers: {

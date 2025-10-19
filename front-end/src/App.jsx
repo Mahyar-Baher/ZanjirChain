@@ -32,7 +32,6 @@ const Services = lazy(() => import('./pages/Services'));
 const GoogleAuthenticator = lazy(() => import('./pages/GoogleAuthenticator'));
 const IdentityVerification = lazy(() => import('./pages/IdentityVerification'));
 const Mainpage = lazy(() => import('./pages/mainpage'));
-
 function App() {
   return (
     <CustomThemeProvider>

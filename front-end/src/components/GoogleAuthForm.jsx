@@ -38,7 +38,7 @@ const GoogleAuthForm = ({ phone, onSuccess }) => {
 
     try {
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/verify2FACodeGoogle',
+        'https://pump-ex.com/laravel/api/verify2FACodeGoogle',
         { 
           mobile_number: phone,
           uesrEnterCode: code.trim(),

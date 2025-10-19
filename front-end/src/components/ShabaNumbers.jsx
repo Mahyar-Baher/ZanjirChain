@@ -59,7 +59,7 @@ const ShabaNumbers = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`https://amirrezaei2002x.shop/laravel/api/users/${userId}`, {
+        const response = await axios.get(`https://pump-ex.com/laravel/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const ShabaNumbers = () => {
   const updateShebas = async (updatedShebas, message) => {
     try {
       await axios.put(
-        `https://amirrezaei2002x.shop/laravel/api/users/${userId}`,
+        `https://pump-ex.com/laravel/api/users/${userId}`,
         { sheba_number: updatedShebas },
         {
           headers: {

@@ -10,6 +10,8 @@ import 'regenerator-runtime/runtime';
 import { CustomThemeProvider } from './theme/ThemeContext.jsx';
 import { AuthProvider } from './context/AuthContext';
 
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CustomThemeProvider>

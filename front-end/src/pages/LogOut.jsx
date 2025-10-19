@@ -19,7 +19,7 @@ const LogOut = () => {
         }
 
         const response = await axios.post(
-          'https://amirrezaei2002x.shop/laravel/api/logout-user',
+          'https://pump-ex.com/laravel/api/logout-user',
           {},
           {
             headers: {

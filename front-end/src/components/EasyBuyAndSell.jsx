@@ -195,7 +195,7 @@ const QuickBuyAndSell = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/TomanToCoin',
+        'https://pump-ex.com/laravel/api/TomanToCoin',
         data,
         {
           headers: {

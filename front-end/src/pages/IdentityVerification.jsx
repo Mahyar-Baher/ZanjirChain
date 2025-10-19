@@ -50,7 +50,7 @@ const IdentityVerification = (authToken) => {
     switch (activeStep) {
       case 0: return <BasicLevel onNext={handleStepComplete} />;
       case 1: return <IntermediateLevel onNext={handleStepComplete} />;
-      case 2: return <AdvancedLevel onComplete={handleStepComplete} token={authToken} uploadUrl="https://amirrezaei2002x.shop/laravel/api/kyc-level-Advanced"/>;
+      case 2: return <AdvancedLevel onComplete={handleStepComplete} token={authToken} uploadUrl="https://pump-ex.com/laravel/api/kyc-level-Advanced"/>;
       case 3: return <CompletedLevel />;
       default: return null;
     }

@@ -145,7 +145,7 @@ function Signup() {
     };
 
     try {
-      const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/add-user', payload, {
+      const response = await axios.post('https://pump-ex.com/laravel/api/add-user', payload, {
         headers: {
           Accept: 'application/json',
         },
@@ -158,7 +158,7 @@ function Signup() {
 
         try {
           const verifyRes = await axios.post(
-            'https://amirrezaei2002x.shop/laravel/api/verifyPasscodeToken',
+            'https://pump-ex.com/laravel/api/verifyPasscodeToken',
             { mobile_number: mobileNumber.trim() },
             {
               headers: { Authorization: `Bearer ${initialToken}` }

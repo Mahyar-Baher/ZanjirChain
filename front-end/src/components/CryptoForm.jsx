@@ -16,9 +16,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton
+  IconButton,
+  Modal
 } from '@mui/material';
 import { ArrowBack, CheckCircle, AccountBalanceWallet } from '@mui/icons-material';
+import SaveIcon from '@mui/icons-material/Save';
 import TransactionSummary from './TransactionSummary';
 import SnackBarNotification from './SnackBarNotification';
 import useAuthStore from '../context/authStore';
@@ -99,6 +101,7 @@ const CurrencyIcon = ({ currency, size = 20 }) => {
 };
 
 const CryptoForm = () => {
+  const [open, setOpen] = React.useState(false);
   const { wallet, token, fetchWalletBalance, user, setUser } = useAuthStore();
   const [cryptoAddress, setCryptoAddress] = useState('');
   const [cryptoAmount, setCryptoAmount] = useState('');
@@ -123,6 +126,9 @@ const CryptoForm = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // لیست شبکه‌ها
   const networksToSelect = [
@@ -301,6 +307,7 @@ const CryptoForm = () => {
   };
 
   const handleSubmit = async () => {
+    
     setError(null);
     setApiMessage(null);
 
@@ -323,22 +330,22 @@ const CryptoForm = () => {
         return;
     }
 
-    let amountcheck = wallet[finalSelection.network.label][finalSelection.currency.label]["total"]
-    if (parsedTether > amountcheck) {
-      setError(`موجودی کافی نیست. موجودی: ${amountcheck.toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 6,
-      })} ${finalSelection.currency.label}`);
-      setSnack(true);
-      return;
-    }
+    // let amountcheck = wallet[finalSelection.network.label][finalSelection.currency.label]["total"]
+    // if (parsedTether > amountcheck) {
+    //   setError(`موجودی کافی نیست. موجودی: ${amountcheck.toLocaleString('en-US', {
+    //     minimumFractionDigits: 0,
+    //     maximumFractionDigits: 6,
+    //   })} ${finalSelection.currency.label}`);
+    //   setSnack(true);
+    //   return;
+    // }
 
     if (parsedTether <= 0) {
       setError('مقدار برداشت باید بزرگتر از صفر باشد.');
       setSnack(true);
       return;
     }
-
+    setOpen(true)
     const data = {
       toaddress: cryptoAddress,
       network: finalSelection.network.label,
@@ -350,13 +357,14 @@ const CryptoForm = () => {
     try {
       setSubmitting(true);
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/sendcoinapi',
+        'https://pump-ex.com/laravel/api/sendcoinapi',
         data,
         {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
+          timeout: 300000,
         }
       );
 
@@ -383,6 +391,8 @@ const CryptoForm = () => {
       setSnack(true);
     }
   };
+
+  const handeltosend = async () => {}
 
   if (loading) {
     return (
@@ -667,6 +677,34 @@ const CryptoForm = () => {
         onClose={() => setSnack(false)}
         message={error || apiMessage}
       />
+
+
+      
+      <Modal
+        open={open}
+        onClose={handleClose}
+        >
+          <Box
+           sx={{
+            backgroundColor:"white"
+            ,width:"50%"
+            ,height:"300px"
+            ,borderRadius:"10px"
+            ,position:"absolute"
+            ,top:"50%"
+            ,left:"50%"
+            ,transform:"translate(-50%,-50%)"
+            ,color:"black"
+            ,padding:"30px"
+            }}>
+              
+              <Box>{submitting ? <Box sx={{color:"black !important",position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)" }} display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>  <Button  color='primary' variant='standard' loading></Button> <Box pt={1}>درحال ثبت</Box> <Box pt={1}>انتقال ممکن است یک دقیقه طول بکشد</Box> <Box pt={1} color={"gray"}>پس لطفا پنیک نکنید (:</Box>  </Box>: ""}</Box>
+              <Box p={1} sx={{color:"black !important",position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)" }} textAlign={"center"}> {error || apiMessage} </Box>
+              <Box textAlign={"center"} sx={{position:"absolute", bottom:"0px", left:"50%", transform:"translate(-50%,-50%)"  }}>
+                  <Button variant='outlined' onClick={submitting ? null : handleClose} color='black' >بستن</Button>
+              </Box>
+            </Box>
+        </Modal>
     </Box>
   );
 };

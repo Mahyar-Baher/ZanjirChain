@@ -61,7 +61,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
       setQrLoading(true);
       try {
         const res = await axios.post(
-          'https://amirrezaei2002x.shop/laravel/api/geturlofqrcode',
+          'https://pump-ex.com/laravel/api/geturlofqrcode',
           { mobile_number: phone, user_id: userId },
           { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` } }
         );
@@ -115,7 +115,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
       };
 
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/verify2FACodeGoogle',
+        'https://pump-ex.com/laravel/api/verify2FACodeGoogle',
         payload,
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -136,7 +136,7 @@ const GoogleAuthenticatorFirst = ({ phone, token: propToken }) => {
         const tokenForActive = newToken || authToken || null;
 
         const statusResponse = await axios.post(
-          'https://amirrezaei2002x.shop/laravel/api/activegoogle2af',
+          'https://pump-ex.com/laravel/api/activegoogle2af',
           activePayload,
           {
             headers: {

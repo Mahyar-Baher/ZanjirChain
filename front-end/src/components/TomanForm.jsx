@@ -115,7 +115,7 @@ const TomanForm = ({ balanceToman, exchangeRate = 1 }) => { // exchangeRate به
 
     try {
       setLoading(true);
-      const response = await axios.post('https://amirrezaei2002x.shop/laravel/api/orders', data, {
+      const response = await axios.post('https://pump-ex.com/laravel/api/orders', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

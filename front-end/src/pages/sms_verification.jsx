@@ -95,7 +95,7 @@ const Sms_verification = () => {
     setSending(true);
     try {
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/create-code',
+        'https://pump-ex.com/laravel/api/create-code',
         { mobile_number: phone },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -122,12 +122,12 @@ const Sms_verification = () => {
     setLoading(true);
 
     try {
-      await axios.get('https://amirrezaei2002x.shop/laravel/sanctum/csrf-cookie', {
+      await axios.get('https://pump-ex.com/laravel/sanctum/csrf-cookie', {
         withCredentials: true,
       });
 
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/verify-code',
+        'https://pump-ex.com/laravel/api/verify-code',
         {
           mobile_number: phone.trim(),
           code: code.trim(),
@@ -152,7 +152,7 @@ const Sms_verification = () => {
           if (user_exist) {
             const session = await parseUserAgent();
             axios
-              .post('https://amirrezaei2002x.shop/laravel/api/verifyPasscodeToken', {
+              .post('https://pump-ex.com/laravel/api/verifyPasscodeToken', {
                 mobile_number: phone.trim(),
                 code: code.trim(),
           active_sessions: [session],

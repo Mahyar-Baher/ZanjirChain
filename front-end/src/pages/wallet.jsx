@@ -170,21 +170,21 @@ const Wallet = () => {
                         bgcolor: isActivePath('/trade') ? '#015d02' : undefined,
                       }}
                     >
-                      تبدیل به تتر
+                      تبدیل به ارز
                     </Button>
                   </Box>
                 </Item>
               </Grid>
 
-              {/* بخش تتر */}
+              {/* بخش ارزی */}
               <Grid item size={{ xs: 12, sm: 6, md: 6, lg: 4 }} sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}>
                 <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 0, borderRadius:'0px 0px 20px 20px' }} className='bg-img-hexed'>
                   <Box sx={{ p: 2, pb: 0 }}>
                     <Typography variant="h6" fontWeight={600} textAlign="right">
-                      تتر
+                      ارز
                     </Typography>
                     <Typography mt={1} textAlign="left">
-                      {roundedTether.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 3 })} تتر
+                      {roundedTether.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 3 })} ارز
                     </Typography>
                     <Typography variant="body2" mt={1} color="text.secondary" textAlign="left">
                       موجودی در دسترس: {roundedTether.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 3 })}

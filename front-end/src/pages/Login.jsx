@@ -48,7 +48,7 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(
-        'https://amirrezaei2002x.shop/laravel/api/check-phone',
+        'https://pump-ex.com/laravel/api/check-phone',
         { mobile_number: trimmedPhone },
         { headers: { 'Content-Type': 'application/json' } }
       );

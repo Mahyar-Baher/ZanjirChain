@@ -27,7 +27,7 @@ const Footer = () => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center bottom",
         backgroundSize: "cover",
-        opacity: 0.02,
+        opacity: 0.08,
         zIndex: 0,
       },
       pt: 6,

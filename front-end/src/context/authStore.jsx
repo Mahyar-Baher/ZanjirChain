@@ -40,7 +40,7 @@ const useAuthStore = create(
             axios.defaults.timeout = 10000;
 
             const response = await axios.post(
-              "https://amirrezaei2002x.shop/laravel/api/check-token-api"
+              "https://pump-ex.com/laravel/api/check-token-api"
             );
             console.log("send api chek")
 
@@ -78,7 +78,7 @@ const useAuthStore = create(
 
           try {
             const response = await axios.post(
-              "https://amirrezaei2002x.shop/laravel/api/v2",
+              "https://pump-ex.com/laravel/api/v2",
               {},
               {
                 headers: {
@@ -105,7 +105,7 @@ const useAuthStore = create(
         login: async (phone, password, session) => {
           try {
             const response = await axios.post(
-              "https://amirrezaei2002x.shop/laravel/api/check-password",
+              "https://pump-ex.com/laravel/api/check-password",
               {
                 mobile_number: phone,
                 password: password.trim(),

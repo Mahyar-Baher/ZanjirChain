@@ -42,7 +42,7 @@ export default function CryptoPaymentForm() {
       setLoading(true);
       try {
         const res = await axios.post(
-          'https://amirrezaei2002x.shop/laravel/api/getAllWallets',
+          'https://pump-ex.com/laravel/api/getAllWallets',
           {},
           {
             headers: {

@@ -8,7 +8,7 @@ import { GradientPaper, LevelIcon, FileUploadBox, StyledButton } from "./styles"
 
 const AdvancedLevel = ({
   onComplete,
-  uploadUrl,      // مثلا: "https://amirrezaei2002x.shop/laravel/api/kyc-level-Advanced"
+  uploadUrl,      // مثلا: "https://pump-ex.com/laravel/api/kyc-level-Advanced"
   token,          // اگر لازم داری هدر Authorization بفرستی
 }) => {
   const [selectedOption, setSelectedOption] = useState("bill"); // bill | bank | video
