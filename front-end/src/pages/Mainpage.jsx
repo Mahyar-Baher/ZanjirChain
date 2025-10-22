@@ -151,7 +151,7 @@ const Mainpage = () => {
           <Grid container spacing={3}>
             {features.map((feature, index) => (
               <Grid size={{xs:12, sm: 6 , md: 3}} key={index}>
-                  <ElectricBorder
+                  <Box
                     color="#1a652f"
                     speed={1}
                     chaos={0.3}
@@ -198,7 +198,7 @@ const Mainpage = () => {
                           </CardContent>
                         </CardActionArea>
                       </Card>
-                    </ElectricBorder>
+                    </Box>
               </Grid>
             ))}
           </Grid>
@@ -219,7 +219,7 @@ const Mainpage = () => {
             با ثبت‌نام در پلتفرم ما، از خدمات ویژه و امنیت بالا بهره‌مند شوید
           </Typography>
            <Box width="fit-content">
-           <ElectricBorder
+           <Box
               color="#1a652f"
               speed={1}
               chaos={0.3}
@@ -245,7 +245,7 @@ const Mainpage = () => {
                 >
                   شروع کنید
                 </Button>
-            </ElectricBorder>
+            </Box>
            </Box>
         </Box>
       </motion.div>

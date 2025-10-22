@@ -366,8 +366,8 @@ const QuickBuyAndSell = () => {
     </>
   );
 
-  const lableselectnetwork = (<Box sx={{paddingX:"10px", backgroundColor:"white"}}>انتخاب شبکه</Box>);
-  const lableselectcurrency = (<Box sx={{paddingX:"10px", backgroundColor:"white"}}>انتخاب ارز</Box>);
+  const lableselectnetwork = (<Box sx={{paddingX:"10px", backgroundColor:"initial"}}>انتخاب شبکه</Box>);
+  const lableselectcurrency = (<Box sx={{paddingX:"10px", backgroundColor:"initial"}}>انتخاب ارز</Box>);
 
   const tetherField = (
     <>

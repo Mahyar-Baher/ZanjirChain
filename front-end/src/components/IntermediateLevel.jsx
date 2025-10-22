@@ -3,12 +3,14 @@ import { Box, Typography, Button } from "@mui/material";
 import { CameraAlt, CloudUpload } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { GradientPaper, LevelIcon, FileUploadBox, StyledButton } from "./styles";
+import axios from "axios";
 
 const IntermediateLevel = ({ onNext }) => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     const uploaded = acceptedFiles[0];
     if (!uploaded) return;
 
@@ -29,6 +31,21 @@ const IntermediateLevel = ({ onNext }) => {
 
     setError("");
     setFile(uploaded);
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://pump-ex.com/laravel/api/kyc-level-Two",
+        { status: true },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      console.log("Level 2 approved:", response.data);
+    } catch (error) {
+      console.log("Error:", error);
+      setError("خطا در ارسال درخواست. دوباره تلاش کنید.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -93,6 +110,11 @@ const IntermediateLevel = ({ onNext }) => {
               }}
             />
             <Typography sx={{ color: "white" }}>{file.name}</Typography>
+            {loading && (
+              <Typography sx={{ color: "rgba(255, 255, 255, 0.6)", mt: 1 }}>
+                در حال ارسال...
+              </Typography>
+            )}
           </Box>
         ) : (
           <>
@@ -143,7 +165,7 @@ const IntermediateLevel = ({ onNext }) => {
           variant="contained"
           size="large"
           onClick={onNext}
-          disabled={!file}
+          disabled={!file || loading}
         >
           مرحله بعد
         </StyledButton>

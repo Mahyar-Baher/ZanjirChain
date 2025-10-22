@@ -102,38 +102,6 @@ const CryptoTable = (props) => {
                   <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>قیمت تتر</Typography>
                   <Typography sx={{ fontSize: '14px' }}>{crypto.tetherPrice}</Typography>
                 </Grid>
-                <Grid size={{xs:12}} display="flex" flexDirection="column" justifyContent='end' gap={1}>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      background: 'linear-gradient(90deg, #26A17B, #1a652a)',
-                      borderRadius: '12px',
-                      fontSize: '14px',
-                    }}
-                  >
-                    برداشت
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      background: 'linear-gradient(90deg, #26A17B, #1a652a)',
-                      borderRadius: '12px',
-                      fontSize: '14px',
-                    }}
-                  >
-                    واریز
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    sx={{ borderRadius: '12px', fontSize: '14px' }}
-                  >
-                    خرید/فروش
-                  </Button>
-                </Grid>
               </Grid>
             </Paper>
           ))}
@@ -153,8 +121,7 @@ const CryptoTable = (props) => {
                 <TableCell align="center" sx={{ borderBottom: 'none' }}>نماد</TableCell>
                 <TableCell align="center" sx={{ borderBottom: 'none' }}>موجودی</TableCell>
                 <TableCell align="center" sx={{ borderBottom: 'none' }}>تغییر (%)</TableCell>
-                <TableCell align="center" sx={{ borderBottom: 'none' }}>قیمت تتر</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 'bold', borderTopLeftRadius: '22px', borderBottomLeftRadius: '22px', borderBottom: 'none' }}>عملیات</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 'bold', borderTopLeftRadius: '22px', borderBottomLeftRadius: '22px', borderBottom: 'none' }}>قیمت تتر</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: '#80808c3f' }}>
@@ -167,16 +134,7 @@ const CryptoTable = (props) => {
                   <TableCell align="center">{crypto.symbol.toUpperCase()}</TableCell>
                   <TableCell align="center">{crypto.total}</TableCell>
                   <TableCell align="center">{crypto.change}</TableCell>
-                  <TableCell align="center">{crypto.tetherPrice}</TableCell>
-                  <TableCell align="center" sx={{ borderTopLeftRadius: '22px', borderBottomLeftRadius: '22px', borderBottom: 'none' }}>
-                    <Box display='flex' justifyContent="center" flexDirection={{xs: 'column', md: 'column', lg: 'row'}}>
-                      <Button variant="text" size="small" sx={{ mx: 0, p: 0 }}>برداشت</Button>
-                      <Button variant="text" size="small" sx={{ mx: 0, p: 0, ml: 1 }}>واریز</Button>
-                      <Button variant="text" color="primary" size="small" sx={{ mx: 0, p: 0, ml: 1 }}>
-                        خرید/فروش
-                      </Button>
-                    </Box>
-                  </TableCell>
+                  <TableCell align="center" sx={{ borderTopLeftRadius: '22px', borderBottomLeftRadius: '22px', borderBottom: 'none' }}>{crypto.tetherPrice}</TableCell>
                 </TableRow>
               ))}
               {filteredData.length === 0 && (

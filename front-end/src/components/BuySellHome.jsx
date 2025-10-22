@@ -126,7 +126,7 @@ const BuySellHome = () => {
             }}
             onClick={() => setMode("buy")}
           >
-            خرید ارز
+            خرید تتر
           </Button>
         </Grid>
         <Grid size={{ xs: 5.5 }}>
@@ -144,7 +144,7 @@ const BuySellHome = () => {
             }}
             onClick={() => setMode("sell")}
           >
-            فروش ارز
+            فروش تتر
           </Button>
         </Grid>
       </Grid>
@@ -182,7 +182,7 @@ const BuySellHome = () => {
               "&.Mui-selected": { bgcolor: "#2C9F45", color: "#fff" },
             }}
           >
-            بر حسب ارز
+            بر حسب تتر
           </ToggleButton>
           <ToggleButton
             value="toman"

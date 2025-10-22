@@ -405,7 +405,7 @@ const CryptoForm = () => {
   return (
     <Box sx={{ p: { xs: 0, sm: 1 }, mx: 'auto', direction: 'rtl', maxWidth: { xs: '100%', sm: '600px' } }}>
       
-      <Card sx={{ mb: 2, bgcolor: 'grey.50' }}>
+      <Card sx={{ mb: 2 , bgcolor:"inherit" }}>
         <CardContent sx={{ py: 2 }}>
           <Typography variant="subtitle2" color="text.secondary" gutterBottom>
             انتخاب فعلی:

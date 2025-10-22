@@ -22,7 +22,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import avatarImg from '../assets/icons/avatar.png';
 import { AuthContext } from '../context/AuthContext';
 
-const pages = ['راهنمای استفاده', 'بلاگ', 'دعوت دوستان', 'ارتباط با ما'];
+const pages = ['راهنمای استفاده', 'دعوت دوستان', 'ارتباط با ما'];
 const pageRoutes = {
   'راهنمای استفاده': '/guide',
   'بلاگ': '/blog',

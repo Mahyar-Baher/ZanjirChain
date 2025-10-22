@@ -28,6 +28,34 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[2],
 }));
 
+const ehrazbut = (            <Grid  size={{xs: 12, sm: 12, md: 12, lg: 3}}
+  sx={{
+    height: { xs: 'fit-content', md: 'fit-content', lg: '100%' },
+  }}
+>
+  <Item
+    sx={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      p: 0,
+    }}
+  >
+    <Box>
+      <Button
+        fullWidth
+        variant="contained"
+        className="bg-btn-sky"
+        sx={{ fontSize: { md: 14, xl: 17 }, p: { md: 1.7 } }}
+        onClick={() => navigate('/IdentityVerification')}
+      >
+        تکمیل احراز هویت
+      </Button>
+    </Box>
+  </Item>
+</Grid>)
+
 const Dashboard = ({ hideNavBox = false }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext); // دسترسی به اطلاعات کاربر
@@ -90,35 +118,10 @@ const Dashboard = ({ hideNavBox = false }) => {
             </Grid>
             <Grid size={{xs: 12, sm: 12, md: 12, lg: 9}} sx={{ py: 0 }}>
               {/* استفاده از kycLevel در activeStep */}
-              <CompleteIdenity activeStep={kycLevel} />
+              {user?.kyc_level == 2 ? "" : <CompleteIdenity activeStep={kycLevel} />}
+              
             </Grid>
-            <Grid size={{xs: 12, sm: 12, md: 12, lg: 3}}
-              sx={{
-                height: { xs: 'fit-content', md: 'fit-content', lg: '100%' },
-              }}
-            >
-              <Item
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  p: 0,
-                }}
-              >
-                <Box>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    className="bg-btn-sky"
-                    sx={{ fontSize: { md: 14, xl: 17 }, p: { md: 1.7 } }}
-                    onClick={() => navigate('/IdentityVerification')}
-                  >
-                    تکمیل احراز هویت
-                  </Button>
-                </Box>
-              </Item>
-            </Grid>
+            {user?.kyc_level == 2 ? "" : ehrazbut}
             <Grid size={{xs: 12, sm: 12, md: 12, lg: 8}}
               sx={{ height: { xs: 'fit-content', md: 'fit-content', lg: '100%' } }}
             >
