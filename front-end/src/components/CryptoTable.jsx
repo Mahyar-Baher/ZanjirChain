@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import {
   useMediaQuery, useTheme, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Box, Button, TextField, Typography, Grid,
-  FormControlLabel, Checkbox, Paper
+  TableHead, TableRow, Box, TextField, Typography, Grid, Paper
 } from '@mui/material';
 import { Icon } from '@iconify/react';
-
-
 
 const CryptoTable = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hideEmptyBalances, setHideEmptyBalances] = useState(true);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md')); // تشخیص موبایل
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const assetuserhave = props.walletBalenc;
 
   const cryptoData = Object.keys(assetuserhave).map(network => {
     const tokenKeys = Object.keys(assetuserhave[network]);
     return tokenKeys.map(token => ({
-      name: `${token} on ${network}`, 
-      icon: `token-branded:usdt`,  
+      name: `${token} on ${network}`,
+      icon: `token-branded:usdt`,
       symbol: token.toLowerCase(),
+      network: network,
       total: assetuserhave[network][token].total,
-      change: '0%',                // اگه داری، می‌تونی اینو هم از API بگیری
+      change: '0%',
       tetherPrice: 100
     }));
-  }).flat(); 
+  }).flat();
 
   const filteredData = cryptoData.filter((crypto) => {
     const matchesSearch =
@@ -36,12 +34,9 @@ const CryptoTable = (props) => {
     return matchesSearch && hasBalance;
   });
 
-
-
-
   return (
     <Box sx={{ p: 0, width: '100%', backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }}>
-      {/* هدر شامل عنوان، جستجو و چک‌باکس */}
+      {/* هدر شامل عنوان و جستجو */}
       <Box
         sx={{
           display: 'flex',
@@ -72,9 +67,9 @@ const CryptoTable = (props) => {
       {/* نمایش کارتی در موبایل و جدولی در دسکتاپ */}
       {isMobile ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, px: 2 }}>
-          {filteredData.map((crypto) => (
+          {filteredData.map((crypto, index) => (
             <Paper
-              key={crypto.icon}
+              key={`${crypto.symbol}-${crypto.network}`} // key منحصر به فرد
               sx={{
                 backgroundColor: '#80808c3f',
                 borderRadius: '22px',
@@ -84,21 +79,21 @@ const CryptoTable = (props) => {
               }}
             >
               <Grid container spacing={2} alignItems="center">
-                <Grid size={{xs:12}} display="flex" alignItems="center" justifyContent="center">
+                <Grid item xs={12} display="flex" alignItems="center" justifyContent="center">
                   <Icon icon={crypto.icon} width="32" height="32" />
                   <Typography sx={{ ml: 1, fontWeight: 'bold', fontSize: '16px' }}>
                     {crypto.name} ({crypto.symbol.toUpperCase()})
                   </Typography>
                 </Grid>
-                <Grid size={{xs:4}} textAlign='center'>
+                <Grid item xs={4} textAlign='center'>
                   <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>موجودی</Typography>
                   <Typography sx={{ fontSize: '14px' }}>{crypto.total}</Typography>
                 </Grid>
-                <Grid siz={{xs:4}} textAlign='center'>
+                <Grid item xs={4} textAlign='center'>
                   <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>تغییر</Typography>
                   <Typography sx={{ fontSize: '14px' }}>{crypto.change}</Typography>
                 </Grid>
-                <Grid size={{xs:4}} textAlign="center">
+                <Grid item xs={4} textAlign="center">
                   <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>قیمت تتر</Typography>
                   <Typography sx={{ fontSize: '14px' }}>{crypto.tetherPrice}</Typography>
                 </Grid>
@@ -125,8 +120,8 @@ const CryptoTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ backgroundColor: '#80808c3f' }}>
-              {filteredData.map((crypto) => (
-                <TableRow key={crypto.icon} sx={{ '& td': { borderBottom: 'none' } }}>
+              {filteredData.map((crypto, index) => (
+                <TableRow key={`${crypto.symbol}-${crypto.network}`} sx={{ '& td': { borderBottom: 'none' } }}>
                   <TableCell align="center" sx={{ borderTopRightRadius: '22px', borderBottomRightRadius: '22px', borderBottom: 'none' }}>
                     <Icon icon={crypto.icon} width="28" height="28" />
                   </TableCell>
