@@ -209,11 +209,12 @@ const TomanPaymentForm = ({ activeMethod }) => {
         </Box>
       ) : (
         <>
+          <Box mt={2} mb={-1}>انتخاب شماره شبا</Box>
           {shebaList.length > 0 ? (
+            
             <TextField
               fullWidth
               select
-              label="انتخاب شماره شبا"
               margin="normal"
               value={offlineData.selectedSheba}
               onChange={(e) => setOfflineData({ ...offlineData, selectedSheba: e.target.value })}
@@ -241,9 +242,9 @@ const TomanPaymentForm = ({ activeMethod }) => {
               />
             </>
           )}
+          <Box mt={2} mb={-1}>مبلغ</Box>
           <TextField
             fullWidth
-            label="مبلغ (تومان)"
             type="text"
             inputMode="numeric"
             margin="normal"
@@ -251,9 +252,9 @@ const TomanPaymentForm = ({ activeMethod }) => {
             onChange={handleOfflineAmountChange}
             placeholder="مثلاً 2500000"
           />
+          <Box mt={2} mb={-1}>شماره واریز / شماره پیگیری</Box>
           <TextField
             fullWidth
-            label="شناسه واریز / شماره پیگیری"
             type="text"
             inputMode="numeric"
             margin="normal"
@@ -261,9 +262,9 @@ const TomanPaymentForm = ({ activeMethod }) => {
             onChange={handleTrackingCodeChange}
             placeholder="مثلاً 1234567890"
           />
+          <Box mt={2} mb={-1}>توضیحات تکمیلی (اختیاری)</Box>
           <TextField
             fullWidth
-            label="توضیحات تکمیلی (اختیاری)"
             multiline
             rows={3}
             margin="normal"

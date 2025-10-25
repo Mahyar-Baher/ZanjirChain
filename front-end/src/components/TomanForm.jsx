@@ -175,7 +175,6 @@ const TomanForm = ({ balanceToman, exchangeRate = 1 }) => { // exchangeRate به
           <Box mt={2} mb={-1}>مبلغ برداشت (تومان)</Box>
           <TextField
             fullWidth
-            label="مبلغ برداشت (تومان)"
             type="text"
             inputMode="numeric"
             placeholder="بین ۲۰۰,۰۰۰ تا ۵۰۰,۰۰۰,۰۰۰ تومان"

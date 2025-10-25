@@ -1,217 +1,149 @@
-import { Box, Button, TextField, Typography, Chip, Avatar } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import NetworkSelect from './NetworkSelect';
-import TokenSelect from './TokenSelectModal';
-import { Icon } from '@iconify/react';
-import useAuthStore from '../context/authStore'; // فرضاً مسیر فایل useAuthStore.js
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Typography,
+  FormControl,
+  Select,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
+import axios from "axios";
+import useAuthStore from "../context/authStore";
 
 export default function CryptoPaymentForm() {
-  const { token, wallet } = useAuthStore(); // توکن و ولت رو از useAuthStore بگیر
-  const [tokens, setTokens] = useState([]);
-  const [selectedToken, setSelectedToken] = useState(null);
-  const [networks, setNetworks] = useState({});
-  const [selectedNetwork, setSelectedNetwork] = useState('');
+  const { token } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [wallets, setWallets] = useState({}); // {ethereum: "0x...", tron: "T...", solana: "W..."}
+  const [selectedNetwork, setSelectedNetwork] = useState("Ethereum");
+  const [selectedToken, setSelectedToken] = useState("USDT");
+
+  // لیست شبکه‌ها
+  const networks = ["Ethereum", "Solana", "Tron"];
+
+  // لیست ارزها برای هر شبکه
+  const currencies = {
+    Ethereum: ["USDT", "USDC", "ETH", "WETH", "DAI", "LINK", "UNI"],
+    Solana: ["USDT", "USDC", "SOL", "RAY", "SRM", "ORCA"],
+    Tron: ["USDT", "USDC", "TRX", "BTT", "SUN"],
+  };
 
   useEffect(() => {
-    const fetchTokens = async () => {
+    const fetchWallets = async () => {
       if (!token) {
-        setError('توکن احراز هویت یافت نشد. لطفاً دوباره وارد شوید.');
+        setError("توکن احراز هویت یافت نشد.");
         return;
       }
 
-      // اگر اطلاعات ولت در useAuthStore موجوده، از همون استفاده کن
-      if (wallet && wallet.currency === 'usdt') {
-        const usdtNetworks = {};
-        Object.entries(wallet.networks || {}).forEach(([network, address]) => {
-          usdtNetworks[network.toLowerCase()] = address;
-        });
-
-        const tetherToken = {
-          name: 'Tether',
-          symbol: 'USDT',
-          networks: usdtNetworks,
-        };
-        setTokens([tetherToken]);
-        return;
-      }
-
-      // در غیر این صورت، درخواست به API
       setLoading(true);
       try {
         const res = await axios.post(
-          'https://pump-ex.com/laravel/api/getAllWallets',
+          "https://pump-ex.com/laravel/api/getAllWallets",
           {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           }
         );
 
-        if (res.data && Array.isArray(res.data)) {
-          const rawTokens = res.data;
-          const usdtNetworks = {};
-          rawTokens.forEach(wallet => {
-            usdtNetworks[wallet.network.toLowerCase()] = wallet.address;
+        if (Array.isArray(res.data)) {
+          const map = {};
+          res.data.forEach(({ network, address }) => {
+            map[network.toLowerCase()] = address;
           });
-
-          const tetherToken = {
-            name: 'Tether',
-            symbol: 'USDT',
-            networks: usdtNetworks,
-          };
-          setTokens([tetherToken]);
+          setWallets(map);
         } else {
-          setError('پاسخ API نامعتبر است.');
+          setError("پاسخ API نامعتبر است.");
         }
-      } catch (error) {
-        setError(error.response?.data?.message || 'خطا در دریافت اطلاعات ولت.');
+      } catch (err) {
+        setError(err.response?.data?.message || "خطا در دریافت ولت‌ها.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTokens();
-  }, [token, wallet]);
+    fetchWallets();
+  }, [token]);
 
-  const handleTokenSelect = (token) => {
-    setSelectedToken(token);
-    setNetworks(token.networks || {});
-    setSelectedNetwork('');
-  };
+  const currentAddress = wallets[selectedNetwork.toLowerCase()] || "—";
 
   return (
-    <Box 
-      sx={{ 
-        mx: 'auto', 
-        p: 0,
-        borderRadius: 4,
-        mt: 0
-      }}
-    >
-      {/* نمایش لودینگ یا خطا */}
-      {loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-          <Typography>در حال بارگذاری...</Typography>
+    <Box>
+      {error && <Typography color="error">{error}</Typography>}
+      {loading ? (
+        <Box textAlign="center" py={5}>
+          <CircularProgress />
         </Box>
-      )}
-      {error && (
-        <Box sx={{ mb: 2 }}>
-          <Typography color="error">{error}</Typography>
-        </Box>
-      )}
-
-      {/* بخش انتخاب رمز ارز */}
-      <Box sx={{ mb: 1 }}>
-        <Typography 
-          variant="h6" 
-          sx={{ 
-            mb: 1, 
-            fontWeight: 700,
-            color: '#1a652a',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1
-          }}
-        >
-          <Icon icon="mdi:currency-usd-circle" width={28} height={28} />
-          انتخاب رمز ارز
-        </Typography>
-        
-        {selectedToken ? (
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: "space-between",
-              p: 1, 
-              borderRadius: 3, 
-              bgColor: 'background.paper',
-              position: 'relative'
-            }}
-          >
-            <Avatar 
-              sx={{ 
-                bgcolor: '#c8e6c9', 
-                width: 40, 
-                height: 40,
-                boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
+      ) : (
+        <>
+          {/* انتخاب شبکه */}
+          <Typography mb={1}>انتخاب شبکه</Typography>
+          <FormControl fullWidth>
+            <Select
+              value={selectedNetwork}
+              onChange={(e) => {
+                setSelectedNetwork(e.target.value);
+                setSelectedToken(currencies[e.target.value][0]);
               }}
             >
-              <Icon 
-                icon={`cryptocurrency-color:${selectedToken.symbol.toLowerCase()}`} 
-                width={40} 
-                height={40} 
-              />
-            </Avatar>
-            
-            <Box sx={{ ml: 3 }}>
-              <Typography variant="body1" sx={{ fontWeight: 800, color: '#2e7d32' }}>
-                {selectedToken.name}
-              </Typography>
-              <Chip 
-                label={selectedToken.symbol} 
-                sx={{ 
-                  mt: 1, 
-                  p: 0,
-                  bgcolor: '#28a745', 
-                  color: 'white', 
-                  fontWeight: 700,
-                  fontSize: '0.6rem'
-                }} 
-              />
-            </Box>
-            
-            <Button 
-              variant="outlined" 
-              onClick={() => setSelectedToken(null)}
-              sx={{ 
-                minWidth: 'auto',
-                p: 1,
-                color: '#28a745',
-                borderColor: '#28a745'
-              }}
-            >
-              <Icon icon="mdi:refresh" width={20} height={20} />
-            </Button>
-          </Box>
-        ) : (
-          <TokenSelect
-            tokens={tokens}
-            onSelect={handleTokenSelect}
-          />
-        )}
-      </Box>
+              {networks.map((net) => (
+                <MenuItem key={net} value={net}>
+                  {net}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-      {/* بخش انتخاب شبکه */}
-      {selectedToken && (
-        <Box sx={{ mb: 0 }}>
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 1, 
-              fontWeight: 700,
-              color: '#2e7d32',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
-            }}
-          >
-            <Icon icon="mdi:network" width={28} height={28} />
-            انتخاب شبکه انتقال
+          {/* انتخاب ارز */}
+          <Typography mb={1} mt={4}>
+            انتخاب ارز
           </Typography>
-          
-          <NetworkSelect
-            networks={networks}
-            selectedNetwork={selectedNetwork}
-            onChange={setSelectedNetwork}
-            tokenIcon={selectedToken?.symbol}
-          />
-        </Box>
+          <FormControl fullWidth>
+            <Select
+              value={selectedToken}
+              onChange={(e) => setSelectedToken(e.target.value)}
+            >
+              {currencies[selectedNetwork].map((curr) => (
+                <MenuItem key={curr} value={curr}>
+                  {curr}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* نمایش آدرس */}
+          <Box mt={6}>
+            <Typography mb={1}>
+              آدرس {selectedToken} ({selectedNetwork})
+            </Typography>
+            <Box
+              p={2}
+              border="1px solid"
+              flexDirection={"column"}
+              borderColor="divider"
+              borderRadius={2}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography mb={2} sx={{ wordBreak: "break-all", maxWidth: "100%" }}>
+                {currentAddress}
+              </Typography>
+              <Button
+
+                onClick={() => navigator.clipboard.writeText(currentAddress)}
+                variant="outlined"
+                size="small"
+                
+              >
+                کپی
+              </Button>
+            </Box>
+          </Box>
+        </>
       )}
     </Box>
   );
