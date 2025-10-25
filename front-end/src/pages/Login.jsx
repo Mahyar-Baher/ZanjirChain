@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
@@ -18,6 +18,7 @@ import { AuthContext } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const { code } = useParams()
   const location = useLocation();
   const { user } = useContext(AuthContext);
   const isVerySmallScreen = useMediaQuery('(max-width:319px)');
@@ -30,7 +31,12 @@ function Login() {
     if (user && location.pathname !== '/') {
       navigate('/');
     }
-  }, [user, location.pathname, navigate]);
+    // برسی اینوایت 
+    const invite = !!code;
+    if(invite){
+      localStorage.setItem("invite", code); 
+    }
+  }, [user, location.pathname, navigate, code]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

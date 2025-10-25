@@ -26,6 +26,7 @@ const navItems = [
       { label: 'هشدار قیمت', icon: 'mdi:bell-alert-outline', path: '/alertPrice' },
       { label: 'مدیریت پیام ها', icon: 'mdi:email-outline', path: '/manageMessage' },
       { label: 'مدیریت آدرس ها', icon: 'mdi:map-marker-outline', path: '/manageAddresses' },
+      { label: 'دعوت و رفرال' , icon: 'mdi:user-outline', path: '/referral' },
       { label: 'تنظیمات', icon: 'mdi:cog-outline', path: '/settings' },
       { label: 'امنیت', icon: 'mdi:shield-outline', path: '/security' }
     ]

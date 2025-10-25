@@ -32,6 +32,7 @@ const Services = lazy(() => import('./pages/Services'));
 const GoogleAuthenticator = lazy(() => import('./pages/GoogleAuthenticator'));
 const IdentityVerification = lazy(() => import('./pages/IdentityVerification'));
 const Mainpage = lazy(() => import('./pages/mainpage'));
+const Referral = lazy(() => import('./pages/referral'));
 function App() {
   return (
     <CustomThemeProvider>
@@ -53,6 +54,7 @@ function App() {
               <Route path="/History" element={<History />} />
               <Route path="/Security" element={<Security />} />
               <Route path="/Settings" element={<Settings />} />
+              <Route path='/referral' element={<Referral/>} />
               <Route path="/ManageAddresses" element={<ManageAddresses />} />
               <Route path="/ManageMessage" element={<ManageMessage />} />
               <Route path="/alertPrice" element={<AlertPrice />} />
@@ -68,6 +70,7 @@ function App() {
               <Route path="/Password" element={<Password />} />
               <Route path="/sms_verification" element={<Sms_verification />} />
               <Route path="/LogOut" element={<LogOut />} />
+              <Route path='/invite/:code' element={<Login />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

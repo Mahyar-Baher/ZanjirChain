@@ -134,6 +134,9 @@ function Signup() {
 
     const session = await parseUserAgent();
 
+    // برسی اینوایت کد ک هست توی لوکال استوریج یا نه
+    const invite_code = localStorage.getItem("invite");
+
     const payload = {
       first_name: formData.name,
       last_name: formData.fname,
@@ -142,6 +145,7 @@ function Signup() {
       password_confirmation: formData.password_approve,
       mobile_number: mobileNumber,
       active_sessions: [session],
+      invite_code : invite_code || null,
     };
 
     try {

@@ -152,6 +152,7 @@ const TetherChartDash = () => {
           }}
         >
           پرتفوی دیجیتال شما
+          
         </Box>
         
         {wallet ? (
@@ -393,7 +394,7 @@ const TetherChartDash = () => {
                           flexShrink: 0
                         }}
                       >
-                        {Object.keys(tokens).length} دارایی
+                        {Object.keys(tokens).length > 0} دارایی
                       </Box>
                     </Box>
                   );
