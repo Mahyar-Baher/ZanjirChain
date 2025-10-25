@@ -153,12 +153,11 @@ const TomanForm = ({ balanceToman, exchangeRate = 1 }) => { // exchangeRate به
         </Box>
       ) : (
         <>
+          <Box mb={1}>شماره شبا مقصد</Box>
           <FormControl fullWidth margin="normal" style={{ padding: 0, margin: 0 }}>
-            <InputLabel id="select-sheba-label">شماره شبا مقصد</InputLabel>
             <Select
               labelId="select-sheba-label"
               value={sheba}
-              label="شماره شبا مقصد"
               onChange={(e) => setSheba(e.target.value)}
             >
               {shabaList.length === 0 && (
@@ -173,6 +172,7 @@ const TomanForm = ({ balanceToman, exchangeRate = 1 }) => { // exchangeRate به
               ))}
             </Select>
           </FormControl>
+          <Box mt={2} mb={-1}>مبلغ برداشت (تومان)</Box>
           <TextField
             fullWidth
             label="مبلغ برداشت (تومان)"

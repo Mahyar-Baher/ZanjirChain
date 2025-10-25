@@ -17,7 +17,7 @@ export const CustomThemeProvider = ({ children }) => {
   };
 
   const [darkMode, setDarkMode] = useState(() => getInitialSetting('darkMode', false));
-  const [primaryColor, setPrimaryColor] = useState(() => getInitialSetting('primaryColor', '#7878FF'));
+  const [primaryColor, setPrimaryColor] = useState(() => getInitialSetting('primaryColor', '#317540'));
   const [accessibilityMode, setAccessibilityMode] = useState(() => getInitialSetting('accessibilityMode', false));
   const [persianNumbers, setPersianNumbers] = useState(() => getInitialSetting('persianNumbers', false));
 

@@ -467,11 +467,10 @@ const CryptoForm = () => {
       </Button>
 
       
-
+      <Box mb={-1} mt={1}>آدرس مقصد</Box>
       <TextField
         fullWidth
         select={savedAddresses.length > 0}
-        label="آدرس مقصد"
         color='black'
         margin="normal"
         value={cryptoAddress}
@@ -485,10 +484,10 @@ const CryptoForm = () => {
           </MenuItem>
         ))}
       </TextField>
-
+      
+      <Box mb={-1} mt={1}>مقدار برداشت</Box>
       <TextField
         fullWidth
-        label={`مقدار برداشت (${finalSelection.currency?.label || 'USDT'})`}
         margin="normal"
         type="text"
         color='black'
@@ -496,7 +495,7 @@ const CryptoForm = () => {
         value={cryptoAmount}
         onChange={handleCryptoAmountChange}
         sx={{ mb: 0 }}
-        placeholder="مثلاً 200.123456"
+        placeholder="مثلاً 11,4"
         error={parsedTether > wallet && cryptoAmount !== ''}
         helperText={
           parsedTether > balanceTether && cryptoAmount !== ''

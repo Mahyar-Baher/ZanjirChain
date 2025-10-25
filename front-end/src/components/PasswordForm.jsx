@@ -225,7 +225,7 @@ const PasswordForm = ({ phone }) => {
             p: 0,
             mb: 3,
             justifyContent: "flex-start",
-            color: "primary.main",
+            color: "inherit",
             "&:hover": { backgroundColor: "transparent" },
           }}
         >
@@ -233,9 +233,9 @@ const PasswordForm = ({ phone }) => {
         </Button>
 
         <form onSubmit={handleSubmit}>
+          <Box mb={1} color={"inherit"}>رمز عبور</Box>
           <TextField
             fullWidth
-            label="رمز عبور"
             type={showPassword ? "text" : "password"}
             variant="outlined"
             placeholder="مثال: Tether01@#"

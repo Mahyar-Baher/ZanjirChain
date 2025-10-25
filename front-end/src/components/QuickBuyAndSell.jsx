@@ -339,14 +339,14 @@ const QuickBuyAndSell = () => {
       <Typography variant="caption" color="text.secondary" sx={{ m: 2 }}>
         موجودی: {formatNumber(walletBalance.balance_toman)} تومان
       </Typography>
+      <Box mb={1} textAlign={"start"}>مقدار</Box>
       <TextField
         name="tomanQ"
         type="text"
         inputMode="numeric"
-        label="تومان"
         value={toman}
         onChange={handleTomanChange}
-        placeholder="مقدار بین 145,000 تا 25,000,000"
+        placeholder="مقدار بین 500,000 هزار تومان تا 25,000,000 هزار تومان"
         fullWidth
         sx={{
           '& .MuiInputLabel-root': labelSx,
@@ -381,9 +381,10 @@ const QuickBuyAndSell = () => {
               setSelectednetwork(newValue);
             }}
             renderInput={(params) => (
+              <>
+              <Box mb={1}>شبکه</Box>
               <TextField
                 {...params}
-                label={lableselectnetwork}
                 fullWidth
                 InputProps={{
                   ...params.InputProps,
@@ -394,6 +395,8 @@ const QuickBuyAndSell = () => {
                   ) : null
                 }}
               />
+              </>
+
             )}
             renderOption={(props, option) => (
               <Box
@@ -422,9 +425,11 @@ const QuickBuyAndSell = () => {
               selectCurrencyHandler(newValue);
             }}
             renderInput={(params) => (
+              <>
+              <Box mb={1}>ارز</Box>
               <TextField
                 {...params}
-                label={lableselectcurrency}
+
                 fullWidth
                 disabled={!selectednetwork}
                 InputProps={{
@@ -436,6 +441,8 @@ const QuickBuyAndSell = () => {
                   ) : null
                 }}
               />
+              </>
+
             )}
             renderOption={(props, option) => (
               <Box
@@ -462,7 +469,6 @@ const QuickBuyAndSell = () => {
           name="tetherQ"
           type="text"
           inputMode="numeric"
-          label={lablecu}
           value={tether}
           onChange={handleTetherChange}
           placeholder="مقدار بین 5 تا 25,000"

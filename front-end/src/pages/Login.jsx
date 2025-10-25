@@ -198,12 +198,12 @@ function Login() {
             </Typography>
 
             <form onSubmit={handleSubmit}>
+              <Box mb={1} variant="body1" color={"inherit"}>شماره همراه</Box>
               <TextField
-                label="شماره موبایل"
                 type="tel"
                 variant="outlined"
                 placeholder="مثال: 09123456789"
-                value={phone}
+                value={phone}                
                 onChange={(e) => setPhone(e.target.value)}
                 fullWidth
                 sx={{

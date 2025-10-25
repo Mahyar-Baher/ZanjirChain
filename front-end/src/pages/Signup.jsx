@@ -291,7 +291,6 @@ function Signup() {
         disableGutters
         maxWidth={false}
         sx={{
-          width: '100vw',
           minHeight: '100vh',
           display: 'flex',
           bgcolor: (theme) => theme.palette.background.default,
@@ -332,9 +331,9 @@ function Signup() {
               </Typography>
 
               <form onSubmit={handleSubmit}>
+                <Box mb={-1}>نام</Box>
                 <TextField
                   fullWidth
-                  label="نام"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
@@ -356,9 +355,9 @@ function Signup() {
                     },
                   }}
                 />
+                <Box mb={-1}>نام خانوادگی</Box>
                 <TextField
                   fullWidth
-                  label="نام خانوادگی"
                   name="fname"
                   value={formData.fname}
                   onChange={handleChange}
@@ -380,9 +379,9 @@ function Signup() {
                     },
                   }}
                 />
+                <Box mb={-1}>کد ملی</Box>
                 <TextField
                   fullWidth
-                  label="کد ملی"
                   name="identity_code"
                   value={formData.identity_code}
                   onChange={handleChange}
@@ -404,9 +403,9 @@ function Signup() {
                     },
                   }}
                 />
+                <Box mb={-1}>رمز عبور</Box>
                 <TextField
                   fullWidth
-                  label="رمز عبور"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -472,9 +471,9 @@ function Signup() {
                   </Box>
                 )}
 
+                <Box mb={-1}>تکرار رمز عبور</Box>
                 <TextField
                   fullWidth
-                  label="تکرار رمز عبور"
                   name="password_approve"
                   value={formData.password_approve}
                   onChange={handleChange}

@@ -174,16 +174,17 @@ const TomanPaymentForm = ({ activeMethod }) => {
 
   const tomanForms = [
     <Box key="gateway" component="form" noValidate autoComplete="on">
-      <TextField fullWidth select label="درگاه مورد نظر را انتخاب کنید" margin="normal">
+      <Box>درگاه پرداخت را انتخاب کنید</Box>
+      <TextField fullWidth select margin="normal">
         {bankList.map((bank) => (
           <MenuItem key={bank} value={bank}>
             {bank}
           </MenuItem>
         ))}
       </TextField>
+      <Box mt={2}>مبلغ (تومان)</Box>
       <TextField
         fullWidth
-        label="مبلغ (تومان)"
         type="text"
         inputMode="numeric"
         margin="normal"
