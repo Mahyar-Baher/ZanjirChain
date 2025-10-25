@@ -212,7 +212,7 @@ const Dashboard = ({ hideNavBox = false }) => {
               </Item>
             </Grid>
             <Grid size={{xs: 12, sm: 12, md: 12, lg: 4}}
-              sx={{ height: '100%', alignContent: 'end' }}
+              sx={{ height: '100%', alignContent: 'end'  }}
             >
               <TetherChartDash />
               {isOkeyToGetReferral ? allertReferral : aboutReferral}
